@@ -7,12 +7,17 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-		"lint": "eslint . --ext js,jsx",
-		"format": "prettier --write ./src/",
-		"format:check": "prettier --check ./src/",
+    "lint": "eslint . --ext js,jsx",
+    "format": "prettier --write ./src/",
+    "format:check": "prettier --check ./src/",
     "prepare": "husky install"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/icons-material": "^5.14.11",
+    "@mui/material": "^5.14.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0"

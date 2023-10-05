@@ -1,5 +1,6 @@
 import { red } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
+import { LinkBehavior } from './link-behavior';
 
 const theme = createTheme({
 	palette: {
@@ -14,12 +15,13 @@ const theme = createTheme({
 		},
 	},
 	components: {
-		MuiButton: {
-			defaultProps: { disableRipple: true, disableElevation: true },
-			styleOverrides: {
-				disabled: true,
+		MuiLink: { defaultProps: { component: LinkBehavior } },
+		MuiButtonBase: {
+			defaultProps: {
+				LinkComponent: LinkBehavior,
 			},
 		},
+		MuiContainer: { defaultProps: { maxWidth: 'xl' } },
 	},
 });
 

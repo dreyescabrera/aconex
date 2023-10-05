@@ -6,34 +6,19 @@
 		"plugin:react/recommended",
 		"plugin:react/jsx-runtime",
 		"plugin:react-hooks/recommended",
-		"plugin:import/recommended",
+		"plugin:jsdoc/recommended",
 		"prettier"
 	],
 	"parserOptions": { "ecmaVersion": "latest", "sourceType": "module" },
 	"settings": {
-		"react": { "version": "18.2" },
-		"import/resolver": {
-			"node": {
-				"extensions": [".js", ".jsx"]
-			},
-			"alias": {
-				"extensions": [".js", ".jsx"],
-				"map": [
-					["@/components", "./src/components"],
-					["@/pages", "./src/pages"],
-					["@/layouts", "./src/layouts"],
-					["@/store", "./src/store"],
-					["@/common", "./src/common"],
-					["@/hooks", "./src/hooks"],
-					["@/assets", "./src/assets"],
-					["@/constants", "./src/constants"],
-					["@/services", "./src/services"]
-				]
-			}
-		}
+		"react": { "version": "18.2" }
 	},
 	"plugins": ["react-refresh"],
 	"rules": {
-		"react-refresh/only-export-components": ["warn", { "allowConstantExport": true }]
+		"react-refresh/only-export-components": ["warn", { "allowConstantExport": true }],
+		"react/prop-types": "off",
+		"jsdoc/require-param-description": "off",
+		"jsdoc/require-jsdoc": "off",
+		"jsdoc/require-returns": "off"
 	}
 }

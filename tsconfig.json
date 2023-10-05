@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"rootDir": "src/",
+		"lib": ["es2017", "DOM", "DOM.Iterable"],
+		"target": "ES6",
+		"outDir": "./irrelevant/unused",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"noEmitOnError": true,
+		"noErrorTruncation": true,
+		"jsx": "preserve",
+		"allowJs": true,
+		"checkJs": true,
+		"module": "esnext",
+		"moduleResolution": "Node",
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"]
+}

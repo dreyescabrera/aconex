@@ -1,13 +1,15 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { MainLayout } from '@/layouts/main-layout';
-
-const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <MainLayout />,
-	},
-]);
+import { router } from '@/routes';
+import { Helmet } from 'react-helmet';
+import { RouterProvider } from 'react-router-dom';
 
 export function App() {
-	return <RouterProvider router={router} />;
+	return (
+		<>
+			<Helmet
+				titleTemplate="%s | AConex - Boot & Calendar"
+				defaultTitle="AConex - Boot & Calendar"
+			/>
+			<RouterProvider router={router} />
+		</>
+	);
 }

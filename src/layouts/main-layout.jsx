@@ -28,6 +28,8 @@ export const MainLayout = () => {
 						display: 'flex',
 						flexDirection: 'column',
 						flexGrow: 1,
+						gap: 4,
+						mt: 4,
 					}}
 				>
 					<main>

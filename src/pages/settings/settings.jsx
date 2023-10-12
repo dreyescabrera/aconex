@@ -66,7 +66,7 @@ export const SettingsPage = () => {
 				<Stack gap={4}>
 					{cards.map((card) => (
 						<Paper key={card.title} variant="outlined" sx={{ padding: 2 }}>
-							<Typography variant="h6" component="h2">
+							<Typography variant="h6" component="h2" fontWeight="200">
 								{card.title}
 							</Typography>
 							<List disablePadding>

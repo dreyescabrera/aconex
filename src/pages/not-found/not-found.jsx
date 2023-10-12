@@ -1,4 +1,6 @@
-import { Button, Container, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 import { Helmet } from 'react-helmet';
 
 export const NotFoundPage = () => {

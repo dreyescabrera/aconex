@@ -19,6 +19,21 @@
 		"react/prop-types": "off",
 		"jsdoc/require-param-description": "off",
 		"jsdoc/require-jsdoc": "off",
-		"jsdoc/require-returns": "off"
+		"jsdoc/require-returns": "off",
+		"no-restricted-imports": [
+			"warn",
+			{
+				"paths": [
+					{
+						"name": "@mui/material",
+						"message": "Please import from '@material-ui/*' instead."
+					},
+					{
+						"name": "@mui/icons-material",
+						"message": "Please import from '@mui/icons-material/*' instead."
+					}
+				]
+			}
+		]
 	}
 }

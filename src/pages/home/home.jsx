@@ -54,10 +54,16 @@ export const HomePage = () => {
 							}}
 						>
 							<Paper variant="outlined" sx={{ padding: 2 }}>
-								<Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+								<Typography
+									variant="h6"
+									component="h2"
+									sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+								>
 									<link.Icon /> {link.title}
 								</Typography>
-								<Typography sx={{ mt: 1 }}>{link.text}</Typography>
+								<Typography paragraph sx={{ mt: 1 }}>
+									{link.text}
+								</Typography>
 							</Paper>
 						</Link>
 					))}

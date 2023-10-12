@@ -1,13 +1,15 @@
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import { Button, Container } from '@mui/material';
 import Box from '@mui/material/Box';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { DesktopBar, Footer, Header, MobileBar } from './components';
 
 export const MainLayout = () => {
 	const [isOpenMobile, setIsOpenMobile] = useState(false);
 	const isMobile = useMediaQuery('(max-width:768px)');
-
+	const { pathname } = useLocation();
 	const toggleMobileBar = () => {
 		setIsOpenMobile((prev) => !prev);
 	};
@@ -32,6 +34,18 @@ export const MainLayout = () => {
 						mt: 4,
 					}}
 				>
+					{isMobile && pathname !== '/' ? (
+						<Container>
+							<Button
+								href=".."
+								startIcon={<KeyboardReturnIcon />}
+								variant="outlined"
+								sx={{ width: 'max-content' }}
+							>
+								Volver
+							</Button>
+						</Container>
+					) : null}
 					<main>
 						<Outlet />
 					</main>

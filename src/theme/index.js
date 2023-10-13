@@ -5,10 +5,10 @@ import { LinkBehavior } from './link-behavior';
 const theme = createTheme({
 	palette: {
 		primary: {
-			main: '#556cd6',
+			main: '#10472C',
 		},
 		secondary: {
-			main: '#19857b',
+			main: '#FAFF00',
 		},
 		error: {
 			main: red.A400,

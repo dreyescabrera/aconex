@@ -47,9 +47,9 @@ export const MainLayout = () => {
 							</Button>
 						</Container>
 					) : null}
-					<main>
+					<Box component="main" sx={{ flexGrow: 1 }}>
 						<Outlet />
-					</main>
+					</Box>
 					<Footer />
 				</Box>
 			</Box>

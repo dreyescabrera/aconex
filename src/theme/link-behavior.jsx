@@ -7,7 +7,7 @@ import { Link as RouterLink } from 'react-router-dom';
  */
 function ForwardedLinkBehavior(props, ref) {
 	const { href, ...other } = props;
-	return <RouterLink ref={ref} to={href} {...other} />;
+	return <RouterLink ref={ref} to={href} relative="path" {...other} />;
 }
 
 export const LinkBehavior = forwardRef(ForwardedLinkBehavior);

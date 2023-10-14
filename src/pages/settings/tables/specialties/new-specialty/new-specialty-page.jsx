@@ -3,22 +3,24 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Helmet } from 'react-helmet';
-import { DatePicker, Form, TextInput } from '@/components/form';
+import { Form, TextInput } from '@/components/form';
 
-export const NewHolidaysPage = () => {
+export const NewSpecialtiesPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Nuevo Feriado</title>
+				<title>Nueva Especialidad</title>
 			</Helmet>
 			<Container sx={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 4 }}>
 				<Typography variant="h3" component="h1">
-					Nuevo Feriado
+					Nueva Especialidad
 				</Typography>
-				<Typography paragraph>Especifica el día y descripción del nuevo feriado</Typography>
-				<Form onSubmit={console.log} defaultValues={{ dia: null, descripcion: '' }}>
+				<Typography paragraph>
+					Especifica el código y descripción de la nueva especialidad
+				</Typography>
+				<Form onSubmit={console.log} defaultValues={{ codigo: '', descripcion: '' }}>
 					<Stack direction="row" spacing={4} justifyContent="start">
-						<DatePicker name="dia" label="Día" />
+						<TextInput name="codigo" label="Código" variant="outlined" type="number" />
 						<TextInput
 							name="descripcion"
 							label="Descripción"

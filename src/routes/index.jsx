@@ -6,6 +6,8 @@ import { UsersPage } from '@/pages/settings/system/users';
 import { NewUsersPage } from '@/pages/settings/system/users/new-user';
 import { HolidaysPage } from '@/pages/settings/tables/holidays';
 import { NewHolidaysPage } from '@/pages/settings/tables/holidays/new-holiday';
+import { SpecialtiesPage } from '@/pages/settings/tables/specialties';
+import { NewSpecialtiesPage } from '@/pages/settings/tables/specialties/new-specialty';
 import { createBrowserRouter } from 'react-router-dom';
 import { MainLayout } from '@/layouts/main-layout';
 
@@ -33,6 +35,14 @@ export const router = createBrowserRouter([
 			{
 				path: '/configuracion/usuarios/nuevo',
 				element: <NewUsersPage />,
+			},
+			{
+				path: '/configuracion/especialidades',
+				element: <SpecialtiesPage />,
+			},
+			{
+				path: '/configuracion/especialidades/nuevo',
+				element: <NewSpecialtiesPage />,
 			},
 			{
 				path: '/configuracion/feriados',

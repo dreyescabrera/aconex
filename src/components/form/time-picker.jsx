@@ -1,10 +1,10 @@
-import { DatePicker as MuiDatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker as MuiTimePicker } from '@mui/x-date-pickers/TimePicker';
 import { useController } from 'react-hook-form';
 
 /**
- * @param {import("@mui/x-date-pickers/DatePicker").DatePickerProps & import("react-hook-form").UseControllerProps} props
+ * @param {import("@mui/x-date-pickers/TimePicker").TimePickerProps & import("react-hook-form").UseControllerProps} props
  */
-export const DatePicker = (props) => {
+export const TimePicker = (props) => {
 	const { name, control, defaultValue, rules, shouldUnregister, ...textFieldProps } = props;
 
 	const {
@@ -19,7 +19,7 @@ export const DatePicker = (props) => {
 	});
 
 	return (
-		<MuiDatePicker
+		<MuiTimePicker
 			{...field}
 			{...textFieldProps}
 			slotProps={{ textField: { helperText: error?.message, error: Boolean(error) } }}

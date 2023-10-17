@@ -4,16 +4,12 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useState } from 'react';
-import { useProfessionals } from '../context/professionals.context';
+import { useProfessionalsContext } from '../../context/professionals.context';
 import { EditProfessionalData } from './edit-professional-data';
 
 export const ProfessionalsData = () => {
-	const { professionals, filteredProfessionals, filterQuery, changeProfessionalInView } =
-		useProfessionals();
-	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-	const listToRender = filterQuery ? filteredProfessionals : professionals;
+	const { isDrawerOpen, closeDrawer, handleEditProfessional, listToRender } =
+		useProfessionalsContext();
 
 	if (listToRender.length === 0) {
 		return (
@@ -22,21 +18,6 @@ export const ProfessionalsData = () => {
 			</Alert>
 		);
 	}
-
-	const openDrawer = () => {
-		setIsDrawerOpen(true);
-	};
-
-	const handleEditProfessional = (professional) => {
-		return () => {
-			changeProfessionalInView(professional);
-			openDrawer();
-		};
-	};
-
-	const closeDrawer = () => {
-		setIsDrawerOpen(false);
-	};
 
 	return (
 		<>

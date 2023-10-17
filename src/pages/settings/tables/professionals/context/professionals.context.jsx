@@ -103,13 +103,14 @@ const professionals = [
 const initialData = {
 	professionals,
 	/**@type {Array<Professional>} */
-	filteredProfessionals: [],
-	filterQuery: '',
+	listToRender: [],
 	/**@type {Professional} */
 	professionalInView: null,
+	isDrawerOpen: false,
 	handleFilterChange: (event) => undefined,
 	handleAutocompleteClick: (event, value) => undefined,
-	changeProfessionalInView: (newProfessional) => undefined,
+	closeDrawer: () => undefined,
+	handleEditProfessional: (professional) => undefined,
 };
 /* eslint-enable */
 
@@ -120,6 +121,24 @@ export const ProfessionalsProvider = ({ children }) => {
 	const [professionalInView, setProfessionalInView] = useState(null);
 	const [filteredProfessionals, setFilteredProfessionals] = useState([]);
 	const [filterQuery, setFilterQuery] = useState('');
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+	const listToRender = filterQuery ? filteredProfessionals : professionals;
+
+	const openDrawer = () => {
+		setIsDrawerOpen(true);
+	};
+
+	const closeDrawer = () => {
+		setIsDrawerOpen(false);
+	};
+
+	const handleEditProfessional = (professional) => {
+		return () => {
+			changeProfessionalInView(professional);
+			openDrawer();
+		};
+	};
 
 	const changeProfessionalInView = (newProfessional) => {
 		setProfessionalInView(newProfessional);
@@ -155,16 +174,17 @@ export const ProfessionalsProvider = ({ children }) => {
 
 	const state = {
 		professionals,
-		filteredProfessionals,
-		filterQuery,
 		professionalInView,
+		isDrawerOpen,
+		listToRender,
 		handleFilterChange,
 		handleAutocompleteClick,
-		changeProfessionalInView,
+		closeDrawer,
+		handleEditProfessional,
 	};
 
 	return <ProfessionalsContext.Provider value={state}>{children}</ProfessionalsContext.Provider>;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useProfessionals = () => useContext(ProfessionalsContext);
+export const useProfessionalsContext = () => useContext(ProfessionalsContext);

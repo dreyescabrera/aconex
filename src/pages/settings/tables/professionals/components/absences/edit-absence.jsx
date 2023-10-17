@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { DatePicker, Form } from '@/components/form';
-import { useProfessionals } from '../context/professionals.context';
+import { useProfessionalsContext } from '../../context/professionals.context';
 
 const Drawer = styled(MuiDrawer)(() => ({
 	'& .MuiDrawer-paper': {
@@ -20,7 +20,7 @@ const Drawer = styled(MuiDrawer)(() => ({
  * @param {() => void} props.onClose
  */
 export const EditAbsence = ({ open, onClose }) => {
-	const { professionalInView } = useProfessionals();
+	const { professionalInView } = useProfessionalsContext();
 
 	return (
 		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>

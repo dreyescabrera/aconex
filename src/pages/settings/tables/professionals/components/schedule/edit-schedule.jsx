@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
 import { dayList } from '@/constants/day-list';
-import { useProfessionals } from '../context/professionals.context';
+import { useProfessionalsContext } from '../../context/professionals.context';
 
 const especialidades = ['Cirugia', 'Odontologia'];
 
@@ -24,7 +24,7 @@ const Drawer = styled(MuiDrawer)(() => ({
  * @param {() => void} props.onClose
  */
 export const EditSchedule = ({ open, onClose }) => {
-	const { professionalInView } = useProfessionals();
+	const { professionalInView } = useProfessionalsContext();
 
 	return (
 		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>

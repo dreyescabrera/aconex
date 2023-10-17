@@ -2,11 +2,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import { useProfessionals } from '../context/professionals.context';
+import { useProfessionalsContext } from '../context/professionals.context';
 
 export const FilterInput = () => {
 	const { professionals, filterQuery, handleFilterChange, handleAutocompleteClick } =
-		useProfessionals();
+		useProfessionalsContext();
 
 	return (
 		<Autocomplete

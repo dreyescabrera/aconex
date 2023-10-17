@@ -22,7 +22,14 @@ export const DatePicker = (props) => {
 		<MuiDatePicker
 			{...field}
 			{...textFieldProps}
-			slotProps={{ textField: { helperText: error?.message, error: Boolean(error) } }}
+			slotProps={{
+				...textFieldProps.slotProps,
+				textField: {
+					helperText: error?.message,
+					error: Boolean(error),
+					...textFieldProps.slotProps?.textField,
+				},
+			}}
 		/>
 	);
 };

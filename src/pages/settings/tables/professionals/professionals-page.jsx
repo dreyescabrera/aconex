@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { FilterInput, ProfessionalsData, ProfessionalsSchedule } from './components';
+import { Absences, FilterInput, ProfessionalsData, ProfessionalsSchedule } from './components';
 import { ProfessionalsProvider } from './context/professionals.context';
 
 export const ProfessionalsPage = () => {
@@ -36,6 +36,7 @@ export const ProfessionalsPage = () => {
 					<FilterInput />
 					{tabValue === 0 && <ProfessionalsData />}
 					{tabValue === 1 && <ProfessionalsSchedule />}
+					{tabValue === 2 && <Absences />}
 				</Container>
 			</ProfessionalsProvider>
 		</>

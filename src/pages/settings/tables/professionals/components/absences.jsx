@@ -6,22 +6,12 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useState } from 'react';
 import { useProfessionals } from '../context/professionals.context';
-import { EditProfessionalData } from './edit-professional-data';
+import { EditAbsence } from './edit-absence';
 
-export const ProfessionalsData = () => {
+export const Absences = () => {
 	const { professionals, filteredProfessionals, filterQuery, changeProfessionalInView } =
 		useProfessionals();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-	const listToRender = filterQuery ? filteredProfessionals : professionals;
-
-	if (listToRender.length === 0) {
-		return (
-			<Alert severity="warning" sx={{ mt: 5 }}>
-				No se encontraron resultados.
-			</Alert>
-		);
-	}
 
 	const openDrawer = () => {
 		setIsDrawerOpen(true);
@@ -38,6 +28,16 @@ export const ProfessionalsData = () => {
 		setIsDrawerOpen(false);
 	};
 
+	const listToRender = filterQuery ? filteredProfessionals : professionals;
+
+	if (listToRender.length === 0) {
+		return (
+			<Alert severity="warning" sx={{ mt: 5 }}>
+				No se encontraron resultados.
+			</Alert>
+		);
+	}
+
 	return (
 		<>
 			<Grid container spacing={2} sx={{ mt: 5 }}>
@@ -47,26 +47,32 @@ export const ProfessionalsData = () => {
 							<Typography fontWeight="bold" variant="h6" component="p">
 								{professional.nombre} {professional.apellido}
 							</Typography>
-							<Typography>Tel: {professional.celular}</Typography>
-							<Typography>Cédula: {professional.cedula}</Typography>
-							<Box sx={{ display: 'flex', gap: 3, mt: 2 }}>
-								<Button
-									color="primary"
-									variant="outlined"
-									size="small"
-									onClick={handleEditProfessional(professional)}
-								>
-									Editar
-								</Button>
-								<Button color="error" size="small">
-									Eliminar
-								</Button>
-							</Box>
+							{professional.ausencias.map((absence) => (
+								<Grid key={absence.id}>
+									<Paper variant="outlined" sx={{ p: 1 }}>
+										<Typography>Desde {absence.fechaDesde}</Typography>
+										<Typography sx={{ mb: 1 }}>Hasta {absence.fechaHasta}</Typography>
+										<Box sx={{ display: 'flex', gap: 3 }}>
+											<Button
+												color="primary"
+												variant="outlined"
+												size="small"
+												onClick={handleEditProfessional(professional)}
+											>
+												Editar
+											</Button>
+											<Button color="error" size="small">
+												Eliminar
+											</Button>
+										</Box>
+									</Paper>
+								</Grid>
+							))}
 						</Paper>
 					</Grid>
 				))}
 			</Grid>
-			<EditProfessionalData open={isDrawerOpen} onClose={closeDrawer} />
+			<EditAbsence open={isDrawerOpen} onClose={closeDrawer} />
 		</>
 	);
 };

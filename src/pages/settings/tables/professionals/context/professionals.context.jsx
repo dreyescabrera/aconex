@@ -7,8 +7,23 @@ import { createContext, useContext, useState } from 'react';
  * @property {number} cedula
  * @property {number} celular
  * @property {string} direccion
+ * @property {string} email
  * @property {Array<{nroDia: number, horaDesde: string, horaHasta: string}>} horarios
+ * @property {Array<{id: string, fechaDesde: string, fechaHasta: string}>} ausencias
  */
+
+const ausenciasFake = [
+	{
+		id: Math.random().toFixed(4),
+		fechaDesde: '24/09/23',
+		fechaHasta: '24/10/23',
+	},
+	{
+		id: Math.random().toFixed(4),
+		fechaDesde: '10/09/23',
+		fechaHasta: '10/10/23',
+	},
+];
 
 const horariosFake = [
 	{
@@ -58,15 +73,19 @@ const professionals = [
 		cedula: 40823774,
 		celular: 2643183732,
 		direccion: 'calle 123',
+		email: 'correo@gmail.com',
 		horarios: [...horariosFake],
+		ausencias: [...ausenciasFake],
 	},
 	{
 		nombre: 'Diego',
 		apellido: 'Reyes',
 		cedula: 12345678,
 		celular: 8889832730,
+		email: 'correo@gmail.com',
 		direccion: 'calle 456',
 		horarios: [...horariosFake],
+		ausencias: [...ausenciasFake],
 	},
 	{
 		nombre: 'Harold',
@@ -74,7 +93,9 @@ const professionals = [
 		cedula: 345678,
 		celular: 3215457686,
 		direccion: 'calle 789',
+		email: 'correo@gmail.com',
 		horarios: [...horariosFake],
+		ausencias: [...ausenciasFake],
 	},
 ];
 

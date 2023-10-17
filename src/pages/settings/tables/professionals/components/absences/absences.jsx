@@ -6,9 +6,10 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useProfessionalsContext } from '../../context/professionals.context';
 import { EditAbsence } from './edit-absence';
+import { NewAbsence } from './new-absence';
 
 export const Absences = () => {
-	const { isDrawerOpen, closeDrawer, handleEditProfessional, listToRender } =
+	const { isDrawerOpen, drawerToOpen, openDrawer, closeDrawer, handleEditAbsence, listToRender } =
 		useProfessionalsContext();
 
 	if (listToRender.length === 0) {
@@ -20,8 +21,16 @@ export const Absences = () => {
 	}
 
 	return (
-		<>
-			<Grid container spacing={2} sx={{ mt: 5 }}>
+		<Box>
+			<Button
+				color="primary"
+				variant="contained"
+				onClick={() => openDrawer('newAbsence')}
+				sx={{ mt: 2, mb: 4 }}
+			>
+				Nueva ausencia
+			</Button>
+			<Grid container spacing={2}>
 				{listToRender.map((professional) => (
 					<Grid key={professional.celular} xs={12} md={6} lg={4}>
 						<Paper variant="outlined" sx={{ p: 2 }}>
@@ -38,7 +47,7 @@ export const Absences = () => {
 												color="primary"
 												variant="outlined"
 												size="small"
-												onClick={handleEditProfessional(professional)}
+												onClick={handleEditAbsence(professional, absence, 'editAbsence')}
 											>
 												Editar
 											</Button>
@@ -53,7 +62,8 @@ export const Absences = () => {
 					</Grid>
 				))}
 			</Grid>
-			<EditAbsence open={isDrawerOpen} onClose={closeDrawer} />
-		</>
+			<NewAbsence open={isDrawerOpen && drawerToOpen === 'newAbsence'} onClose={closeDrawer} />
+			<EditAbsence open={isDrawerOpen && drawerToOpen === 'editAbsence'} onClose={closeDrawer} />
+		</Box>
 	);
 };

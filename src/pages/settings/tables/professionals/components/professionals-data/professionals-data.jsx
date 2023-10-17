@@ -6,10 +6,17 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useProfessionalsContext } from '../../context/professionals.context';
 import { EditProfessionalData } from './edit-professional-data';
+import { NewProfessionalData } from './new-professional';
 
 export const ProfessionalsData = () => {
-	const { isDrawerOpen, closeDrawer, handleEditProfessional, listToRender } =
-		useProfessionalsContext();
+	const {
+		isDrawerOpen,
+		closeDrawer,
+		handleEditProfessional,
+		listToRender,
+		openDrawer,
+		drawerToOpen,
+	} = useProfessionalsContext();
 
 	if (listToRender.length === 0) {
 		return (
@@ -20,8 +27,15 @@ export const ProfessionalsData = () => {
 	}
 
 	return (
-		<>
-			<Grid container spacing={2} sx={{ mt: 5 }}>
+		<Box>
+			<Button
+				onClick={() => openDrawer('newProfessional')}
+				variant="contained"
+				sx={{ mt: 2, mb: 4 }}
+			>
+				Nuevo profesional
+			</Button>
+			<Grid container spacing={2}>
 				{listToRender.map((professional) => (
 					<Grid key={professional.celular} xs={12} md={6} lg={4}>
 						<Paper variant="outlined" sx={{ p: 2 }}>
@@ -35,7 +49,7 @@ export const ProfessionalsData = () => {
 									color="primary"
 									variant="outlined"
 									size="small"
-									onClick={handleEditProfessional(professional)}
+									onClick={handleEditProfessional(professional, 'editProfessional')}
 								>
 									Editar
 								</Button>
@@ -47,7 +61,14 @@ export const ProfessionalsData = () => {
 					</Grid>
 				))}
 			</Grid>
-			<EditProfessionalData open={isDrawerOpen} onClose={closeDrawer} />
-		</>
+			<NewProfessionalData
+				open={isDrawerOpen && drawerToOpen === 'newProfessional'}
+				onClose={closeDrawer}
+			/>
+			<EditProfessionalData
+				open={isDrawerOpen && drawerToOpen === 'editProfessional'}
+				onClose={closeDrawer}
+			/>
+		</Box>
 	);
 };

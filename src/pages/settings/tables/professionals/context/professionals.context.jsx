@@ -1,116 +1,42 @@
 import { createContext, useContext, useState } from 'react';
+import { professionals } from './fake-data';
 
 /**
- * @typedef {object} Professional
- * @property {string} nombre
- * @property {string} apellido
- * @property {number} cedula
- * @property {number} celular
- * @property {string} direccion
- * @property {string} email
- * @property {Array<{nroDia: number, horaDesde: string, horaHasta: string}>} horarios
- * @property {Array<{id: string, fechaDesde: string, fechaHasta: string}>} ausencias
+ * @typedef {"newProfessional" | "editProfessional" | "newSchedule" | "editSchedule" | "newAbsence" | "editAbsence" | null} DrawerToOpen
  */
-
-const ausenciasFake = [
-	{
-		id: Math.random().toFixed(4),
-		fechaDesde: '24/09/23',
-		fechaHasta: '24/10/23',
-	},
-	{
-		id: Math.random().toFixed(4),
-		fechaDesde: '10/09/23',
-		fechaHasta: '10/10/23',
-	},
-];
-
-const horariosFake = [
-	{
-		nroDia: 1,
-		horaDesde: '11:00:00',
-		horaHasta: '20:00:00',
-	},
-	{
-		nroDia: 2,
-		horaDesde: '11:00:00',
-		horaHasta: '20:00:00',
-	},
-	{
-		nroDia: 3,
-		horaDesde: '11:00:00',
-		horaHasta: '20:00:00',
-	},
-	{
-		nroDia: 4,
-		horaDesde: '11:00:00',
-		horaHasta: '20:00:00',
-	},
-	{
-		nroDia: 5,
-		horaDesde: '11:00:00',
-		horaHasta: '20:00:00',
-	},
-	{
-		nroDia: 6,
-		horaDesde: '11:00:00',
-		horaHasta: '20:00:00',
-	},
-	{
-		nroDia: 7,
-		horaDesde: '11:00:00',
-		horaHasta: '20:00:00',
-	},
-];
-
-/**
- * @type {Array<Professional>}
- */
-const professionals = [
-	{
-		nombre: 'Luciano',
-		apellido: 'Massa',
-		cedula: 40823774,
-		celular: 2643183732,
-		direccion: 'calle 123',
-		email: 'correo@gmail.com',
-		horarios: [...horariosFake],
-		ausencias: [...ausenciasFake],
-	},
-	{
-		nombre: 'Diego',
-		apellido: 'Reyes',
-		cedula: 12345678,
-		celular: 8889832730,
-		email: 'correo@gmail.com',
-		direccion: 'calle 456',
-		horarios: [...horariosFake],
-		ausencias: [...ausenciasFake],
-	},
-	{
-		nombre: 'Harold',
-		apellido: 'Alzate',
-		cedula: 345678,
-		celular: 3215457686,
-		direccion: 'calle 789',
-		email: 'correo@gmail.com',
-		horarios: [...horariosFake],
-		ausencias: [...ausenciasFake],
-	},
-];
 
 /* eslint-disable */
 const initialData = {
 	professionals,
-	/**@type {Array<Professional>} */
+	/**@type {Array<import('./fake-data').Professional>} */
 	listToRender: [],
-	/**@type {Professional} */
+	/**@type {import('./fake-data').Professional} */
 	professionalInView: null,
+	/**@type {import('./fake-data').Schedule} */
+	scheduleInView: null,
+	/**@type {import('./fake-data').Absence} */
+	absenceInView: null,
 	isDrawerOpen: false,
+	/**@type {DrawerToOpen} */
+	drawerToOpen: null,
 	handleFilterChange: (event) => undefined,
 	handleAutocompleteClick: (event, value) => undefined,
+	openDrawer: (/**@type {DrawerToOpen} */ drawerToOpen) => undefined,
 	closeDrawer: () => undefined,
-	handleEditProfessional: (professional) => undefined,
+	handleEditProfessional: (
+		/**@type {import('./fake-data').Professional} */ professional,
+		/**@type {DrawerToOpen} */ drawerToOpen
+	) => undefined,
+	handleEditSchedule: (
+		/**@type {import('./fake-data').Professional} */ professional,
+		/**@type {import('./fake-data').Schedule} */ schedule,
+		/**@type {DrawerToOpen} */ drawerToOpen
+	) => undefined,
+	handleEditAbsence: (
+		/**@type {import('./fake-data').Professional} */ professional,
+		/**@type {import('./fake-data').Absence} */ absence,
+		/**@type {DrawerToOpen} */ drawerToOpen
+	) => undefined,
 };
 /* eslint-enable */
 
@@ -119,29 +45,46 @@ const ProfessionalsContext = createContext(initialData);
 export const ProfessionalsProvider = ({ children }) => {
 	const [professionals] = useState(initialData.professionals);
 	const [professionalInView, setProfessionalInView] = useState(null);
+	const [scheduleInView, setScheduleInView] = useState(null);
+	const [absenceInView, setAbsenceInView] = useState(null);
 	const [filteredProfessionals, setFilteredProfessionals] = useState([]);
 	const [filterQuery, setFilterQuery] = useState('');
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [drawerToOpen, setdrawerToOpen] = useState(null);
 
 	const listToRender = filterQuery ? filteredProfessionals : professionals;
 
-	const openDrawer = () => {
+	const openDrawer = (drawerToOpen) => {
+		setdrawerToOpen(drawerToOpen);
 		setIsDrawerOpen(true);
 	};
 
 	const closeDrawer = () => {
+		setdrawerToOpen(null);
 		setIsDrawerOpen(false);
 	};
 
-	const handleEditProfessional = (professional) => {
+	const handleEditProfessional = (professional, drawerToOpen) => {
 		return () => {
-			changeProfessionalInView(professional);
-			openDrawer();
+			setProfessionalInView(professional);
+			openDrawer(drawerToOpen);
 		};
 	};
 
-	const changeProfessionalInView = (newProfessional) => {
-		setProfessionalInView(newProfessional);
+	const handleEditSchedule = (professional, schedule, drawerToOpen) => {
+		return () => {
+			setProfessionalInView(professional);
+			setScheduleInView(schedule);
+			openDrawer(drawerToOpen);
+		};
+	};
+
+	const handleEditAbsence = (professional, absence, drawerToOpen) => {
+		return () => {
+			setProfessionalInView(professional);
+			setAbsenceInView(absence);
+			openDrawer(drawerToOpen);
+		};
 	};
 
 	const updateFilteredProfessionals = (newList) => {
@@ -174,13 +117,19 @@ export const ProfessionalsProvider = ({ children }) => {
 
 	const state = {
 		professionals,
-		professionalInView,
-		isDrawerOpen,
 		listToRender,
+		isDrawerOpen,
+		drawerToOpen,
+		professionalInView,
+		scheduleInView,
+		absenceInView,
+		openDrawer,
 		handleFilterChange,
 		handleAutocompleteClick,
 		closeDrawer,
 		handleEditProfessional,
+		handleEditSchedule,
+		handleEditAbsence,
 	};
 
 	return <ProfessionalsContext.Provider value={state}>{children}</ProfessionalsContext.Provider>;

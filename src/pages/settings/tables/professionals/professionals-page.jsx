@@ -21,9 +21,10 @@ export const ProfessionalsPage = () => {
 			</Helmet>
 			<ProfessionalsProvider>
 				<Container>
-					<Typography variant="h3" component="h1" sx={{ mb: 4 }}>
+					<Typography variant="h3" component="h1">
 						Profesionales
 					</Typography>
+
 					<Tabs
 						value={tabValue}
 						onChange={handleTabChange}

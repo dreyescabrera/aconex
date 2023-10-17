@@ -30,8 +30,8 @@ export const Autocomplete = (props) => {
 			renderInput={(params) => (
 				<TextField {...params} {...inputProps} error={Boolean(error)} helperText={error?.message} />
 			)}
-			{...field}
 			{...autocompleteProps}
+			{...field}
 			onChange={(_, data) => field.onChange(data)}
 		/>
 	);

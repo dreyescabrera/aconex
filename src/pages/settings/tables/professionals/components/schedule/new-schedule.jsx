@@ -1,10 +1,8 @@
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
 import { dayList } from '@/constants/day-list';
 import { useProfessionalsContext } from '../../context/professionals.context';
@@ -24,32 +22,39 @@ const Drawer = styled(MuiDrawer)(() => ({
  * @param {boolean} props.open
  * @param {() => void} props.onClose
  */
-export const EditSchedule = ({ open, onClose }) => {
-	const { scheduleInView, professionalInView } = useProfessionalsContext();
+export const NewSchedule = ({ open, onClose }) => {
+	const { professionals } = useProfessionalsContext();
 
 	return (
 		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
-			<Typography variant="h4" component="h2">
+			<Typography variant="h4" component="h2" sx={{ mb: 3 }}>
 				Horarios disponible
-			</Typography>
-			<Typography variant="h6" component="p" sx={{ mt: 1, mb: 3 }}>
-				{professionalInView?.nombre} {professionalInView?.apellido} - {professionalInView?.cedula}
 			</Typography>
 			<Form
 				onSubmit={console.info}
 				defaultValues={{
-					dia: scheduleInView,
-					especialidad: scheduleInView?.especialidad,
-					horaDesde: dayjs(scheduleInView?.horaDesde),
-					horaHasta: dayjs(scheduleInView?.horaHasta),
-					intervalo: dayjs(scheduleInView?.intervalo),
-					fechaDesde: dayjs(scheduleInView?.fechaDesde),
-					fechaHasta: dayjs(scheduleInView?.fechaHasta),
+					profesional: null,
+					dia: null,
+					especialidad: null,
+					horaDesde: null,
+					horaHasta: null,
+					intervalo: null,
+					fechaDesde: null,
+					fechaHasta: null,
 				}}
 			>
 				<Stack spacing={3}>
 					<Autocomplete
-						options={professionalInView?.horarios}
+						options={professionals}
+						getOptionLabel={(option) =>
+							typeof option !== 'string' ? `${option.nombre} ${option.apellido}` : option
+						}
+						isOptionEqualToValue={(option, value) => option.email === value.email}
+						name="profesional"
+						inputProps={{ label: 'Profesional', variant: 'standard' }}
+					/>
+					<Autocomplete
+						options={professionals[0]?.horarios}
 						name="dia"
 						getOptionLabel={(option) => dayList[option.nroDia]}
 						isOptionEqualToValue={(option, value) => option.nroDia === value.nroDia}
@@ -60,7 +65,6 @@ export const EditSchedule = ({ open, onClose }) => {
 						name="especialidad"
 						inputProps={{ label: 'Seleccionar especialidad', variant: 'standard' }}
 					/>
-					<Divider />
 					<Stack direction="row" spacing={1}>
 						<TimePicker
 							name="horaDesde"

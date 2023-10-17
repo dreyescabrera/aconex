@@ -16,9 +16,9 @@ export const NewHolidaysPage = () => {
 					Nuevo Feriado
 				</Typography>
 				<Typography paragraph>Especifica el día y descripción del nuevo feriado</Typography>
-				<Form onSubmit={console.log} defaultValues={{ dia: null, descripcion: '' }}>
+				<Form onSubmit={console.info} defaultValues={{ dia: null, descripcion: '' }}>
 					<Stack direction="row" spacing={4} justifyContent="start">
-						<DatePicker name="dia" label="Día" />
+						<DatePicker name="dia" label="Día" disablePast />
 						<TextInput
 							name="descripcion"
 							label="Descripción"

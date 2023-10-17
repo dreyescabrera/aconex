@@ -18,7 +18,7 @@ export const NewSpecialtiesPage = () => {
 				<Typography paragraph>
 					Especifica el código y descripción de la nueva especialidad
 				</Typography>
-				<Form onSubmit={console.log} defaultValues={{ codigo: '', descripcion: '' }}>
+				<Form onSubmit={console.info} defaultValues={{ codigo: '', descripcion: '' }}>
 					<Stack direction="row" spacing={4} justifyContent="start">
 						<TextInput name="codigo" label="Código" variant="outlined" type="number" />
 						<TextInput

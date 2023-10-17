@@ -15,7 +15,7 @@ export const UserData = () => {
 				<Fade in={view === 'USER_DATA'} appear={false} timeout={200}>
 					<div>
 						<Form
-							onSubmit={console.log}
+							onSubmit={console.info}
 							defaultValues={{
 								username: '',
 								password: '',

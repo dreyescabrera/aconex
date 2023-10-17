@@ -19,7 +19,7 @@ export const ParametersPage = () => {
 					Datos generales
 				</Typography>
 				<Form
-					onSubmit={console.log}
+					onSubmit={console.info}
 					defaultValues={{
 						nombre: '',
 						direccion: '',

@@ -11,7 +11,7 @@ export const ProfileData = () => {
 
 	const handleSubmit = (profile) => {
 		updateView('USER_DATA');
-		console.log(profile);
+		console.info(profile);
 	};
 
 	return (

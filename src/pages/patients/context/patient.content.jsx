@@ -79,5 +79,7 @@ export const PatientsProvider = ({ children }) => {
 		handleFilterChange,
 	};
 	return <PatientsContext.Provider value={state}>{children}</PatientsContext.Provider>;
-}; // eslint-disable-next-line react-refresh/only-export-components
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
 export const usePatientsContext = () => useContext(PatientsContext);

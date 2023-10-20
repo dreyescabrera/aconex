@@ -5,7 +5,7 @@ import { FilterInput } from './components/filter-input';
 import { PatientsData } from './components/patients-data';
 import { PatientsProvider } from './context/patient.content';
 
-const PatientPage = () => {
+export const PatientPage = () => {
 	return (
 		<>
 			<Helmet>
@@ -23,5 +23,3 @@ const PatientPage = () => {
 		</>
 	);
 };
-
-export default PatientPage;

@@ -12,7 +12,6 @@ const initialData = {
 	listToRender: [],
 	/**@type {import('./fake-data').Patient} */
 	patientInVIew: null,
-	isDrawerOpen: false,
 	/**@type {DrawerToOpen} */
 	drawerToOpen: null,
 	handleFilterChange: (event) => undefined,
@@ -32,16 +31,15 @@ export const PatientsProvider = ({ children }) => {
 	const [patientInVIew, setPatientInView] = useState(null);
 	const [filteredPatients, setFilteredPatients] = useState([]);
 	const [filterQuery, setFilterQuery] = useState('');
-	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [drawerToOpen, setdrawerToOpen] = useState(null);
+
 	const listToRender = filterQuery ? filteredPatients : patients;
+
 	const openDrawer = (drawerToOpen) => {
 		setdrawerToOpen(drawerToOpen);
-		setIsDrawerOpen(true);
 	};
 	const closeDrawer = () => {
 		setdrawerToOpen(null);
-		setIsDrawerOpen(false);
 	};
 	const handleEditPatient = (patient, drawerToOpen) => {
 		return () => {
@@ -72,7 +70,6 @@ export const PatientsProvider = ({ children }) => {
 	const state = {
 		patients,
 		patientInVIew,
-		isDrawerOpen,
 		drawerToOpen,
 		listToRender,
 		openDrawer,

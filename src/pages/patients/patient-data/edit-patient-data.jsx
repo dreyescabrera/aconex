@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { DatePicker, Form, TextInput } from '@/components/form';
+import { usePatientsContext } from '../context/patient.content';
 
 const Drawer = styled(MuiDrawer)(() => ({
 	'& .MuiDrawer-paper': {
@@ -18,10 +19,11 @@ const Drawer = styled(MuiDrawer)(() => ({
  * @param {() => void} props.onClose
  */
 export const EditPatientData = ({ open, onClose }) => {
+	const { patientInVIew } = usePatientsContext();
 	return (
 		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
-				Nuevo paciente
+				Paciente: {patientInVIew?.nombre} {patientInVIew?.apellido}
 			</Typography>
 			<Typography variant="h6" component="p" sx={{ mt: 1, mb: 3 }}>
 				Datos requeridos
@@ -29,21 +31,22 @@ export const EditPatientData = ({ open, onClose }) => {
 			<Form
 				onSubmit={console.info}
 				defaultValues={{
-					nombre: '',
-					apellido: '',
-					cedula: '',
-					celular: '',
-					direccion: '',
-					pasaporte: '',
+					nombre: patientInVIew?.nombre,
+					apellido: patientInVIew?.apellido,
+					cedula: patientInVIew?.cedula,
+					celular: patientInVIew?.celular,
+					direccion: patientInVIew?.direccion,
+					email: patientInVIew?.email,
+					nacimiento: null,
 				}}
 			>
 				<Stack spacing={3}>
 					<TextInput name="nombre" label="Nombre" />
 					<TextInput name="apellido" label="Apellido" />
-					<TextInput name="cedula" label="DNI" />
+					<TextInput name="cedula" label="Número de Cédula" />
 					<TextInput name="celular" label="Celular" />
 					<TextInput name="direccion" label="Dirección" />
-					<TextInput name="pasaporte" label="pasaporte" />
+					<TextInput name="email" label="Correo electrónico" />
 					<DatePicker
 						name="nacimiento"
 						label="Fecha de nacimiento"
@@ -51,12 +54,10 @@ export const EditPatientData = ({ open, onClose }) => {
 						disableFuture
 					/>
 					<Button type="submit" variant="contained">
-						Continuar
+						Guardar
 					</Button>
 				</Stack>
 			</Form>
 		</Drawer>
 	);
 };
-
-export default EditPatientData;

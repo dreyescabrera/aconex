@@ -3,7 +3,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { Form, TextInput } from '@/components/form';
+import { DatePicker, Form, TextInput } from '@/components/form';
 
 const Drawer = styled(MuiDrawer)(() => ({
 	'& .MuiDrawer-paper': {
@@ -33,16 +33,23 @@ export const NewPatient = ({ open, onClose }) => {
 					cedula: '',
 					celular: '',
 					direccion: '',
-					pasaporte: '',
+					email: '',
+					nacimiento: '',
 				}}
 			>
 				<Stack spacing={3}>
 					<TextInput name="nombre" label="Nombre" />
 					<TextInput name="apellido" label="Apellido" />
-					<TextInput name="cedula" label="DNI" />
+					<TextInput name="cedula" label="Número de Cédula" />
 					<TextInput name="celular" label="Celular" />
 					<TextInput name="direccion" label="Dirección" />
-					<TextInput name="pasaporte" label="pasaporte" />
+					<TextInput name="email" label="Correo electrónico" />
+					<DatePicker
+						name="nacimiento"
+						label="Fecha de nacimiento"
+						slotProps={{ textField: { variant: 'standard' } }}
+						disableFuture
+					/>
 					<Button type="submit" variant="contained">
 						Crear
 					</Button>

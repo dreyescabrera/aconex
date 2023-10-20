@@ -1,4 +1,4 @@
-import PatientPage from '@/pages/patients/tables/patient-page';
+import PatientPage from '@/pages/patients/patient-page';
 
 export const patientsRouter = [
 	{

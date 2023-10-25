@@ -8,6 +8,9 @@ import { ProfessionalsPage } from '@/pages/settings/tables/professionals';
 import { SpecialtiesPage } from '@/pages/settings/tables/specialties';
 import { NewSpecialtiesPage } from '@/pages/settings/tables/specialties/new-specialty';
 
+/**
+ * @type {Array<import('react-router-dom').RouteObject>}
+ */
 export const settingsRouter = [
 	{
 		path: '/configuracion',

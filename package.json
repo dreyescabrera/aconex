@@ -9,7 +9,7 @@
 		"preview": "vite preview",
 		"check": "tsc --noEmit",
 		"lint": "eslint --ext js,jsx --max-warnings 0",
-		"format": "prettier --write ./src/",
+		"format": "prettier --write/",
 		"format:check": "prettier --check ./src/",
 		"prepare": "husky install"
 	},

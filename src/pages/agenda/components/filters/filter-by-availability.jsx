@@ -9,7 +9,7 @@ export const FilterByAvailability = () => {
 
 	const handleChange = (ev) => {
 		const isChecked = ev.target.checked;
-		updateFilters({ libres: isChecked || undefined }); // undefined por error en la API
+		updateFilters({ libres: isChecked || undefined }); // undefined para mostrar todos los turnos, en vez de solo los ocupados
 	};
 
 	return (
@@ -17,7 +17,6 @@ export const FilterByAvailability = () => {
 			<Typography variant="h6" component="h3" sx={{ mb: 2 }}>
 				Horarios disponibles
 			</Typography>
-
 			<FormControlLabel
 				control={<Switch onChange={handleChange} />}
 				label="Muestra solo los turnos disponibles"

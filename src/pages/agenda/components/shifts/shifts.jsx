@@ -33,14 +33,14 @@ export const Shifts = () => {
 			<Table>
 				<TableHead>
 					<TableRow>
-						<TableCell sx={{ width: '12ch', position: 'relative' }} align="center">
+						<TableCell sx={{ width: '5%', position: 'relative' }} align="center">
 							<span>Turno</span>
 							<Divider orientation="vertical" absolute sx={{ height: '50%', top: '25%' }} />
 						</TableCell>
-						<TableCell sx={{ width: '30%' }}>Paciente</TableCell>
+						<TableCell sx={{ width: '20%' }}>Paciente</TableCell>
 						<TableCell sx={{ width: '20%' }}>Presentismo</TableCell>
-						<TableCell>Observación</TableCell>
-						<TableCell sx={{ width: '12%' }}>Contacto</TableCell>
+						<TableCell sx={{ width: '20%' }}>Observación</TableCell>
+						<TableCell sx={{ minWidth: '115px', width: '20%' }}>Contacto</TableCell>
 						<TableCell sx={{ width: '0' }}></TableCell>
 					</TableRow>
 				</TableHead>
@@ -49,25 +49,29 @@ export const Shifts = () => {
 						<SkeletonRows />
 					) : (
 						<>
-							{shifts?.map((row) => (
-								<Fragment key={row.id}>
-									{row.pacienteId ? (
+							{shifts?.map((shift) => (
+								<Fragment key={shift.id}>
+									{shift.pacienteId ? (
 										<TableRow
 											sx={{
 												textTransform: 'capitalize',
 												'&:last-child td, &:last-child th': { border: 0 },
 											}}
 										>
-											<TimeCell date={row.date} />
+											<TimeCell date={shift.date} />
 
-											<TableCell>{row.pacienteId}</TableCell>
-											<TableCell sx={{ textTransform: 'capitalize' }}>{row.presentismo}</TableCell>
-											<TableCell>{row.observacion}</TableCell>
 											<TableCell>
-												<IconButton>
+												{shift.paciente.perfil.nombre} {shift.paciente.perfil.apellido}
+											</TableCell>
+											<TableCell sx={{ textTransform: 'capitalize' }}>
+												{shift.presentismo}
+											</TableCell>
+											<TableCell>{shift.observacion}</TableCell>
+											<TableCell>
+												<IconButton href={`tel:${shift.paciente.perfil.celular}`}>
 													<CallIcon />
 												</IconButton>
-												<IconButton sx={{ ml: 1 }}>
+												<IconButton>
 													<WhatsappIcon />
 												</IconButton>
 											</TableCell>
@@ -82,8 +86,8 @@ export const Shifts = () => {
 											sx={{ cursor: 'pointer', '&:hover': { background: '#CCC2' } }}
 											onClick={() => openDrawer('emptyShiftOptions')}
 										>
-											<TimeCell date={row.date} />
-											<TableCell>{row.id}</TableCell>
+											<TimeCell date={shift.date} />
+											<TableCell></TableCell>
 											<TableCell></TableCell>
 											<TableCell></TableCell>
 											<TableCell></TableCell>
@@ -108,8 +112,8 @@ export const Shifts = () => {
 
 function TimeCell({ date }) {
 	return (
-		<TableCell sx={{ position: 'relative' }}>
-			<span>{dayjs.tz(date, 'America/Argentina/Buenos_Aires').format('DD MMM hh:mm A')}</span>
+		<TableCell sx={{ position: 'relative' }} align="center">
+			<span>{dayjs.tz(date, 'America/Argentina/Buenos_Aires').format('HH:mm')}</span>
 			<Divider orientation="vertical" absolute sx={{ height: '50%', top: '25%' }} />
 		</TableCell>
 	);

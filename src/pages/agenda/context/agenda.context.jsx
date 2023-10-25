@@ -9,7 +9,7 @@ import { createContext, useContext, useState } from 'react';
  * @typedef Filters
  * @property {number} profesionalId
  * @property {number} especialidadId
- * @property {boolean} libres
+ * @property {boolean | undefined} libres
  * @property {string} fechaDesde
  * @property {string} fechaHasta
  */

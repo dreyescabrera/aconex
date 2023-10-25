@@ -14,13 +14,13 @@ export const PatientsData = () => {
 		<Box>
 			<Grid container spacing={2} sx={{ mt: 2 }}>
 				{listToRender.map((patient) => (
-					<Grid key={patient.email} xs={12} md={6} lg={3}>
+					<Grid key={patient.id} xs={12} md={6} lg={3}>
 						<Paper variant="outlined" sx={{ p: 4 }}>
 							<Typography fontWeight="bold" variant="h6" component="p">
-								{patient.nombre} {patient.apellido}
+								{patient.perfil.nombre} {patient.perfil.apellido}
 							</Typography>
-							<Typography>Cedula: {patient.cedula} </Typography>
-							<Typography>Tel: {patient.celular} </Typography>
+							<Typography>Cedula: {patient.perfil.cedula} </Typography>
+							<Typography>Tel: {patient.perfil.celular} </Typography>
 							<Box sx={{ display: 'flex', gap: 3, mt: 2 }}>
 								<Button
 									color="primary"

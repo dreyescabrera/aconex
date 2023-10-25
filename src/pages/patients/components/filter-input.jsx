@@ -12,7 +12,7 @@ export const FilterInput = () => {
 			freeSolo
 			options={patients}
 			getOptionLabel={(option) =>
-				typeof option !== 'string' ? `${option.nombre} ${option.apellido}` : option
+				typeof option !== 'string' ? `${option.perfil.nombre} ${option.perfil.apellido}` : option
 			}
 			onChange={handleAutocompleteClick}
 			renderInput={(params) => (

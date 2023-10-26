@@ -17,7 +17,14 @@ const Message = ({ status }) => {
 		return <p>Cargando...</p>;
 	}
 	if (status.isSuccess) {
-		return <p>Especialidad agregada con exito</p>;
+		return (
+			<div>
+				<p>Especialidad agregada con exito</p>
+				<Button variant="contained" sx={{ mt: 'auto' }} href="../">
+					Volver
+				</Button>
+			</div>
+		);
 	}
 	if (status.isError) {
 		return <p>Error al agregar especialidad</p>;
@@ -27,7 +34,7 @@ const Message = ({ status }) => {
 export const NewSpecialtiesPage = () => {
 	const mutation = useMutation(addspecialty);
 	const handleSubmit = (event) => {
-		let specialty = { clinicaId: event.codigo, nombre: event.descripcion }; //el Codigo de la clinica debe obtenerse desde los datos del usuario
+		let specialty = { clinicaId: 1, nombre: event.descripcion }; //el Codigo de la clinica debe obtenerse desde los datos del usuario a traves del backend Arreglar esto
 		mutation.mutate(specialty);
 	};
 
@@ -45,7 +52,6 @@ export const NewSpecialtiesPage = () => {
 				</Typography>
 				<Form onSubmit={handleSubmit} defaultValues={{ codigo: '', descripcion: '' }}>
 					<Stack direction="row" spacing={4} justifyContent="start">
-						<TextInput name="codigo" label="Código" variant="outlined" type="number" />
 						<TextInput
 							name="descripcion"
 							label="Descripción"

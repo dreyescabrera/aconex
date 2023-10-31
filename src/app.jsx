@@ -11,15 +11,15 @@ const queryClient = new QueryClient();
 export function App() {
 	return (
 		<>
-			<Helmet
-				titleTemplate="%s | AConex - Boot & Calendar"
-				defaultTitle="AConex - Boot & Calendar"
-			/>
-			<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
-				<QueryClientProvider client={queryClient}>
+			<QueryClientProvider client={queryClient}>
+				<Helmet
+					titleTemplate="%s | AConex - Boot & Calendar"
+					defaultTitle="AConex - Boot & Calendar"
+				/>
+				<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
 					<RouterProvider router={router} />
-				</QueryClientProvider>
-			</LocalizationProvider>
+				</LocalizationProvider>
+			</QueryClientProvider>
 		</>
 	);
 }

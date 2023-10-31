@@ -27,6 +27,9 @@ export const NewPatient = ({ open, onClose }) => {
 	const handleSubmit = async (data) => {
 		const response = await postProfile(data);
 		createPatient({ clinicaId: fakeClinicId, perfilId: response.data.id });
+		if (response) {
+			onClose();
+		}
 	};
 
 	return (

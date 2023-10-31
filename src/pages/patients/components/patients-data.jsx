@@ -3,6 +3,9 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
+import { useEffect, useState } from 'react';
+import { deletePatient } from '@/services/patients';
+import { getPatients } from '@/services/patients';
 import { usePatientsContext } from '../context/patient.content';
 import { EditPatientData } from '../patient-data/edit-patient-data';
 import { NewPatient } from '../patient-data/new-patient';
@@ -10,6 +13,23 @@ import { NewPatient } from '../patient-data/new-patient';
 export const PatientsData = () => {
 	const { closeDrawer, drawerToOpen, openDrawer, listToRender, handleEditPatient } =
 		usePatientsContext();
+	const fakeClinicId = 1;
+	const [patientsData, setPatientsData] = useState([]);
+	const [allPatients, setAllPatients] = useState([]);
+	useEffect(() => {
+		const fetchPatients = async () => {
+			const allPatientsData = await getPatients(fakeClinicId);
+			setAllPatients(allPatientsData);
+		};
+		fetchPatients();
+	}, []);
+	const handleDelete = async (perfilId) => {
+		const response = await deletePatient(fakeClinicId, perfilId);
+		const updatedPatientsData = allPatients.filter((patient) => patient.perfil.id !== perfilId);
+		setAllPatients(updatedPatientsData);
+		setPatientsData(updatedPatientsData);
+		return response.id;
+	};
 	return (
 		<Box>
 			<Grid container spacing={2} sx={{ mt: 2 }}>
@@ -30,7 +50,7 @@ export const PatientsData = () => {
 								>
 									Editar
 								</Button>
-								<Button color="error" size="small">
+								<Button color="error" size="small" onClick={() => handleDelete(patient.id)}>
 									Eliminar
 								</Button>
 							</Box>

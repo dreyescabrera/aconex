@@ -4,6 +4,8 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { DatePicker, Form, TextInput } from '@/components/form';
+import { createPatient } from '@/services/patients';
+import { postProfile } from '@/services/profiles';
 
 const Drawer = styled(MuiDrawer)(() => ({
 	'& .MuiDrawer-paper': {
@@ -20,13 +22,20 @@ const Drawer = styled(MuiDrawer)(() => ({
  */
 
 export const NewPatient = ({ open, onClose }) => {
+	const fakeClinicId = 1;
+
+	const handleSubmit = async (data) => {
+		const response = await postProfile(data);
+		createPatient({ clinicaId: fakeClinicId, perfilId: response.data.id });
+	};
+
 	return (
 		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
 				Información paciente
 			</Typography>
 			<Form
-				onSubmit={console.info}
+				onSubmit={handleSubmit}
 				defaultValues={{
 					nombre: '',
 					apellido: '',

@@ -1,6 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { api } from '../../../services/api';
 
+/**
+ * Get an array of patients by clinicId.
+ * @param {number} clinicaId - The ID of the clinic.
+ * @returns {Promise<Array<Object>>} Array of patient objects.
+ */
 const getPatients = async (clinicaId) => {
 	try {
 		const response = await api.get(`/pacientes/${clinicaId}`);

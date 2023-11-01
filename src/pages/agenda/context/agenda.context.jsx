@@ -27,6 +27,8 @@ const initialFilters = {
 const initialData = {
 	filters: initialFilters,
 	updateFilters: (/** @type {Partial<Filters>} */ filters) => undefined,
+	shiftInView: null,
+	updateShiftInView: (newShift) => undefined,
 	/**@type {DrawerToOpen} */
 	drawerToOpen: null,
 	openDrawer: (/** @type {DrawerToOpen} */ drawerToOpen) => undefined,
@@ -37,11 +39,17 @@ const initialData = {
 const AgendaContext = createContext(initialData);
 
 export const AgendaProvider = ({ children }) => {
-	const [filters, setFilters] = useState(initialFilters);
+	const [filters, setFilters] = useState(initialData.filters);
+	const [shiftInView, setShiftInView] = useState(initialData.shiftInView);
+
 	const [drawerToOpen, setDrawerToOpen] = useState(null);
 
 	const updateFilters = (newFilters) => {
 		setFilters((prev) => ({ ...prev, ...newFilters }));
+	};
+
+	const updateShiftInView = (newShift) => {
+		setShiftInView(newShift);
 	};
 
 	const openDrawer = (drawerToOpen) => {
@@ -55,6 +63,8 @@ export const AgendaProvider = ({ children }) => {
 	const state = {
 		filters,
 		updateFilters,
+		shiftInView,
+		updateShiftInView,
 		drawerToOpen,
 		openDrawer,
 		closeDrawer,

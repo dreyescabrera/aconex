@@ -23,10 +23,17 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export const Shifts = () => {
-	const { filters, drawerToOpen, openDrawer, closeDrawer } = useAgendaContext();
+	const { filters, drawerToOpen, openDrawer, closeDrawer, updateShiftInView } = useAgendaContext();
 	const fakeClinicId = 1;
 
 	const { data: shifts, isLoading } = useShifts(fakeClinicId, filters);
+
+	const handleClickEmptyShift = (shift) => {
+		return () => {
+			updateShiftInView(shift);
+			openDrawer('emptyShiftOptions');
+		};
+	};
 
 	return (
 		<TableContainer component={Paper} sx={{ mt: 4 }}>
@@ -39,6 +46,7 @@ export const Shifts = () => {
 						</TableCell>
 						<TableCell sx={{ width: '20%' }}>Paciente</TableCell>
 						<TableCell sx={{ width: '20%' }}>Presentismo</TableCell>
+						<TableCell sx={{ width: '15%' }}>Obra Social</TableCell>
 						<TableCell sx={{ width: '20%' }}>Observación</TableCell>
 						<TableCell sx={{ minWidth: '115px', width: '20%' }}>Contacto</TableCell>
 						<TableCell sx={{ width: '0' }}></TableCell>
@@ -66,6 +74,7 @@ export const Shifts = () => {
 											<TableCell sx={{ textTransform: 'capitalize' }}>
 												{shift.presentismo}
 											</TableCell>
+											<TableCell sx={{ textTransform: 'capitalize' }}>{shift.obraSocial}</TableCell>
 											<TableCell>{shift.observacion}</TableCell>
 											<TableCell>
 												<IconButton href={`tel:${shift.paciente.perfil.celular}`}>
@@ -83,10 +92,17 @@ export const Shifts = () => {
 										</TableRow>
 									) : (
 										<TableRow
-											sx={{ cursor: 'pointer', '&:hover': { background: '#CCC2' } }}
-											onClick={() => openDrawer('emptyShiftOptions')}
+											sx={{
+												cursor: 'pointer',
+												pointerEvents: shift.habilitado ? 'auto' : 'none',
+												'&:hover': { background: '#CCC2' },
+											}}
+											onClick={handleClickEmptyShift(shift)}
 										>
 											<TimeCell date={shift.date} />
+											<TableCell sx={{ fontStyle: 'italic' }}>
+												{!shift.habilitado ? 'Deshabilitado' : ''}
+											</TableCell>
 											<TableCell></TableCell>
 											<TableCell></TableCell>
 											<TableCell></TableCell>

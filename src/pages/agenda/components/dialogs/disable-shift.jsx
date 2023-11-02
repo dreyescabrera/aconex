@@ -1,0 +1,67 @@
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grow from '@mui/material/Grow';
+import dayjs from 'dayjs';
+import { useEditShifts } from '../../hooks/use-edit-shifts';
+
+/**
+ * @param {object} props
+ * @param {boolean} props.open
+ * @param {() => void} props.onClose
+ * @param {any} props.shift
+ */
+export const DisableShift = ({ open, onClose, shift }) => {
+	const { mutate, isLoading, isSuccess } = useEditShifts();
+
+	const disableShift = () => {
+		mutate(
+			{ shiftId: shift?.id, habilitado: false },
+			{ onSuccess: () => setTimeout(onClose, 2_000) }
+		);
+	};
+
+	return (
+		<Dialog open={open} onClose={onClose}>
+			<DialogTitle>Deshabilitar turno</DialogTitle>
+			<DialogContent>
+				<DialogContentText>
+					Si confirmas, deshabilitarás el turno seleccionado. Quieres continuar?
+				</DialogContentText>
+				<DialogContentText
+					sx={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 20, mt: 1 }}
+				>
+					{dayjs(shift?.date).format('MMMM DD | HH:mm   ')}
+				</DialogContentText>
+			</DialogContent>
+			<DialogActions>
+				<Button variant="outlined" onClick={onClose} disabled={isLoading}>
+					No, cerrar
+				</Button>
+				<Button variant="contained" onClick={disableShift} disabled={isLoading}>
+					Sí, continuar
+					{isLoading && (
+						<CircularProgress
+							size={24}
+							sx={{
+								position: 'absolute',
+								top: '50%',
+								left: '50%',
+								marginTop: '-12px',
+								marginLeft: '-12px',
+							}}
+						/>
+					)}
+				</Button>
+			</DialogActions>
+			<Grow in={isSuccess}>
+				<Alert severity="success">Éxito</Alert>
+			</Grow>
+		</Dialog>
+	);
+};

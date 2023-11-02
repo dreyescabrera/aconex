@@ -23,17 +23,10 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export const Shifts = () => {
-	const { filters, drawerToOpen, openDrawer, closeDrawer, updateShiftInView } = useAgendaContext();
+	const { filters, drawerToOpen, closeDrawer, handleShiftOptions } = useAgendaContext();
 	const fakeClinicId = 1;
 
 	const { data: shifts, isLoading } = useShifts(fakeClinicId, filters);
-
-	const handleClickEmptyShift = (shift) => {
-		return () => {
-			updateShiftInView(shift);
-			openDrawer('emptyShiftOptions');
-		};
-	};
 
 	return (
 		<TableContainer component={Paper} sx={{ mt: 4 }}>
@@ -85,7 +78,7 @@ export const Shifts = () => {
 												</IconButton>
 											</TableCell>
 											<TableCell align="right">
-												<IconButton onClick={() => openDrawer('shiftOptions')}>
+												<IconButton onClick={handleShiftOptions(shift, 'shiftOptions')}>
 													<MoreVertIcon />
 												</IconButton>
 											</TableCell>
@@ -97,7 +90,7 @@ export const Shifts = () => {
 												pointerEvents: shift.habilitado ? 'auto' : 'none',
 												'&:hover': { background: '#CCC2' },
 											}}
-											onClick={handleClickEmptyShift(shift)}
+											onClick={handleShiftOptions(shift, 'emptyShiftOptions')}
 										>
 											<TimeCell date={shift.date} />
 											<TableCell sx={{ fontStyle: 'italic' }}>

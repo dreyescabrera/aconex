@@ -1,5 +1,5 @@
 import { AgendaPage } from '@/pages/agenda';
-import { NewOvertimePage } from '@/pages/agenda/new-overtime/new-overtime-page';
+import { NewOvertimePage } from '@/pages/agenda/new-overtime';
 import { NewShiftPage } from '@/pages/agenda/new-shift';
 
 /**

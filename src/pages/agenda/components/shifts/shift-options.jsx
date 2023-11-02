@@ -42,7 +42,7 @@ export const ShiftOptions = ({ open, onClose }) => {
 		},
 		{
 			text: 'Modificar turno',
-			href: './editar',
+			href: './editar_turno',
 		},
 		{
 			text: 'Detalles',

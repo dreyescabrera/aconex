@@ -79,8 +79,8 @@ export const EmptyShiftOptions = ({ open, onClose }) => {
 					{options.map((option) => (
 						<ListItem disablePadding key={option.text}>
 							<ListItemButton
-								to={option.href}
 								onClick={option.onClick}
+								to={option.href}
 								state={{ shift: shiftInView }}
 								component={Link}
 							>

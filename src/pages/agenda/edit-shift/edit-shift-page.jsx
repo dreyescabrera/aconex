@@ -18,7 +18,6 @@ export const EditShiftPage = () => {
 		state: { shift },
 	} = useLocation();
 	const navigate = useNavigate();
-
 	const handleMutate = (newFields) => {
 		const { paciente, ...rest } = newFields;
 		mutate(

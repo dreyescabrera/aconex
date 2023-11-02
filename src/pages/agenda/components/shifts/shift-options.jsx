@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAgendaContext } from '../../context/agenda.context';
-import { ShiftDetails } from '../dialogs';
+import { PatientInfo, ShiftDetails } from '../dialogs';
 
 const Drawer = styled(MuiDrawer)(({ theme }) => ({
 	'& .MuiDrawer-paper': {
@@ -91,6 +91,11 @@ export const ShiftOptions = ({ open, onClose }) => {
 			</Container>
 
 			<ShiftDetails open={dialog === 'details'} onClose={onCloseDialog} shift={shiftInView} />
+			<PatientInfo
+				open={dialog === 'patientInfo'}
+				onClose={onCloseDialog}
+				patient={shiftInView?.paciente}
+			/>
 		</Drawer>
 	);
 };

@@ -3,14 +3,18 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { DatePicker, Form } from '@/components/form';
 import { dayList } from '@/constants/day-list';
 import { useAgendaContext } from '../../context/agenda.context';
 
 export const FilterByDate = () => {
+	const [inputValue, setInputValue] = useState(dayjs());
 	const { updateFilters } = useAgendaContext();
 
 	const handleChange = (date) => {
+		setInputValue(date);
+
 		const formattedDate = dayjs(date).format('MM/DD/YY');
 		updateFilters({ fechaDesde: formattedDate, fechaHasta: formattedDate });
 	};
@@ -23,17 +27,18 @@ export const FilterByDate = () => {
 
 			<p>Selecciona el día que quires ver y el tipo de agenda.</p>
 
-			<Form defaultValues={{ date: dayjs() }} onSubmit={console.info}>
+			<Form defaultValues={{ date: inputValue }} onSubmit={console.info}>
 				<Stack direction="row">
 					<DatePicker
 						name="date"
 						slotProps={{
 							textField: { size: 'small', fullWidth: true },
 						}}
+						value={inputValue}
 						onChange={handleChange}
 					/>
 					<Button
-						type="reset"
+						onClick={() => handleChange(dayjs())}
 						sx={{
 							borderRadius: 1,
 							ml: 2,

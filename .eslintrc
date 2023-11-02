@@ -29,11 +29,11 @@
 				"paths": [
 					{
 						"name": "@mui/material",
-						"message": "Please import from '@material-ui/*' instead."
+						"message": "Please import from '@material-ui/<Component_Name>' instead."
 					},
 					{
 						"name": "@mui/icons-material",
-						"message": "Please import from '@mui/icons-material/*' instead."
+						"message": "Please import from '@mui/icons-material/<Icon_Name>' instead."
 					}
 				]
 			}

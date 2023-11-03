@@ -27,7 +27,7 @@ export const DisableShift = ({ open, onClose, shift }) => {
 	};
 
 	return (
-		<Dialog open={open} onClose={onClose}>
+		<Dialog open={open} onClose={onClose} sx={{ transition: 'height' }}>
 			<DialogTitle>Deshabilitar turno</DialogTitle>
 			<DialogContent>
 				<DialogContentText>
@@ -43,7 +43,7 @@ export const DisableShift = ({ open, onClose, shift }) => {
 				<Button variant="outlined" onClick={onClose} disabled={isLoading}>
 					No, cerrar
 				</Button>
-				<Button variant="contained" onClick={disableShift} disabled={isLoading}>
+				<Button variant="contained" onClick={disableShift} disabled={isLoading || isSuccess}>
 					Sí, continuar
 					{isLoading && (
 						<CircularProgress
@@ -59,9 +59,11 @@ export const DisableShift = ({ open, onClose, shift }) => {
 					)}
 				</Button>
 			</DialogActions>
-			<Grow in={isSuccess}>
-				<Alert severity="success">Éxito</Alert>
-			</Grow>
+			{isSuccess && (
+				<Grow appear in={isSuccess}>
+					<Alert severity="success">Éxito</Alert>
+				</Grow>
+			)}
 		</Dialog>
 	);
 };

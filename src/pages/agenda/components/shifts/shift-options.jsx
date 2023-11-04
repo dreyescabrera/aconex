@@ -91,7 +91,7 @@ export const ShiftOptions = ({ open, onClose }) => {
 			</Container>
 
 			<ShiftDetails open={dialog === 'details'} onClose={onCloseDialog} shift={shiftInView} />
-			<EraseShiftInfo open={dialog === 'erase'} onClose={onCloseDialog} shiftId={shiftInView?.id} />
+			<EraseShiftInfo open={dialog === 'erase'} onClose={onCloseDialog} shift={shiftInView} />
 			<PatientInfo
 				open={dialog === 'patientInfo'}
 				onClose={onCloseDialog}

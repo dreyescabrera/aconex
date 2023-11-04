@@ -21,7 +21,7 @@ export const DisableShift = ({ open, onClose, shift }) => {
 
 	const disableShift = () => {
 		mutate(
-			{ shiftId: shift?.id, habilitado: false },
+			{ shiftId: shift?.id, profesionalId: shift?.profesionalId, habilitado: false },
 			{ onSuccess: () => setTimeout(onClose, 2_000) }
 		);
 	};

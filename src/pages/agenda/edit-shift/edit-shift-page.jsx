@@ -18,13 +18,16 @@ export const EditShiftPage = () => {
 		state: { shift },
 	} = useLocation();
 	const navigate = useNavigate();
+
 	const handleMutate = (newFields) => {
-		const { paciente, ...rest } = newFields;
 		mutate(
 			{
 				shiftId: shift.id,
-				pacienteId: paciente.id,
-				...rest,
+				pacienteId: newFields.paciente.id,
+				profesionalId: shift.profesionalId,
+				obraSocial: newFields.obraSocial,
+				observacion: newFields.observacion,
+				presentismo: newFields.presentismo,
 			},
 			{ onSuccess: () => setTimeout(() => navigate('..', { relative: 'path' }), 4_000) }
 		);

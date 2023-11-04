@@ -6,26 +6,22 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Grow from '@mui/material/Grow';
-import { useEditShifts } from '../../hooks/use-edit-shifts';
+import { useCancelShift } from '../../hooks/use-cancel-shift';
 
 /**
  * @param {object} props
  * @param {boolean} props.open
  * @param {() => void} props.onClose
- * @param {number} props.shiftId
+ * @param {any} props.shift
  */
-export const EraseShiftInfo = ({ open, onClose, shiftId }) => {
-	const { mutate, isSuccess, isError } = useEditShifts();
+export const EraseShiftInfo = ({ open, onClose, shift }) => {
+	const { mutate, isSuccess, isError } = useCancelShift();
 
 	const handleErase = () => {
 		mutate(
 			{
-				shiftId,
-				habilitado: true,
-				obraSocial: null,
-				observacion: null,
-				pacienteId: null,
-				presentismo: null,
+				turnoId: shift.id,
+				profesionalId: shift.profesionalId,
 			},
 			{ onSuccess: () => setTimeout(onClose, 4_000) }
 		);

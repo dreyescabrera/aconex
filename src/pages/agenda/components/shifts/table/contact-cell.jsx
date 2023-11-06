@@ -1,6 +1,6 @@
 import IconButton from '@mui/material/IconButton';
 import TableCell from '@mui/material/TableCell';
-import { CallIcon, WhatsappIcon } from '@/assets/svgs';
+import { CallIcon, WhatsAppIcon } from '@/assets/svgs';
 
 /**
  * @param {object} props
@@ -12,8 +12,8 @@ export function ContactCell({ phoneNumber }) {
 			<IconButton href={`tel:${phoneNumber}`}>
 				<CallIcon />
 			</IconButton>
-			<IconButton>
-				<WhatsappIcon />
+			<IconButton href={`https://wa.me/${phoneNumber}`} target="_blank">
+				<WhatsAppIcon />
 			</IconButton>
 		</TableCell>
 	);

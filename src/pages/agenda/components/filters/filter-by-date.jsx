@@ -2,20 +2,29 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { DatePicker, Form } from '@/components/form';
-import { dayList } from '@/constants/day-list';
+import { dayJsDayList } from '@/constants/day-list';
 import { useAgendaContext } from '../../context/agenda.context';
 
 export const FilterByDate = () => {
 	const [inputValue, setInputValue] = useState(dayjs());
 	const { updateFilters } = useAgendaContext();
 
-	const handleChange = (date) => {
+	const handleInputChange = (date) => {
 		setInputValue(date);
 
-		const formattedDate = dayjs(date).format('MM/DD/YY');
+		const formattedDate = dayjs(date).format('MM-DD-YY');
+		updateFilters({ fechaDesde: formattedDate, fechaHasta: formattedDate });
+	};
+
+	const handleWeekButtonClick = (dayNumber) => {
+		const operator = inputValue.day() - dayNumber;
+		const newDate = inputValue.subtract(operator, 'day');
+
+		setInputValue(newDate);
+		const formattedDate = dayjs(newDate).format('MM-DD-YY');
 		updateFilters({ fechaDesde: formattedDate, fechaHasta: formattedDate });
 	};
 
@@ -27,49 +36,62 @@ export const FilterByDate = () => {
 
 			<p>Selecciona el día que quires ver y el tipo de agenda.</p>
 
-			<Form defaultValues={{ date: inputValue }} onSubmit={console.info}>
-				<Stack direction="row">
-					<DatePicker
-						name="date"
-						slotProps={{
-							textField: { size: 'small', fullWidth: true },
-						}}
-						value={inputValue}
-						onChange={handleChange}
-					/>
-					<Button
-						onClick={() => handleChange(dayjs())}
-						sx={{
-							borderRadius: 1,
-							ml: 2,
-							backgroundColor: (theme) => theme.palette.primary.main,
-							color: 'white',
-							'&:hover': {
-								backgroundColor: (theme) => theme.palette.primary.dark,
-							},
-						}}
-					>
-						Hoy
-					</Button>
-				</Stack>
-			</Form>
+			<Stack direction="row">
+				<DatePicker
+					slotProps={{
+						textField: { size: 'small', fullWidth: true },
+					}}
+					value={inputValue}
+					onChange={handleInputChange}
+				/>
+				<Button
+					onClick={() => handleInputChange(dayjs())}
+					sx={{
+						borderRadius: 1,
+						ml: 2,
+						backgroundColor: (theme) => theme.palette.primary.main,
+						color: 'white',
+						'&:hover': {
+							backgroundColor: (theme) => theme.palette.primary.dark,
+						},
+					}}
+				>
+					Hoy
+				</Button>
+			</Stack>
 			<Stack direction="row" spacing={1} sx={{ mt: 2, justifyContent: 'space-between' }}>
-				{Object.values(dayList).map((day) => (
-					<Paper
-						key={day}
-						elevation={3}
-						sx={{
-							px: 1,
-							py: 0.5,
-							flex: 1,
-							textAlign: 'center',
-							color: '#444',
-							borderRadius: 1,
-						}}
-					>
-						{day.substring(0, 3).toUpperCase()}
-					</Paper>
-				))}
+				{Object.entries(dayJsDayList).map(([dayNumber, dayName]) => {
+					const currentDay = inputValue;
+
+					let boxBackground;
+
+					if (Number(dayNumber) === currentDay.day()) {
+						boxBackground = 'lightgray';
+					}
+
+					return (
+						<Paper
+							key={dayNumber}
+							elevation={2}
+							sx={{
+								px: 1,
+								py: 0.5,
+								flex: 1,
+								textAlign: 'center',
+								backgroundColor: boxBackground,
+								borderRadius: 1,
+								'&:hover': {
+									backgroundColor: boxBackground,
+									opacity: '0.85',
+								},
+							}}
+							component={Button}
+							onClick={() => handleWeekButtonClick(Number(dayNumber))}
+						>
+							{dayName.substring(0, 3)}
+						</Paper>
+					);
+				})}
 			</Stack>
 		</Paper>
 	);

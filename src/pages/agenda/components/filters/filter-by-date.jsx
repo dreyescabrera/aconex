@@ -9,8 +9,8 @@ import { dayJsDayList } from '@/constants/day-list';
 import { useAgendaContext } from '../../context/agenda.context';
 
 export const FilterByDate = () => {
-	const [inputValue, setInputValue] = useState(dayjs());
-	const { updateFilters } = useAgendaContext();
+	const { updateFilters, filters } = useAgendaContext();
+	const [inputValue, setInputValue] = useState(dayjs(filters.get('fechaDesde')));
 
 	const handleInputChange = (date) => {
 		setInputValue(date);
@@ -45,7 +45,7 @@ export const FilterByDate = () => {
 					onChange={handleInputChange}
 				/>
 				<Button
-					onClick={() => handleInputChange(dayjs())}
+					onClick={() => handleInputChange(dayjs(filters.get('fechaDesde')))}
 					sx={{
 						borderRadius: 1,
 						ml: 2,

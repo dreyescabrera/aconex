@@ -17,12 +17,12 @@ export const Shifts = () => {
 	const { filters, drawerToOpen, closeDrawer, handleShiftOptions } = useAgendaContext();
 	const fakeClinicId = 1;
 
-	const { data: shifts } = useShifts(fakeClinicId, filters);
+	const { data: shifts } = useShifts(fakeClinicId, Object.fromEntries(filters.entries()));
 	const { data: professionals } = useProfessionals();
 
 	let shiftsGroupedByProfessionals;
 
-	if (Boolean(shifts) && Boolean(professionals) && !filters.profesionalId) {
+	if (Boolean(shifts) && Boolean(professionals) && !filters.get('profesionalId')) {
 		shiftsGroupedByProfessionals = groupBy(shifts, 'profesionalId');
 
 		for (const id in shiftsGroupedByProfessionals) {

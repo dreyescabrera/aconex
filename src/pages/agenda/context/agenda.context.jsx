@@ -1,5 +1,7 @@
+import { clearUndefinedProperties } from '@/utils/clearUndefinedProperties';
 import dayjs from 'dayjs';
 import { createContext, useContext, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 /**
  * @typedef {'mobileFilter' | 'shiftOptions' | 'emptyShiftOptions' | null} DrawerToOpen
@@ -14,18 +16,15 @@ import { createContext, useContext, useState } from 'react';
  * @property {string} fechaHasta
  */
 
-/** @type {Filters} */
 const initialFilters = {
-	profesionalId: undefined,
-	especialidadId: undefined,
-	libres: undefined,
 	fechaDesde: dayjs().format('MM-DD-YY'),
 	fechaHasta: dayjs().format('MM-DD-YY'),
 };
 
 /* eslint-disable */
 const initialData = {
-	filters: initialFilters,
+	/**@type {URLSearchParams} */
+	filters: undefined,
 	updateFilters: (/** @type {Partial<Filters>} */ filters) => undefined,
 	shiftInView: null,
 	handleShiftOptions: (shift, /** @type {DrawerToOpen} */ drawerToOpen) => undefined,
@@ -39,13 +38,20 @@ const initialData = {
 const AgendaContext = createContext(initialData);
 
 export const AgendaProvider = ({ children }) => {
-	const [filters, setFilters] = useState(initialData.filters);
+	const [filters, setFilters] = useSearchParams(initialFilters);
+
 	const [shiftInView, setShiftInView] = useState(initialData.shiftInView);
 
 	const [drawerToOpen, setDrawerToOpen] = useState(null);
 
 	const updateFilters = (newFilters) => {
-		setFilters((prev) => ({ ...prev, ...newFilters }));
+		setFilters((prevParams) => {
+			const clearedPrevParams = clearUndefinedProperties(Object.fromEntries(prevParams.entries()));
+			return {
+				...clearedPrevParams,
+				...newFilters,
+			};
+		});
 	};
 
 	const openDrawer = (drawerToOpen) => {

@@ -1,3 +1,10 @@
+const filterUndefinedValues = (param) => {
+	if (typeof param[1] === 'undefined') return false;
+	if (param[1] === null) return false;
+	if (param[1] === 'undefined') return false;
+	return true;
+};
+
 /**
  * This function converts an object of query params into a query param string.
  * @param {object} params
@@ -9,9 +16,7 @@ export const objectToQueryString = (params) => {
 	const paramsArray = Object.entries(params);
 
 	if (paramsArray.length === 0) return '';
-
-	const definedParams = paramsArray.filter((param) => typeof param[1] !== 'undefined');
-
+	const definedParams = paramsArray.filter(filterUndefinedValues);
 	return (
 		'?' +
 		definedParams

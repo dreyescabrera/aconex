@@ -1,3 +1,4 @@
+import { clearUndefinedProperties } from '@/utils/clearUndefinedProperties';
 import { objectToQueryString } from '@/utils/objectToQueryString';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/services/api';
@@ -17,8 +18,10 @@ const getShifts = async (clinicId, params) => {
  * @param {string} [params.fechaHasta]
  */
 export const useShifts = (clinicId, params) => {
+	const clearedParams = clearUndefinedProperties(params);
+
 	const response = useQuery({
-		queryKey: ['turnos', params ?? {}],
+		queryKey: ['turnos', clearedParams ?? {}],
 		queryFn: () => getShifts(clinicId, params),
 		retry: 1,
 	});

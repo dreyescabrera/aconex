@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"rootDir": "src/",
-		"lib": ["es2017", "DOM", "DOM.Iterable"],
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"target": "ES6",
 		"types": ["vite/client"],
 		"outDir": "./irrelevant/unused",

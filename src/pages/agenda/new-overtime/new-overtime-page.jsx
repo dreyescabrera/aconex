@@ -70,8 +70,8 @@ export const NewOvertimePage = () => {
 								name="time"
 								slotProps={{ textField: { variant: 'standard', label: 'Hora del turno' } }}
 								sx={{ flex: '1' }}
-								minTime={dayjs(shift.date).subtract(30, 'minutes')}
-								maxTime={dayjs(shift.date).add(30, 'minutes')}
+								minTime={dayjs(shift.date).subtract(29, 'minutes')}
+								maxTime={dayjs(shift.date).add(29, 'minutes')}
 								minutesStep={5}
 								closeOnSelect={false}
 							/>

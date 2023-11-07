@@ -2,19 +2,18 @@ import { useMutation } from '@tanstack/react-query';
 import { useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
-const patchShifts = async (clinicId, shiftId, modifications) => {
-	const res = await api.patch(`/turnos/${clinicId}/${shiftId}`, modifications);
+const patchShifts = async (professionalId, shiftId, modifications) => {
+	const res = await api.patch(`/turnos/${professionalId}/${shiftId}`, modifications);
 	return res.data;
 };
 
 export const useEditShifts = () => {
 	const queryClient = useQueryClient();
 
-	const fakeClinicId = 1;
-
 	/**
 	 * @param {object} data
 	 * @param {number} data.shiftId
+	 * @param {number} data.profesionalId
 	 * @param {string} [data.pacienteId]
 	 * @param {string} [data.observacion]
 	 * @param {string} [data.presentismo]
@@ -22,9 +21,9 @@ export const useEditShifts = () => {
 	 * @param {string} [data.obraSocial]
 	 */
 	const mutationFn = (data) => {
-		const { shiftId, ...modifications } = data;
+		const { shiftId, profesionalId, ...modifications } = data;
 
-		return patchShifts(fakeClinicId, shiftId, modifications);
+		return patchShifts(profesionalId, shiftId, modifications);
 	};
 
 	return useMutation({

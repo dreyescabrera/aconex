@@ -1,4 +1,5 @@
 import { HomePage } from '@/pages/home';
+import { LoginPage } from '@/pages/login';
 import { NotFoundPage } from '@/pages/not-found';
 import { createBrowserRouter } from 'react-router-dom';
 import { MainLayout } from '@/layouts/main-layout';
@@ -23,5 +24,9 @@ export const router = createBrowserRouter([
 				element: <NotFoundPage />,
 			},
 		],
+	},
+	{
+		path: '/login',
+		element: <LoginPage />,
 	},
 ]);

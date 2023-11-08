@@ -12,7 +12,7 @@ export const FilterByAvailability = () => {
 		updateFilters({ libres: isChecked || undefined }); // undefined para mostrar todos los turnos, en vez de solo los ocupados
 	};
 
-	const isInitialChecked = Boolean(filters.get('libres'));
+	const isSwitchChecked = filters.get('libres') !== 'undefined' && filters.get('libres') !== null;
 
 	return (
 		<Paper sx={{ p: 2 }} variant="outlined">
@@ -20,7 +20,7 @@ export const FilterByAvailability = () => {
 				Horarios disponibles
 			</Typography>
 			<FormControlLabel
-				control={<Switch onChange={handleChange} defaultChecked={isInitialChecked} />}
+				control={<Switch onChange={handleChange} checked={isSwitchChecked} />}
 				label="Muestra solo los turnos disponibles"
 			/>
 		</Paper>

@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import { groupBy } from '@/utils/groupBy';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
@@ -15,9 +16,9 @@ dayjs.extend(timezone);
 
 export const Shifts = () => {
 	const { filters, drawerToOpen, closeDrawer, handleShiftOptions } = useAgendaContext();
-	const fakeClinicId = 1;
+	const { clinicaId } = useStore((state) => state.clinic);
 
-	const { data: shifts } = useShifts(fakeClinicId, Object.fromEntries(filters.entries()));
+	const { data: shifts } = useShifts(clinicaId, Object.fromEntries(filters.entries()));
 	const { data: professionals } = useProfessionals();
 
 	let shiftsGroupedByProfessionals;

@@ -1,5 +1,7 @@
 /**
  * @typedef {object} Professional
+ * @property {number} id
+ * @property {object} perfil
  * @property {string} nombre
  * @property {string} apellido
  * @property {number} cedula
@@ -12,20 +14,23 @@
 
 /**
  * @typedef {object} Schedule
+ * @property {number} id
  * @property {number} nroDia
- * @property {string} especialidad
+ * @property {number} profesionalId
+ * @property {number} especialidadId
  * @property {string} horaDesde
  * @property {string} horaHasta
  * @property {string} intervalo
- * @property {string} fechaDesde
- * @property {string} fechaHasta
+ * @property {string} vigenciaDesde
+ * @property {string} vigenciaHasta
  */
 
 /**
  * @typedef {object} Absence
- * @property {string} id
- * @property {string} fechaDesde
- * @property {string} fechaHasta
+ * @property {number} id
+ * @property {number} profesionalId
+ * @property {string} vigenciaDesde
+ * @property {string} vigenciaHasta
  */
 
 /**
@@ -33,14 +38,16 @@
  */
 const ausenciasFake = [
 	{
-		id: Math.random().toFixed(4),
-		fechaDesde: '24/09/23',
-		fechaHasta: '24/10/23',
+		id: 0,
+		profesionalId: 0,
+		vigenciaDesde: '24/09/23',
+		vigenciaHasta: '24/10/23',
 	},
 	{
-		id: Math.random().toFixed(4),
-		fechaDesde: '10/09/23',
-		fechaHasta: '10/10/23',
+		id: 0,
+		profesionalId: 0,
+		vigenciaDesde: '10/09/23',
+		vigenciaHasta: '10/10/23',
 	},
 ];
 
@@ -49,67 +56,15 @@ const ausenciasFake = [
  */
 const horariosFake = [
 	{
+		id: 0,
 		nroDia: 1,
-		especialidad: 'Cirugia',
+		profesionalId: 0,
+		especialidadId: 0,
 		horaDesde: '11:00',
 		horaHasta: '20:00',
 		intervalo: '00:40',
-		fechaDesde: '2023-03-14',
-		fechaHasta: '2023-04-20',
-	},
-	{
-		nroDia: 2,
-		especialidad: 'Cirugia',
-		horaDesde: '11:00',
-		horaHasta: '20:00',
-		intervalo: '00:40',
-		fechaDesde: '2023-03-14',
-		fechaHasta: '2023-04-20',
-	},
-	{
-		nroDia: 3,
-		especialidad: 'Cirugia',
-		horaDesde: '11:00',
-		horaHasta: '20:00',
-		intervalo: '00:40',
-		fechaDesde: '2023-03-14',
-		fechaHasta: '2023-04-20',
-	},
-	{
-		nroDia: 4,
-		especialidad: 'Cirugia',
-		horaDesde: '11:00',
-		horaHasta: '20:00',
-		intervalo: '00:40',
-		fechaDesde: '2023-03-14',
-		fechaHasta: '2023-04-20',
-	},
-	{
-		nroDia: 5,
-		especialidad: 'Cirugia',
-		horaDesde: '11:00',
-		horaHasta: '20:00',
-		intervalo: '00:40',
-		fechaDesde: '2023-03-14',
-		fechaHasta: '2023-04-20',
-	},
-	{
-		nroDia: 6,
-		especialidad: 'Cirugia',
-		horaDesde: '11:00',
-		horaHasta: '20:00',
-		intervalo: '00:40',
-		fechaDesde: '2023-03-14',
-		fechaHasta: '2023-04-20',
-	},
-	{
-		nroDia: 7,
-		especialidad: 'Cirugia',
-		horaDesde: '11:00',
-		horaHasta: '20:00',
-		intervalo: '00:40',
-		fechaDesde: '2023-03-14',
-		fechaHasta: '2023-04-20',
+		vigenciaDesde: '2023-03-15',
+		vigenciaHasta: '2023-04-20',
 	},
 ];
 
@@ -118,31 +73,13 @@ const horariosFake = [
  */
 export const professionals = [
 	{
-		nombre: 'Luciano',
-		apellido: 'Massa',
+		id: 0,
+		perfil: 0,
+		nombre: 'L',
+		apellido: 'M',
 		cedula: 40823774,
 		celular: 2643183732,
 		direccion: 'calle 123',
-		email: 'correo@gmail.com',
-		horarios: [...horariosFake],
-		ausencias: [...ausenciasFake],
-	},
-	{
-		nombre: 'Diego',
-		apellido: 'Reyes',
-		cedula: 12345678,
-		celular: 8889832730,
-		email: 'correo@gmail.com',
-		direccion: 'calle 456',
-		horarios: [...horariosFake],
-		ausencias: [...ausenciasFake],
-	},
-	{
-		nombre: 'Harold',
-		apellido: 'Alzate',
-		cedula: 345678,
-		celular: 3215457686,
-		direccion: 'calle 789',
 		email: 'correo@gmail.com',
 		horarios: [...horariosFake],
 		ausencias: [...ausenciasFake],

@@ -1,13 +1,36 @@
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Container from '@mui/material/Container';
 import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { useMutation } from '@tanstack/react-query';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
+import { api } from '@/services/api';
 import { dayList } from '@/constants/day-list';
 import { useProfessionalsContext } from '../../context/professionals.context';
+import { useGetspecialties } from '../../hooks/use-get-specialties';
 
-const especialidades = ['Cirugia', 'Odontologia'];
+const dias = [1, 2, 3, 4, 5, 6, 7];
+
+const Mensajenewschedule = ({ status }) => {
+	if (status.isLoading) {
+		return (
+			<Stack direction="row" alignItems="center" spacing={1}>
+				<CircularProgress /> <p>Cargando...</p>
+			</Stack>
+		);
+	}
+	if (status.isSuccess) {
+		return <Alert severity="success">Horario agregado con exito!</Alert>;
+	}
+	if (status.isError) {
+		const errormensaje = status.error.response.data.message;
+		return <Alert severity="error">Error al agregar Horario: {errormensaje}</Alert>;
+	}
+};
 
 const Drawer = styled(MuiDrawer)(() => ({
 	'& .MuiDrawer-paper': {
@@ -21,9 +44,40 @@ const Drawer = styled(MuiDrawer)(() => ({
  * @param {object} props
  * @param {boolean} props.open
  * @param {() => void} props.onClose
+ * @param {object} props.professionalslist
  */
-export const NewSchedule = ({ open, onClose }) => {
-	const { professionals } = useProfessionalsContext();
+export const NewSchedule = ({ open, onClose, professionalslist }) => {
+	const { refetch } = useProfessionalsContext();
+
+	async function setschedule(schedule) {
+		const res = await api.post('/horarios', schedule).then(() => refetch());
+		return res;
+	}
+
+	const especialidades = useGetspecialties();
+
+	const mutation = useMutation(setschedule);
+
+	const handleSubmit = (ev) => {
+		var desde = ev.fechaDesde.format('MM/DD/YYYY');
+		var hasta = ev.fechaHasta.format('MM/DD/YYYY');
+		var hdesde = ev.horaDesde.format('HH:mm');
+		var hhasta = ev.horaHasta.format('HH:mm');
+		var interval = ev.intervalo.format('mm');
+		let horario = {
+			profesionalId: ev.profesional.id,
+			especialidadId: ev.especialidad.id,
+			clinicaId: 1, //Es Necesario especificar la clinica
+			nroDia: ev.dia,
+			vigenciaDesde: desde,
+			vigenciaHasta: hasta,
+			horaDesde: hdesde,
+			horaHasta: hhasta,
+			intervalo: interval,
+		};
+
+		mutation.mutate(horario);
+	};
 
 	return (
 		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
@@ -31,7 +85,7 @@ export const NewSchedule = ({ open, onClose }) => {
 				Horarios disponible
 			</Typography>
 			<Form
-				onSubmit={console.info}
+				onSubmit={handleSubmit}
 				defaultValues={{
 					profesional: null,
 					dia: null,
@@ -45,24 +99,28 @@ export const NewSchedule = ({ open, onClose }) => {
 			>
 				<Stack spacing={3}>
 					<Autocomplete
-						options={professionals}
+						options={professionalslist}
 						getOptionLabel={(option) =>
-							typeof option !== 'string' ? `${option.nombre} ${option.apellido}` : option
+							typeof option !== 'string'
+								? `${option.perfil.nombre} ${option.perfil.apellido}`
+								: option
 						}
-						isOptionEqualToValue={(option, value) => option.email === value.email}
+						isOptionEqualToValue={(option, value) => option.perfil.email === value.perfil.email}
 						name="profesional"
 						inputProps={{ label: 'Profesional', variant: 'standard' }}
 					/>
 					<Autocomplete
-						options={professionals[0]?.horarios}
+						options={dias}
 						name="dia"
-						getOptionLabel={(option) => dayList[option.nroDia]}
-						isOptionEqualToValue={(option, value) => option.nroDia === value.nroDia}
+						getOptionLabel={(option) => dayList[option]}
+						isOptionEqualToValue={(option, value) => option === value}
 						inputProps={{ label: 'Seleccionar día', variant: 'standard' }}
 					/>
 					<Autocomplete
 						options={especialidades}
 						name="especialidad"
+						getOptionLabel={(option) => option.nombre}
+						isOptionEqualToValue={(option, value) => option.nombre === value.nombre}
 						inputProps={{ label: 'Seleccionar especialidad', variant: 'standard' }}
 					/>
 					<Stack direction="row" spacing={1}>
@@ -81,18 +139,21 @@ export const NewSchedule = ({ open, onClose }) => {
 						name="intervalo"
 						label="Intervalo"
 						slotProps={{ textField: { variant: 'standard' } }}
+						views={['minutes']}
 					/>
 					<Stack direction="row" spacing={1}>
 						<DatePicker
 							name="fechaDesde"
 							label="Fecha desde"
 							slotProps={{ textField: { variant: 'standard' } }}
+							format="DD/MM/YYYY"
 						/>
 						<DatePicker
 							name="fechaHasta"
 							label="Fecha hasta"
 							rules={{ required: false }}
 							slotProps={{ textField: { variant: 'standard' } }}
+							format="DD/MM/YYYY"
 						/>
 					</Stack>
 					<Button type="submit" variant="contained">
@@ -100,6 +161,9 @@ export const NewSchedule = ({ open, onClose }) => {
 					</Button>
 				</Stack>
 			</Form>
+			<Container sx={{ mt: 2, mb: 1 }}>
+				<Mensajenewschedule status={mutation} />
+			</Container>
 		</Drawer>
 	);
 };

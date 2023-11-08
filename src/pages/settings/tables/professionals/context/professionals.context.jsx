@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import { useProfessionals } from '@/hooks/use-professionals';
 import { professionals } from './fake-data';
 
 /**
@@ -40,10 +41,24 @@ const initialData = {
 };
 /* eslint-enable */
 
+// const Professionalsdata = () => {
+// 	const { data, status } = useQuery(['Professionals'], fetchprofessionals);
+// 	if (status === 'error') {
+// 		alert('Error al cargar Datos de profesionales');
+// 	}
+// 	if (status === 'success') {
+// 		return data.data;
+// 	}
+// 	if (status === 'loading') {
+// 		return [];
+// 	}
+// };
+
 const ProfessionalsContext = createContext(initialData);
 
 export const ProfessionalsProvider = ({ children }) => {
-	const [professionals] = useState(initialData.professionals);
+	const { data: professionals, refetch } = useProfessionals();
+
 	const [professionalInView, setProfessionalInView] = useState(null);
 	const [scheduleInView, setScheduleInView] = useState(null);
 	const [absenceInView, setAbsenceInView] = useState(null);
@@ -130,6 +145,7 @@ export const ProfessionalsProvider = ({ children }) => {
 		handleEditProfessional,
 		handleEditSchedule,
 		handleEditAbsence,
+		refetch,
 	};
 
 	return <ProfessionalsContext.Provider value={state}>{children}</ProfessionalsContext.Provider>;

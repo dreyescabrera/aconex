@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { api } from '@/services/api';
@@ -18,6 +19,7 @@ const postLogin = async (credentials) => {
 };
 
 export const useLogin = () => {
+	const { setClinic, setUser, setIsLoggedIn } = useStore();
 	const navigate = useNavigate();
 
 	/**
@@ -29,9 +31,11 @@ export const useLogin = () => {
 
 	const mutation = useMutation({
 		mutationFn,
-		onSuccess: (data) => {
-			const stringifiedData = JSON.stringify(data);
-			sessionStorage.setItem('loggedUserData', stringifiedData);
+		onSuccess: ({ data }) => {
+			setClinic({ clinicaId: data.clinica });
+			setUser({ username: data.username, perfil: data.perfil });
+			setIsLoggedIn(true);
+
 			navigate('/home', { replace: true });
 		},
 	});

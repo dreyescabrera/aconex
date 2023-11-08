@@ -1,9 +1,8 @@
 import { HomePage } from '@/pages/home';
-import { LoginPage } from '@/pages/login';
+import { loginLoader, LoginPage } from '@/pages/login';
 import { NotFoundPage } from '@/pages/not-found';
 import { createBrowserRouter } from 'react-router-dom';
-import { BasicLayout } from '@/layouts';
-import { AppLayout, loader as appLayoutLoader } from '@/layouts/app-layout';
+import { AppLayout, appLayoutLoader, BasicLayout } from '@/layouts';
 import { agendaRouter } from './agenda';
 import { patientsRouter } from './patients';
 import { settingsRouter } from './settings';
@@ -32,6 +31,7 @@ export const router = createBrowserRouter([
 			{
 				path: '/login',
 				element: <LoginPage />,
+				loader: loginLoader,
 			},
 		],
 	},

@@ -8,6 +8,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
+import { NavLink } from 'react-router-dom';
 import { navLinks } from '../constants/nav-links';
 import { DrawerHeader } from './drawer-header';
 
@@ -69,11 +70,15 @@ export const DesktopBar = ({ onClose, open }) => {
 					{navLinks.map((link) => (
 						<ListItem key={link.id} disablePadding sx={{ display: 'block' }}>
 							<ListItemButton
-								href={link.href}
+								component={NavLink}
+								to={link.href}
 								sx={{
 									minHeight: 48,
 									justifyContent: open ? 'initial' : 'center',
 									px: 2.5,
+									'&.active': {
+										backgroundColor: '#E7ECE9',
+									},
 								}}
 							>
 								<ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>

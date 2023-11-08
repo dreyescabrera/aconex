@@ -1,7 +1,6 @@
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
@@ -9,12 +8,10 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
-import { dayList } from '@/constants/day-list';
+import { useSpecialties } from '@/hooks/use-specialties';
+import { dayJsDayList } from '@/constants/day-list';
 import { useProfessionalsContext } from '../../context/professionals.context';
-import { useEditschedule } from '../../hooks/use-edit-schedule';
-import { useGetspecialties } from '../../hooks/use-get-specialties';
-
-const dias = [1, 2, 3, 4, 5, 6, 7];
+import { useEditSchedule } from '../../hooks/use-edit-schedule';
 
 const Drawer = styled(MuiDrawer)(() => ({
 	'& .MuiDrawer-paper': {
@@ -24,7 +21,7 @@ const Drawer = styled(MuiDrawer)(() => ({
 	},
 }));
 
-const cuttimezone = (vigencia) => {
+const cutTimezone = (vigencia) => {
 	//Recorta la zona horaria de la fecha de forma tal que dayjs no la modifique
 	if (vigencia) {
 		const tam1 = vigencia.length - 2;
@@ -32,64 +29,25 @@ const cuttimezone = (vigencia) => {
 
 		return fecha1;
 	}
-	return undefined;
 };
 
-const createtimestring = (timestring) => {
+const createTimeString = (timeString) => {
 	//Similar al anterior pero lo genera para las horas de las cuales solo se tiene "HH:mm"
-	if (timestring) {
-		const datestring = '2023-10-23T' + timestring;
-		return datestring;
+	if (timeString) {
+		const dateString = '2023-10-23T' + timeString;
+		return dateString;
 	}
-	return undefined;
 };
 
-const createintervalstring = (intervalnumber) => {
+const createIntervalString = (intervalNumber) => {
 	//Similar al anterior pero genera el dato del timepicker a traves de un entero que representa los minutos
-	if (intervalnumber) {
-		var intervalstring = intervalnumber.toString();
-		if (intervalstring.length === 1) {
-			intervalstring = '0' + intervalstring;
+	if (intervalNumber) {
+		var intervalString = intervalNumber.toString();
+		if (intervalString.length === 1) {
+			intervalString = '0' + intervalString;
 		}
-		const datestring = '2023-11-07T00:' + intervalstring + ':00.00';
-		return datestring;
-	}
-
-	return undefined;
-};
-
-const identifyspecialty = (specialtyId, specialties) => {
-	//Identifica la especialidad a traves de un id
-	var resultado = null;
-	if (specialtyId && specialties) {
-		const tam = specialties.length;
-		var i = 0;
-		while (i < tam) {
-			if (specialtyId === specialties[i].id) {
-				resultado = specialties[i];
-				i = tam;
-			}
-			i = i + 1;
-		}
-	}
-
-	return resultado;
-};
-
-const Mnjeditschedule = ({ status }) => {
-	if (status.isLoading) {
-		return (
-			<Stack direction="row" alignItems="center" spacing={1}>
-				<CircularProgress /> <p>Cargando...</p>
-			</Stack>
-		);
-	}
-	if (status.isSuccess) {
-		return <Alert severity="success">Horario editado con exito!</Alert>;
-	}
-	if (status.isError) {
-		const errormensaje = status.error.response.data.message;
-		return <Alert severity="error">Error al editar horario: {errormensaje}</Alert>;
+		const dateString = '2023-11-07T00:' + intervalString + ':00.00';
+		return dateString;
 	}
 };
 
@@ -100,30 +58,34 @@ const Mnjeditschedule = ({ status }) => {
  */
 export const EditSchedule = ({ open, onClose }) => {
 	const { scheduleInView, professionalInView } = useProfessionalsContext();
-	const mutation = useEditschedule();
+	const { data: specialties } = useSpecialties();
+	const { mutate, status, error } = useEditSchedule();
 
-	const especialidades = useGetspecialties();
-	const handleSubmit = (ev) => {
-		const profid = scheduleInView?.profesionalId.toString();
-		const horarioid = scheduleInView?.id.toString();
-		const urledit = '/horarios/' + profid + '/' + horarioid;
-		var desde = ev.fechaDesde.format('MM/DD/YYYY');
-		var hasta = ev.fechaHasta.format('MM/DD/YYYY');
-		var hdesde = ev.horaDesde.format('HH:mm');
-		var hhasta = ev.horaHasta.format('HH:mm');
-		var interval = ev.intervalo.format('mm');
-		const horariodata = {
-			especialidadId: ev.especialidad.id,
-			nroDia: ev.dia,
-			vigenciaDesde: desde,
-			vigenciaHasta: hasta,
-			horaDesde: hdesde,
-			horaHasta: hhasta,
-			intervalo: interval,
-		};
-		const resultado = [urledit, horariodata];
-		mutation.mutate(resultado);
+	const handleSubmit = (formData) => {
+		const dateFrom = formData.fechaDesde.format('MM/DD/YYYY');
+		const dateTo = formData.fechaHasta.format('MM/DD/YYYY');
+		const hourFrom = formData.horaDesde.format('HH:mm');
+		const hourTo = formData.horaHasta.format('HH:mm');
+		const intervalo = formData.intervalo.format('mm');
+		const especialidadId = formData.especialidad.id;
+		const dayNumber = formData.dia;
+
+		mutate({
+			profesionalId: scheduleInView.profesionalId,
+			horarioId: scheduleInView.id,
+			horaDesde: hourFrom,
+			horaHasta: hourTo,
+			vigenciaDesde: dateFrom,
+			vigenciaHasta: dateTo,
+			especialidadId,
+			intervalo,
+			nroDia: dayNumber,
+		});
 	};
+
+	const initialSpecialty = specialties?.find(
+		(specialty) => specialty.id === scheduleInView?.especialidadId
+	);
 
 	return (
 		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
@@ -138,24 +100,24 @@ export const EditSchedule = ({ open, onClose }) => {
 				onSubmit={handleSubmit}
 				defaultValues={{
 					dia: scheduleInView?.nroDia,
-					especialidad: identifyspecialty(scheduleInView?.especialidadId, especialidades),
-					horaDesde: dayjs(createtimestring(scheduleInView?.horaDesde)),
-					horaHasta: dayjs(createtimestring(scheduleInView?.horaHasta)),
-					intervalo: dayjs(createintervalstring(scheduleInView?.intervalo)),
-					fechaDesde: dayjs(cuttimezone(scheduleInView?.vigenciaDesde)),
-					fechaHasta: dayjs(cuttimezone(scheduleInView?.vigenciaHasta)),
+					especialidad: initialSpecialty,
+					horaDesde: dayjs(createTimeString(scheduleInView?.horaDesde)),
+					horaHasta: dayjs(createTimeString(scheduleInView?.horaHasta)),
+					intervalo: dayjs(createIntervalString(scheduleInView?.intervalo)),
+					fechaDesde: dayjs(cutTimezone(scheduleInView?.vigenciaDesde)),
+					fechaHasta: dayjs(cutTimezone(scheduleInView?.vigenciaHasta)),
 				}}
 			>
 				<Stack spacing={3}>
 					<Autocomplete
-						options={dias}
+						options={Object.keys(dayJsDayList)}
 						name="dia"
-						getOptionLabel={(option) => dayList[option]}
+						getOptionLabel={(option) => dayJsDayList[option]}
 						isOptionEqualToValue={(option, value) => option === value}
 						inputProps={{ label: 'Seleccionar día', variant: 'standard' }}
 					/>
 					<Autocomplete
-						options={especialidades}
+						options={specialties}
 						name="especialidad"
 						getOptionLabel={(option) => option.nombre}
 						isOptionEqualToValue={(option, value) => option.nombre === value.nombre}
@@ -200,9 +162,19 @@ export const EditSchedule = ({ open, onClose }) => {
 					</Button>
 				</Stack>
 			</Form>
-			<Container sx={{ mt: 2, mb: 1 }}>
-				<Mnjeditschedule status={mutation} />
-			</Container>
+
+			{status === 'loading' && (
+				<Stack direction="row" alignItems="center" spacing={1}>
+					<CircularProgress /> <p>Cargando...</p>
+				</Stack>
+			)}
+
+			{status === 'error' && (
+				// @ts-ignore
+				<Alert severity="success">Error al editar horario: {error.response.data.message}</Alert>
+			)}
+
+			{status === 'success' && <Alert severity="success">Horario editado con éxito!</Alert>}
 		</Drawer>
 	);
 };

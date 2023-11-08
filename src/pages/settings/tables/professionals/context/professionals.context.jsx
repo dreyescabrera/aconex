@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from 'react';
 import { useProfessionals } from '@/hooks/use-professionals';
-import { professionals } from './fake-data';
 
 /**
  * @typedef {"newProfessional" | "editProfessional" | "newSchedule" | "editSchedule" | "newAbsence" | "editAbsence" | null} DrawerToOpen
@@ -8,14 +7,15 @@ import { professionals } from './fake-data';
 
 /* eslint-disable */
 const initialData = {
-	professionals,
-	/**@type {Array<import('./fake-data').Professional>} */
+	/**@type {Array<import('./types').Professional>} */
+	professionals: undefined,
+	/**@type {Array<import('./types').Professional>} */
 	listToRender: [],
-	/**@type {import('./fake-data').Professional} */
+	/**@type {import('./types').Professional} */
 	professionalInView: null,
-	/**@type {import('./fake-data').Schedule} */
+	/**@type {import('./types').Schedule} */
 	scheduleInView: null,
-	/**@type {import('./fake-data').Absence} */
+	/**@type {import('./types').Absence} */
 	absenceInView: null,
 	isDrawerOpen: false,
 	/**@type {DrawerToOpen} */
@@ -25,34 +25,21 @@ const initialData = {
 	openDrawer: (/**@type {DrawerToOpen} */ drawerToOpen) => undefined,
 	closeDrawer: () => undefined,
 	handleEditProfessional: (
-		/**@type {import('./fake-data').Professional} */ professional,
+		/**@type {import('./types').Professional} */ professional,
 		/**@type {DrawerToOpen} */ drawerToOpen
 	) => undefined,
 	handleEditSchedule: (
-		/**@type {import('./fake-data').Professional} */ professional,
-		/**@type {import('./fake-data').Schedule} */ schedule,
+		/**@type {import('./types').Professional} */ professional,
+		/**@type {import('./types').Schedule} */ schedule,
 		/**@type {DrawerToOpen} */ drawerToOpen
 	) => undefined,
 	handleEditAbsence: (
-		/**@type {import('./fake-data').Professional} */ professional,
-		/**@type {import('./fake-data').Absence} */ absence,
+		/**@type {import('./types').Professional} */ professional,
+		/**@type {import('./types').Absence} */ absence,
 		/**@type {DrawerToOpen} */ drawerToOpen
 	) => undefined,
 };
 /* eslint-enable */
-
-// const Professionalsdata = () => {
-// 	const { data, status } = useQuery(['Professionals'], fetchprofessionals);
-// 	if (status === 'error') {
-// 		alert('Error al cargar Datos de profesionales');
-// 	}
-// 	if (status === 'success') {
-// 		return data.data;
-// 	}
-// 	if (status === 'loading') {
-// 		return [];
-// 	}
-// };
 
 const ProfessionalsContext = createContext(initialData);
 

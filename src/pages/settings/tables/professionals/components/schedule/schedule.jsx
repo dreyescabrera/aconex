@@ -6,20 +6,17 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { dayList } from '@/constants/day-list';
 import { useProfessionalsContext } from '../../context/professionals.context';
-import { useDeleteschedule } from '../../hooks/use-edit-schedule';
+import { useDeleteSchedule } from '../../hooks/use-delete-schedule';
 import { EditSchedule } from './edit-schedule';
 import { NewSchedule } from './new-schedule';
 
 export const ProfessionalsSchedule = () => {
 	const { isDrawerOpen, closeDrawer, handleEditSchedule, listToRender, openDrawer, drawerToOpen } =
 		useProfessionalsContext();
-	const mutation = useDeleteschedule();
+	const mutation = useDeleteSchedule();
 
-	const HandleDeletion = (datos) => {
-		const profesionalId = datos.profesionalId;
-		const id = datos.id;
-		const urldata = '/horarios/' + profesionalId + '/' + id;
-		mutation.mutate(urldata);
+	const handleDelete = (schedule) => {
+		mutation.mutate({ horarioId: schedule.id, profesionalId: schedule.profesionalId });
 	};
 
 	if (!listToRender) {
@@ -71,7 +68,7 @@ export const ProfessionalsSchedule = () => {
 													color="error"
 													variant="text"
 													size="small"
-													onClick={() => HandleDeletion(dia)}
+													onClick={() => handleDelete(dia)}
 												>
 													Eliminar
 												</Button>

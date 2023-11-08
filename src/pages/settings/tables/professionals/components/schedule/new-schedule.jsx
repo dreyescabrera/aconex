@@ -8,12 +8,10 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
+import { useSpecialties } from '@/hooks/use-specialties';
 import { api } from '@/services/api';
-import { dayList } from '@/constants/day-list';
+import { dayJsDayList } from '@/constants/day-list';
 import { useProfessionalsContext } from '../../context/professionals.context';
-import { useGetspecialties } from '../../hooks/use-get-specialties';
-
-const dias = [1, 2, 3, 4, 5, 6, 7];
 
 const Mensajenewschedule = ({ status }) => {
 	if (status.isLoading) {
@@ -47,14 +45,13 @@ const Drawer = styled(MuiDrawer)(() => ({
  * @param {object} props.professionalslist
  */
 export const NewSchedule = ({ open, onClose, professionalslist }) => {
+	const { data: specialties } = useSpecialties();
 	const { refetch } = useProfessionalsContext();
 
 	async function setschedule(schedule) {
 		const res = await api.post('/horarios', schedule).then(() => refetch());
 		return res;
 	}
-
-	const especialidades = useGetspecialties();
 
 	const mutation = useMutation(setschedule);
 
@@ -110,14 +107,14 @@ export const NewSchedule = ({ open, onClose, professionalslist }) => {
 						inputProps={{ label: 'Profesional', variant: 'standard' }}
 					/>
 					<Autocomplete
-						options={dias}
+						options={Object.keys(dayJsDayList)}
 						name="dia"
-						getOptionLabel={(option) => dayList[option]}
+						getOptionLabel={(option) => dayJsDayList[option]}
 						isOptionEqualToValue={(option, value) => option === value}
 						inputProps={{ label: 'Seleccionar día', variant: 'standard' }}
 					/>
 					<Autocomplete
-						options={especialidades}
+						options={specialties}
 						name="especialidad"
 						getOptionLabel={(option) => option.nombre}
 						isOptionEqualToValue={(option, value) => option.nombre === value.nombre}

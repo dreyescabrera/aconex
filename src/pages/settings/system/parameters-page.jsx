@@ -17,6 +17,7 @@ export const ParametersPage = () => {
 	const editGeneralParameters = useEditParameters();
 	const editProfileParameters = useEditProfile({ queryKeyToInvalidate: ['clinics'] });
 	const [status, setStatus] = useState('idle');
+	const [error, setError] = useState(null);
 
 	const handleSubmit = async (formData) => {
 		setStatus('loading');
@@ -32,9 +33,10 @@ export const ParametersPage = () => {
 		try {
 			await editGeneralParameters.mutateAsync(newGeneralParameters);
 			// perfilId será reemplazado por clinic.perfil.id cuando Luciano modifique la API
-			await editProfileParameters.mutateAsync({ perfilId: 1, ...perfil });
+			await editProfileParameters.mutateAsync({ perfilId: 3131, ...perfil });
 			setStatus('success');
 		} catch (err) {
+			setError(err);
 			setStatus('error');
 		}
 	};
@@ -91,7 +93,9 @@ export const ParametersPage = () => {
 					{status === 'loading' && <CircularProgress />}
 
 					{status === 'error' && (
-						<Alert severity="error">Error al editar parámetros generales.</Alert>
+						<Alert severity="error">
+							Error al editar parámetros: {error.response.data.message}.
+						</Alert>
 					)}
 
 					{status === 'success' && (

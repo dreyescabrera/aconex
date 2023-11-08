@@ -2,18 +2,19 @@ import { HomePage } from '@/pages/home';
 import { LoginPage } from '@/pages/login';
 import { NotFoundPage } from '@/pages/not-found';
 import { createBrowserRouter } from 'react-router-dom';
-import { MainLayout } from '@/layouts/main-layout';
+import { BasicLayout } from '@/layouts';
+import { AppLayout, loader as appLayoutLoader } from '@/layouts/app-layout';
 import { agendaRouter } from './agenda';
 import { patientsRouter } from './patients';
 import { settingsRouter } from './settings';
 
 export const router = createBrowserRouter([
 	{
-		path: '/',
-		element: <MainLayout />,
+		element: <AppLayout />,
+		loader: appLayoutLoader,
 		children: [
 			{
-				index: true,
+				path: '/home',
 				element: <HomePage />,
 			},
 			...agendaRouter,
@@ -26,7 +27,12 @@ export const router = createBrowserRouter([
 		],
 	},
 	{
-		path: '/login',
-		element: <LoginPage />,
+		element: <BasicLayout />,
+		children: [
+			{
+				path: '/login',
+				element: <LoginPage />,
+			},
+		],
 	},
 ]);

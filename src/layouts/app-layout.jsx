@@ -4,10 +4,10 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, redirect, useLocation } from 'react-router-dom';
 import { DesktopBar, Footer, Header, MobileBar } from './components';
 
-export const MainLayout = () => {
+export const AppLayout = () => {
 	const [isOpenMobile, setIsOpenMobile] = useState(false);
 	const isMobile = useMediaQuery('(max-width:768px)');
 	const { pathname } = useLocation();
@@ -55,4 +55,15 @@ export const MainLayout = () => {
 			</Box>
 		</>
 	);
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const loader = async () => {
+	const isUserLoggedIn = sessionStorage.getItem('loggedUserData');
+
+	if (!isUserLoggedIn) {
+		return redirect('/login');
+	}
+
+	return null;
 };

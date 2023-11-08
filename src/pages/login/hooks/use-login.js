@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { api } from '@/services/api';
 
 /**
@@ -17,6 +18,8 @@ const postLogin = async (credentials) => {
 };
 
 export const useLogin = () => {
+	const navigate = useNavigate();
+
 	/**
 	 * @param {Credentials} credentials
 	 */
@@ -24,6 +27,14 @@ export const useLogin = () => {
 		return postLogin(credentials);
 	};
 
-	const mutation = useMutation({ mutationFn });
+	const mutation = useMutation({
+		mutationFn,
+		onSuccess: (data) => {
+			const stringifiedData = JSON.stringify(data);
+			sessionStorage.setItem('loggedUserData', stringifiedData);
+			navigate('/home', { replace: true });
+		},
+	});
+
 	return mutation;
 };

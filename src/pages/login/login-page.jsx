@@ -1,24 +1,22 @@
 import Alert from '@mui/material/Alert';
-import AppBar from '@mui/material/AppBar';
+import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Collapse from '@mui/material/Collapse';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { useNavigate } from 'react-router-dom';
 import { Form, TextInput } from '@/components/form';
 import { useLogin } from './hooks/use-login';
 
 export const LoginPage = () => {
 	const [hasFailedOnce, setHasFailedOnce] = useState(false);
-	const navigate = useNavigate();
-	const { mutate, isError } = useLogin();
+	const { mutate, isError, isLoading } = useLogin();
 	const handleLogin = (credentials) => {
-		mutate(credentials, { onSuccess: () => navigate('/', { replace: true }) });
+		mutate(credentials);
 	};
 
 	if (isError) {
@@ -30,15 +28,6 @@ export const LoginPage = () => {
 			<Helmet>
 				<title>Iniciar sesión</title>
 			</Helmet>
-			<AppBar position="sticky">
-				<Container>
-					<Toolbar disableGutters>
-						<Typography variant="h6" component="div">
-							AConex
-						</Typography>
-					</Toolbar>
-				</Container>
-			</AppBar>
 			<Container maxWidth="xs">
 				<Typography variant="h3" component="h1" align="center" my={6}>
 					Iniciar Sesión
@@ -89,6 +78,9 @@ export const LoginPage = () => {
 						Regístrate
 					</Link>
 				</Typography>
+				<Backdrop open={isLoading} sx={{ color: '#fff' }}>
+					<CircularProgress color="inherit" />
+				</Backdrop>
 			</Container>
 		</>
 	);

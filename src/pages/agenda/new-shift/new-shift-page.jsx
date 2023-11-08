@@ -24,6 +24,7 @@ export const NewShiftPage = () => {
 		mutate(
 			{
 				shiftId: shift.id,
+				profesionalId: shift.profesionalId,
 				pacienteId: formdata.patient.id,
 				observacion: formdata.notes,
 				presentismo: formdata.attendance,

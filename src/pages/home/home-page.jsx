@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import Face6Icon from '@mui/icons-material/Face6';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -30,6 +31,8 @@ const navLinks = [
 ];
 
 export const HomePage = () => {
+	const { user } = useStore();
+
 	return (
 		<>
 			<Helmet>
@@ -39,7 +42,9 @@ export const HomePage = () => {
 				<Typography variant="h3" component="h1">
 					&lt;Nombre de clínica&gt;
 				</Typography>
-				<Typography variant="subtitle1">Hola, &lt;nombre de usuario&gt;</Typography>
+				<Typography variant="subtitle1">
+					Hola, {user.perfil.nombre} {user.perfil.apellido}
+				</Typography>
 				<Stack spacing={3} sx={{ mt: 4 }}>
 					{navLinks.map((link) => (
 						<Link

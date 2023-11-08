@@ -38,5 +38,19 @@
 				]
 			}
 		]
+		// "import/no-restricted-paths": [
+		// 	"error",
+		// 	{
+		// 		"zones": [
+		// 			{
+		// 				"target": "./src/libs/tanstack-query.js",
+		// 				"from": "./src/pages/login/login-page.jsx",
+		// 				"message": "Importing \"queryClient\" from libs/ folder is not allowed. Use the hook \"useQueryClient\" instead."
+		// 			}
+		// 		]
+		// 	}
+		// ]
+		//
+		// No logré que funcionara
 	}
 }

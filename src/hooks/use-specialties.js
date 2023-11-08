@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
@@ -9,10 +10,10 @@ const getSpecialties = async (clinicId) => {
 
 // Custom hook que utiliza React Query por detrás
 export const useSpecialties = () => {
-	const fakeClinicId = 1;
+	const { clinicaId } = useStore((state) => state.clinic);
 
 	return useQuery({
-		queryKey: ['specialties', fakeClinicId],
-		queryFn: () => getSpecialties(fakeClinicId),
+		queryKey: ['specialties', clinicaId],
+		queryFn: () => getSpecialties(clinicaId),
 	});
 };

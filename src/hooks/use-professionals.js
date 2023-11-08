@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
@@ -13,10 +14,10 @@ const getProfessionals = async (clinicId, professionalId) => {
  * @param {number} [professionalId]
  */
 export const useProfessionals = (professionalId) => {
-	const fakeClinicId = 1;
+	const { clinicaId } = useStore((state) => state.clinic);
 
 	return useQuery({
-		queryKey: ['professionals', fakeClinicId, professionalId],
-		queryFn: () => getProfessionals(fakeClinicId, professionalId),
+		queryKey: ['professionals', clinicaId, professionalId],
+		queryFn: () => getProfessionals(clinicaId, professionalId),
 	});
 };

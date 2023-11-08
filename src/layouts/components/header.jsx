@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiAppBar from '@mui/material/AppBar';
@@ -10,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { drawerWidth } from './desktop-bar';
 
 const AppBar = styled(MuiAppBar, {
@@ -40,7 +42,8 @@ const AppBar = styled(MuiAppBar, {
 export const Header = ({ toggleMobileBar, open }) => {
 	const isMobile = useMediaQuery('(max-width:768px)');
 	const [anchorEl, setAnchorEl] = useState(null);
-	const auth = true;
+	const navigate = useNavigate();
+	const doLogout = useStore((state) => state.doLogout);
 
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -48,6 +51,11 @@ export const Header = ({ toggleMobileBar, open }) => {
 
 	const handleClose = () => {
 		setAnchorEl(null);
+	};
+
+	const handleLogout = () => {
+		doLogout();
+		navigate('/login');
 	};
 
 	const ResponsiveAppBar = isMobile ? MuiAppBar : AppBar;
@@ -70,39 +78,35 @@ export const Header = ({ toggleMobileBar, open }) => {
 				<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 					AConex
 				</Typography>
-				{auth && (
-					<div>
-						<Tooltip title="Usuario">
-							<IconButton
-								aria-label="account of current user"
-								aria-controls="menu-appbar"
-								aria-haspopup="true"
-								onClick={handleMenu}
-								color="inherit"
-							>
-								<AccountCircle />
-							</IconButton>
-						</Tooltip>
-						<Menu
-							id="menu-appbar"
-							anchorEl={anchorEl}
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'right',
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: 'top',
-								horizontal: 'right',
-							}}
-							open={Boolean(anchorEl)}
-							onClose={handleClose}
-						>
-							<MenuItem onClick={handleClose}>Profile</MenuItem>
-							<MenuItem onClick={handleClose}>My account</MenuItem>
-						</Menu>
-					</div>
-				)}
+				<Tooltip title="Usuario">
+					<IconButton
+						aria-label="account of current user"
+						aria-controls="menu-appbar"
+						aria-haspopup="true"
+						onClick={handleMenu}
+						color="inherit"
+					>
+						<AccountCircle />
+					</IconButton>
+				</Tooltip>
+				<Menu
+					id="menu-appbar"
+					anchorEl={anchorEl}
+					anchorOrigin={{
+						vertical: 'bottom',
+						horizontal: 'right',
+					}}
+					keepMounted
+					transformOrigin={{
+						vertical: 'top',
+						horizontal: 'right',
+					}}
+					open={Boolean(anchorEl)}
+					onClose={handleClose}
+				>
+					<MenuItem onClick={handleClose}>Mi perfil</MenuItem>
+					<MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
+				</Menu>
 			</Toolbar>
 		</ResponsiveAppBar>
 	);

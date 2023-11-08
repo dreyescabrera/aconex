@@ -13,7 +13,7 @@ export const NotFoundPage = () => {
 				<Typography variant="h3" component="h1">
 					Página no encontrada
 				</Typography>
-				<Button href="/" variant="contained" sx={{ mt: 2 }}>
+				<Button href="/home" variant="contained" sx={{ mt: 2 }}>
 					Ir al home
 				</Button>
 			</Container>

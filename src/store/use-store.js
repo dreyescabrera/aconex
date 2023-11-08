@@ -9,6 +9,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
  * @property {(clinicData: object) => void} setClinic
  * @property {(userData: object) => void} setUser
  * @property {(status: boolean) => void} setIsLoggedIn
+ * @property {() => void} doLogout
  */
 
 /**
@@ -23,6 +24,7 @@ export const useStore = create(
 			setClinic: (clinicData) => set(() => ({ clinic: clinicData })),
 			setUser: (userData) => set(() => ({ user: userData })),
 			setIsLoggedIn: (status) => set(() => ({ isLoggedIn: status })),
+			doLogout: () => set(() => ({ clinic: null, isLoggedIn: false, user: null })),
 		}),
 		{ name: 'clinic-storage', storage: createJSONStorage(() => sessionStorage) }
 	)

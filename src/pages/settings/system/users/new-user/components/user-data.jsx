@@ -11,43 +11,46 @@ import { useNewUser } from '../context/new-user.context';
 
 export const UserData = () => {
 	const { view, newUser } = useNewUser();
-	const crearusuario = useCreateUser();
-	const handleSubmit = (ev) => {
-		const datos = [newUser, ev];
-		crearusuario.mutate(datos);
+	const { mutate, status } = useCreateUser();
+
+	const handleSubmit = ({ username, password }) => {
+		mutate({ username, password, ...newUser });
 	};
 
 	return (
 		<Slide direction="left" in={view === 'USER_DATA'} timeout={450} mountOnEnter>
 			<Box sx={{ width: view === 'USER_DATA' ? '100%' : 0 }}>
 				<Fade in={view === 'USER_DATA'} appear={false} timeout={200}>
-					<div>
-						<Form
-							onSubmit={handleSubmit}
-							defaultValues={{
-								username: '',
-								password: '',
-							}}
-						>
-							<Stack gap={4}>
-								<TextInput fullWidth name="username" label="Nombre de usuario" />
-								<TextInput fullWidth name="password" label="Constraseña" type="password" />
-								<Button variant="contained" type="submit">
-									Completar
-								</Button>
-							</Stack>
-						</Form>
-						{crearusuario.isError ? (
-							<Alert severity="error">Error al editar persona</Alert>
-						) : crearusuario.isLoading ? (
-							<CircularProgress />
-						) : crearusuario.isSuccess ? (
-							<Alert severity="success">Usuario editado con exito!</Alert>
-						) : (
-							<div />
-						)}
-					</div>
+					<Form
+						onSubmit={handleSubmit}
+						defaultValues={{
+							username: '',
+							password: '',
+						}}
+					>
+						<Stack gap={4}>
+							<TextInput fullWidth name="username" label="Nombre de usuario" />
+							<TextInput fullWidth name="password" label="Contraseña" type="password" />
+							<Button variant="contained" type="submit">
+								Completar
+							</Button>
+						</Stack>
+					</Form>
 				</Fade>
+				{status === 'loading' && <CircularProgress />}
+				{status === 'error' && (
+					<Alert severity="error">
+						Hubo un problema creando el usuario. Por favor, intente de nuevo.
+					</Alert>
+				)}
+				{status === 'success' && (
+					<Stack spacing={3} sx={{ my: 4, justifyContent: 'start' }}>
+						<Alert severity="success">Usuario creado con éxito.</Alert>
+						<Button variant="contained" href="../" sx={{ width: 'max-content' }}>
+							Volver
+						</Button>
+					</Stack>
+				)}
 			</Box>
 		</Slide>
 	);

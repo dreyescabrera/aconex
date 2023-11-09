@@ -3,15 +3,16 @@ import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
-import { Form, TextInput } from '@/components/form';
+import { DatePicker, Form, TextInput } from '@/components/form';
 import { useNewUser } from '../context/new-user.context';
 
 export const ProfileData = () => {
-	const { view, updateView } = useNewUser();
+	const { view, updateView, updateNewUser } = useNewUser();
 
 	const handleSubmit = (profile) => {
+		const dateOfBirth = profile.nacimiento.format('MM/DD/YYYY');
 		updateView('USER_DATA');
-		console.info(profile);
+		updateNewUser({ ...profile, nacimiento: dateOfBirth });
 	};
 
 	return (
@@ -34,7 +35,7 @@ export const ProfileData = () => {
 								celular: '',
 								direccion: '',
 								email: '',
-								nacimiento: '',
+								nacimiento: null,
 							}}
 						>
 							<Stack gap={4}>
@@ -44,7 +45,12 @@ export const ProfileData = () => {
 								<TextInput fullWidth name="celular" label="Celular" />
 								<TextInput fullWidth name="direccion" label="Dirección" />
 								<TextInput fullWidth name="email" label="Email" />
-								<TextInput fullWidth name="nacimiento" label="Nacimiento" />
+								<DatePicker
+									name="nacimiento"
+									label="Nacimiento"
+									disableFuture
+									slotProps={{ textField: { variant: 'standard' } }}
+								/>
 								<Button variant="contained" type="submit">
 									Siguiente
 								</Button>

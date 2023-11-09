@@ -3,12 +3,12 @@ import TextField from '@mui/material/TextField';
 import { useController } from 'react-hook-form';
 
 /**
- * @typedef {object} CustomProps
+ * @typedef {object} AutocompleteCustomProps
  * @property {import("@mui/material/TextField").TextFieldProps} [inputProps={}]
  */
 
 /**
- * @param {Omit<import("@mui/material/Autocomplete").AutocompleteProps, "renderInput"> & import("react-hook-form").UseControllerProps & CustomProps} props
+ * @param {Omit<import("@mui/material/Autocomplete").AutocompleteProps, "renderInput"> & import("react-hook-form").UseControllerProps & AutocompleteCustomProps} props
  */
 export const Autocomplete = (props) => {
 	const { name, control, defaultValue, rules, shouldUnregister, inputProps, ...autocompleteProps } =

@@ -1,6 +1,7 @@
 import { SettingsPage } from '@/pages/settings';
 import { ParametersPage } from '@/pages/settings/system';
 import { UsersPage } from '@/pages/settings/system/users';
+import { EditUserPage } from '@/pages/settings/system/users/edit-user';
 import { NewUsersPage } from '@/pages/settings/system/users/new-user';
 import { HolidaysPage } from '@/pages/settings/tables/holidays';
 import { NewHolidaysPage } from '@/pages/settings/tables/holidays/new-holiday';
@@ -8,6 +9,9 @@ import { ProfessionalsPage } from '@/pages/settings/tables/professionals';
 import { SpecialtiesPage } from '@/pages/settings/tables/specialties';
 import { NewSpecialtiesPage } from '@/pages/settings/tables/specialties/new-specialty';
 
+/**
+ * @type {Array<import('react-router-dom').RouteObject>}
+ */
 export const settingsRouter = [
 	{
 		path: '/configuracion',
@@ -24,6 +28,10 @@ export const settingsRouter = [
 	{
 		path: '/configuracion/usuarios/nuevo',
 		element: <NewUsersPage />,
+	},
+	{
+		path: '/configuracion/usuarios/editar',
+		element: <EditUserPage />,
 	},
 	{
 		path: '/configuracion/profesionales',

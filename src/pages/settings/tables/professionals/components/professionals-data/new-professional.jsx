@@ -1,9 +1,12 @@
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { DatePicker, Form, TextInput } from '@/components/form';
+import { useCreateProfessional } from '../../hooks/use-create-professional';
 
 const Drawer = styled(MuiDrawer)(() => ({
 	'& .MuiDrawer-paper': {
@@ -19,13 +22,32 @@ const Drawer = styled(MuiDrawer)(() => ({
  * @param {() => void} props.onClose
  */
 export const NewProfessionalData = ({ open, onClose }) => {
+	const { mutate, status } = useCreateProfessional();
+
+	const handleSubmit = (formData) => {
+		const cellphone = parseInt(formData.celular);
+		const ced = parseInt(formData.cedula);
+		const birthday = formData.nacimiento.format('MM/DD/YYYY');
+		const data = {
+			nombre: formData.nombre,
+			apellido: formData.apellido,
+			cedula: ced,
+			celular: cellphone,
+			direccion: formData.direccion,
+			email: formData.email,
+			nacimiento: birthday,
+		};
+
+		mutate(data);
+	};
+
 	return (
 		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
 				Información personal
 			</Typography>
 			<Form
-				onSubmit={console.info}
+				onSubmit={handleSubmit}
 				defaultValues={{
 					nombre: '',
 					apellido: '',
@@ -36,7 +58,7 @@ export const NewProfessionalData = ({ open, onClose }) => {
 					nacimiento: null,
 				}}
 			>
-				<Stack spacing={3}>
+				<Stack spacing={3} sx={{ mb: 2 }}>
 					<TextInput name="nombre" label="Nombre" />
 					<TextInput name="apellido" label="Apellido" />
 					<TextInput name="cedula" label="Número de Cédula" />
@@ -48,12 +70,29 @@ export const NewProfessionalData = ({ open, onClose }) => {
 						label="Fecha de nacimiento"
 						slotProps={{ textField: { variant: 'standard' } }}
 						disableFuture
+						format="DD/MM/YYYY"
 					/>
 					<Button type="submit" variant="contained">
 						Crear
 					</Button>
 				</Stack>
 			</Form>
+
+			{status === 'loading' && (
+				<Stack direction="row" alignItems="center" spacing={1}>
+					<CircularProgress />
+				</Stack>
+			)}
+
+			{status === 'error' && (
+				<Alert severity="error">
+					Hubo un problema creando el profesional. Por favor, intente de nuevo.
+				</Alert>
+			)}
+
+			{status === 'success' && (
+				<Alert severity="success">El profesional fue creado exitosamente.</Alert>
+			)}
 		</Drawer>
 	);
 };

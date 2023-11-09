@@ -1,3 +1,4 @@
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import List from '@mui/material/List';
@@ -5,17 +6,43 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { Helmet } from 'react-helmet';
+import { useSpecialties } from '@/hooks/use-specialties';
 
-const specialties = [
-	{
-		code: 111,
-		description: 'Cirugía',
-	},
-	{
-		code: 112,
-		description: 'Fisioterapia',
-	},
-];
+const Specialties = () => {
+	const { data: specialties, status } = useSpecialties();
+
+	if (status === 'loading') {
+		return <Alert severity="info">Cargando...</Alert>;
+	}
+
+	if (status === 'error') {
+		return (
+			<Alert severity="error">
+				Hubo un problema. Por favor, recargue la página o contacte a servicio al cliente .
+			</Alert>
+		);
+	}
+
+	return (
+		<List>
+			{specialties.map((specialty) => (
+				<ListItem
+					key={specialty.id}
+					sx={{
+						'&:not(:last-child)': {
+							borderBottom: '1px solid #DADADAC5',
+							pb: 1,
+							mb: 1,
+						},
+					}}
+					disablePadding
+				>
+					<ListItemText primary={specialty.nombre} secondary={`Código: ${specialty.id}`} />
+				</ListItem>
+			))}
+		</List>
+	);
+};
 
 export const SpecialtiesPage = () => {
 	return (
@@ -27,26 +54,7 @@ export const SpecialtiesPage = () => {
 				<Typography variant="h3" component="h1">
 					Especialidades
 				</Typography>
-				<List>
-					{specialties.map((specialty) => (
-						<ListItem
-							key={specialty.code}
-							sx={{
-								'&:not(:last-child)': {
-									borderBottom: '1px solid #DADADAC5',
-									pb: 1,
-									mb: 1,
-								},
-							}}
-							disablePadding
-						>
-							<ListItemText
-								primary={specialty.description}
-								secondary={`Código: ${specialty.code}`}
-							/>
-						</ListItem>
-					))}
-				</List>
+				<Specialties />
 				<Button variant="contained" sx={{ mt: 'auto' }} href="./nuevo">
 					Agregar nuevo
 				</Button>

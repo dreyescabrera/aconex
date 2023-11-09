@@ -6,14 +6,28 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { dayList } from '@/constants/day-list';
 import { useProfessionalsContext } from '../../context/professionals.context';
+import { useDeleteSchedule } from '../../hooks/use-delete-schedule';
 import { EditSchedule } from './edit-schedule';
 import { NewSchedule } from './new-schedule';
 
 export const ProfessionalsSchedule = () => {
 	const { isDrawerOpen, closeDrawer, handleEditSchedule, listToRender, openDrawer, drawerToOpen } =
 		useProfessionalsContext();
+	const mutation = useDeleteSchedule();
 
-	if (listToRender.length === 0) {
+	const handleDelete = (schedule) => {
+		mutation.mutate({ horarioId: schedule.id, profesionalId: schedule.profesionalId });
+	};
+
+	if (!listToRender) {
+		return (
+			<Alert severity="info" sx={{ mt: 5 }}>
+				Cargando...
+			</Alert>
+		);
+	}
+
+	if (listToRender?.length === 0) {
 		return (
 			<Alert severity="warning" sx={{ mt: 5 }}>
 				No se encontraron resultados.
@@ -28,38 +42,51 @@ export const ProfessionalsSchedule = () => {
 			</Button>
 			<Grid container spacing={2}>
 				{listToRender.map((professional) => (
-					<Grid key={professional.celular} xs={12}>
+					<Grid key={professional.perfil.celular} xs={12}>
 						<Paper variant="outlined" sx={{ p: 2 }}>
 							<Typography fontWeight="bold" variant="h6" component="p">
-								{professional.nombre} {professional.apellido}
+								{professional.perfil.nombre} {professional.perfil.apellido}
 							</Typography>
-							<Grid container spacing={4}>
-								{professional.horarios.map((dia) => (
-									<Grid key={dia.nroDia} xs={6} sm={'auto'}>
-										<Paper variant="outlined" sx={{ p: 1 }}>
-											<Typography>{dayList[dia.nroDia]}</Typography>
-											<Typography color="#666">
-												{dia.horaDesde} - {dia.horaHasta}
-											</Typography>
-											<Button
-												color="primary"
-												variant="text"
-												size="small"
-												onClick={handleEditSchedule(professional, dia, 'editSchedule')}
-											>
-												Editar
-											</Button>
-											<Button color="error" variant="text" size="small">
-												Eliminar
-											</Button>
-										</Paper>
-									</Grid>
-								))}
-							</Grid>
+							{professional.horarios.length > 0 ? (
+								<Grid container spacing={4}>
+									{professional.horarios.map((dia) => (
+										<Grid key={dia.nroDia} xs={6} sm={'auto'}>
+											<Paper variant="outlined" sx={{ p: 1 }}>
+												<Typography>{dayList[dia.nroDia]}</Typography>
+												<Typography color="#666">
+													{dia.horaDesde} - {dia.horaHasta}
+												</Typography>
+												<Button
+													color="primary"
+													variant="text"
+													size="small"
+													onClick={handleEditSchedule(professional, dia, 'editSchedule')}
+												>
+													Editar
+												</Button>
+												<Button
+													color="error"
+													variant="text"
+													size="small"
+													onClick={() => handleDelete(dia)}
+												>
+													Eliminar
+												</Button>
+											</Paper>
+										</Grid>
+									))}
+								</Grid>
+							) : (
+								<div>Sin horario</div>
+							)}
 						</Paper>
 					</Grid>
 				))}
-				<NewSchedule open={isDrawerOpen && drawerToOpen === 'newSchedule'} onClose={closeDrawer} />
+				<NewSchedule
+					open={isDrawerOpen && drawerToOpen === 'newSchedule'}
+					onClose={closeDrawer}
+					professionalslist={listToRender}
+				/>
 				<EditSchedule
 					open={isDrawerOpen && drawerToOpen === 'editSchedule'}
 					onClose={closeDrawer}

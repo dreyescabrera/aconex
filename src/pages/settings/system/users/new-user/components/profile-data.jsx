@@ -7,10 +7,13 @@ import { Form, TextInput } from '@/components/form';
 import { useNewUser } from '../context/new-user.context';
 
 export const ProfileData = () => {
-	const { view, updateView } = useNewUser();
+	const { view, updateView, updateNewUser } = useNewUser();
 
 	const handleSubmit = (profile) => {
+		var z = profile.nacimiento.split('/');
+		profile.nacimiento = z[1] + '/' + z[0] + '/' + z[2];
 		updateView('USER_DATA');
+		updateNewUser(profile);
 		console.info(profile);
 	};
 

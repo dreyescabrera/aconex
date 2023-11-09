@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -5,16 +6,39 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Fade from '@mui/material/Fade';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Form, TextInput } from '@/components/form';
-import { useCreateUser } from '../../../hooks/use-create-user';
-import { useNewUser } from '../context/new-user.context';
+import { api } from '@/services/api';
+import { useEditUser } from '../context/edit-user.context';
 
-export const UserData = () => {
-	const { view, newUser } = useNewUser();
-	const crearusuario = useCreateUser();
+async function edituser(data, clinicId) {
+	const iduser = data[0];
+	const usuariodata = data[1];
+	const endpoint = `/usuarios/${clinicId}/${iduser}`;
+	const response = await api.patch(endpoint, usuariodata);
+	return response;
+}
+
+const useMutEditUser = () => {
+	const queryClient = useQueryClient();
+	const clinicId = useStore((state) => state.clinic.id);
+	const mutationFn = (data) => {
+		return edituser(data, clinicId);
+	};
+
+	return useMutation({
+		mutationFn,
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['getusers', clinicId] }),
+	});
+};
+
+export const UserData = (data) => {
+	const { view } = useEditUser();
+	const user = data.user.user; //Anidamiento de objetos
+	const mutation = useMutEditUser();
 	const handleSubmit = (ev) => {
-		const datos = [newUser, ev];
-		crearusuario.mutate(datos);
+		const datosusuario = [user.id, ev];
+		mutation.mutate(datosusuario);
 	};
 
 	return (
@@ -25,7 +49,7 @@ export const UserData = () => {
 						<Form
 							onSubmit={handleSubmit}
 							defaultValues={{
-								username: '',
+								username: user?.username,
 								password: '',
 							}}
 						>
@@ -37,11 +61,11 @@ export const UserData = () => {
 								</Button>
 							</Stack>
 						</Form>
-						{crearusuario.isError ? (
+						{mutation.isError ? (
 							<Alert severity="error">Error al editar persona</Alert>
-						) : crearusuario.isLoading ? (
+						) : mutation.isLoading ? (
 							<CircularProgress />
-						) : crearusuario.isSuccess ? (
+						) : mutation.isSuccess ? (
 							<Alert severity="success">Usuario editado con exito!</Alert>
 						) : (
 							<div />

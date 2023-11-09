@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { professionals } from './fake-data';
+import { useProfessionals } from '@/hooks/use-professionals';
 
 /**
  * @typedef {"newProfessional" | "editProfessional" | "newSchedule" | "editSchedule" | "newAbsence" | "editAbsence" | null} DrawerToOpen
@@ -7,14 +7,15 @@ import { professionals } from './fake-data';
 
 /* eslint-disable */
 const initialData = {
-	professionals,
-	/**@type {Array<import('./fake-data').Professional>} */
+	/**@type {Array<import('./types').Professional>} */
+	professionals: undefined,
+	/**@type {Array<import('./types').Professional>} */
 	listToRender: [],
-	/**@type {import('./fake-data').Professional} */
+	/**@type {import('./types').Professional} */
 	professionalInView: null,
-	/**@type {import('./fake-data').Schedule} */
+	/**@type {import('./types').Schedule} */
 	scheduleInView: null,
-	/**@type {import('./fake-data').Absence} */
+	/**@type {import('./types').Absence} */
 	absenceInView: null,
 	isDrawerOpen: false,
 	/**@type {DrawerToOpen} */
@@ -24,17 +25,17 @@ const initialData = {
 	openDrawer: (/**@type {DrawerToOpen} */ drawerToOpen) => undefined,
 	closeDrawer: () => undefined,
 	handleEditProfessional: (
-		/**@type {import('./fake-data').Professional} */ professional,
+		/**@type {import('./types').Professional} */ professional,
 		/**@type {DrawerToOpen} */ drawerToOpen
 	) => undefined,
 	handleEditSchedule: (
-		/**@type {import('./fake-data').Professional} */ professional,
-		/**@type {import('./fake-data').Schedule} */ schedule,
+		/**@type {import('./types').Professional} */ professional,
+		/**@type {import('./types').Schedule} */ schedule,
 		/**@type {DrawerToOpen} */ drawerToOpen
 	) => undefined,
 	handleEditAbsence: (
-		/**@type {import('./fake-data').Professional} */ professional,
-		/**@type {import('./fake-data').Absence} */ absence,
+		/**@type {import('./types').Professional} */ professional,
+		/**@type {import('./types').Absence} */ absence,
 		/**@type {DrawerToOpen} */ drawerToOpen
 	) => undefined,
 };
@@ -43,7 +44,8 @@ const initialData = {
 const ProfessionalsContext = createContext(initialData);
 
 export const ProfessionalsProvider = ({ children }) => {
-	const [professionals] = useState(initialData.professionals);
+	const { data: professionals, refetch } = useProfessionals();
+
 	const [professionalInView, setProfessionalInView] = useState(null);
 	const [scheduleInView, setScheduleInView] = useState(null);
 	const [absenceInView, setAbsenceInView] = useState(null);
@@ -130,6 +132,7 @@ export const ProfessionalsProvider = ({ children }) => {
 		handleEditProfessional,
 		handleEditSchedule,
 		handleEditAbsence,
+		refetch,
 	};
 
 	return <ProfessionalsContext.Provider value={state}>{children}</ProfessionalsContext.Provider>;

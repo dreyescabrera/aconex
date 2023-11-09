@@ -16,9 +16,9 @@ dayjs.extend(timezone);
 
 export const Shifts = () => {
 	const { filters, drawerToOpen, closeDrawer, handleShiftOptions } = useAgendaContext();
-	const { clinicaId } = useStore((state) => state.clinic);
+	const clinic = useStore((state) => state.clinic);
 
-	const { data: shifts } = useShifts(clinicaId, Object.fromEntries(filters.entries()));
+	const { data: shifts } = useShifts(clinic.id, Object.fromEntries(filters.entries()));
 	const { data: professionals } = useProfessionals();
 
 	let shiftsGroupedByProfessionals;

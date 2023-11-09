@@ -32,8 +32,13 @@ export const useLogin = () => {
 	const mutation = useMutation({
 		mutationFn,
 		onSuccess: ({ data }) => {
-			setClinic({ clinicaId: data.clinica });
-			setUser({ username: data.username, perfil: data.perfil });
+			setClinic({ ...data.clinica });
+			setUser({
+				username: data.username,
+				createdAt: data.createdAt,
+				perfilId: data.perfilId,
+				perfil: data.perfil,
+			});
 			setIsLoggedIn(true);
 
 			navigate('/home', { replace: true });

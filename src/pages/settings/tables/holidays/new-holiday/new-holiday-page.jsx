@@ -1,42 +1,19 @@
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useMutation } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
 import { DatePicker, Form, TextInput } from '@/components/form';
-import { api } from '@/services/api';
-
-async function addholiday(holiday) {
-	const res = api.post('/feriados', holiday);
-	return res;
-}
-
-const Mensaje = ({ status }) => {
-	if (status.isLoading) {
-		return <p>Cargando...</p>;
-	}
-	if (status.isSuccess) {
-		return (
-			<div>
-				<p>Feriado Agregado con exito!</p>
-				<Button variant="contained" sx={{ mt: 'auto' }} href="../">
-					Volver
-				</Button>
-			</div>
-		);
-	}
-	if (status.isError) {
-		return <p>Error al agregar Feriado</p>;
-	}
-};
+import { useCreateHoliday } from '../hooks/use-create-holiday';
 
 export const NewHolidaysPage = () => {
-	const mutation = useMutation(addholiday);
-	const handleSubmit = (event) => {
-		var date = event.dia.format('MM/DD').toString();
-		let holiday = { clinicaId: 1, descripcion: event.descripcion, fecha: date }; //Es Necesario especificar la clinica que agregara tal feriado (clinicaId)
-		mutation.mutate(holiday);
+	const { mutate, status } = useCreateHoliday();
+
+	const handleSubmit = (formData) => {
+		const date = formData.dia.format('MM/DD');
+
+		mutate({ descripcion: formData.descripcion, fecha: date });
 	};
 	return (
 		<>
@@ -64,7 +41,17 @@ export const NewHolidaysPage = () => {
 						Agregar
 					</Button>
 				</Form>
-				<Mensaje status={mutation} />
+
+				{status === 'loading' && <Alert severity="info">Cargando...</Alert>}
+
+				{status === 'success' && (
+					<div>
+						<Alert severity="success">Feriado Agregado con exito!</Alert>
+						<Button variant="contained" sx={{ mt: 2 }} href="../">
+							Volver
+						</Button>
+					</div>
+				)}
 			</Container>
 		</>
 	);

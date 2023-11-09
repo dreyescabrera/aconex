@@ -10,10 +10,10 @@ const getSpecialties = async (clinicId) => {
 
 // Custom hook que utiliza React Query por detrás
 export const useSpecialties = () => {
-	const { clinicaId } = useStore((state) => state.clinic);
+	const { id } = useStore((state) => state.clinic);
 
 	return useQuery({
-		queryKey: ['specialties', clinicaId],
-		queryFn: () => getSpecialties(clinicaId),
+		queryKey: ['specialties', id],
+		queryFn: () => getSpecialties(id),
 	});
 };

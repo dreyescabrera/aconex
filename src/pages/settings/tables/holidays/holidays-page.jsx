@@ -1,4 +1,5 @@
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -6,107 +7,62 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import { Helmet } from 'react-helmet';
-import { api } from '@/services/api';
-
-async function fetchdates() {
-	const res = await api.get(
-		'/feriados/1' //Es Necesario especificar la clinica que maneja tales especialidades (especialidades/1)
-	);
-	return res;
-}
-
-const Menssagedeletion = ({ status }) => {
-	if (status.isLoading) {
-		return <p> </p>;
-	}
-	if (status.isSuccess) {
-		return (
-			<div>
-				<p> </p>
-			</div>
-		);
-	}
-	if (status.isError) {
-		return <p>Error al borrar</p>;
-	}
-};
+import { useDeleteHoliday } from './hooks/use-delete-holiday';
+import { useHolidays } from './hooks/use-holidays';
 
 const Holidays = () => {
-	const { data, status, refetch } = useQuery(['holiday'], fetchdates);
-	const mutation = useMutation(deletedates);
-	const handleDeletion = (id, mutation) => {
-		mutation.mutate(id);
+	const { data: holidays, status } = useHolidays();
+	const { mutate } = useDeleteHoliday();
+
+	const handleDeleteHoliday = (id) => {
+		mutate(id);
 	};
 
-	async function deletedates(id) {
-		var id2 = id.toString();
-		var endpoint = '/feriados/1/' + id2; //Es Necesario especificar la clinica que agregara tal feriado (clinicaId)
-		const res = await api.delete(endpoint).then(() => refetch());
-		return res;
-	}
-
 	if (status === 'loading') {
-		return <p>Cargando...</p>;
+		return <Alert severity="info">Cargando...</Alert>;
 	}
 
 	if (status === 'error') {
-		return <p>Error al Cargar, no se pudieron obtener los datos</p>;
-	}
-
-	if (status === 'success') {
-		var i = 0;
-		var holidaylist = [];
-		var holidayobject;
-		var size = data.data.length;
-		var id;
-		var date = 'fecha';
-		var descripcion = 'descripcion';
-		var z;
-		var z1;
-		var result;
-		for (i = 0; i < size; i++) {
-			id = data.data[i].id;
-			date = data.data[i].fecha;
-			descripcion = data.data[i].descripcion;
-			z = date.split('-');
-			z1 = z[2].split('T');
-			result = z1[0] + '/' + z[1];
-			holidayobject = { id: id, fecha: result, descripcion: descripcion };
-			holidaylist.push(holidayobject);
-		}
 		return (
-			<List>
-				{holidaylist.map((holiday) => (
-					<ListItem
-						key={holiday.id}
-						id={holiday.id}
-						sx={{
-							'&:not(:last-child)': {
-								borderBottom: '1px solid #DADADAC5',
-								pb: 1,
-								mb: 1,
-							},
-						}}
-						secondaryAction={
-							<IconButton
-								edge="end"
-								aria-label="delete"
-								onClick={() => handleDeletion(holiday.id, mutation)}
-							>
-								<DeleteForeverIcon />
-							</IconButton>
-						}
-						disablePadding
-					>
-						<ListItemText primary={holiday.fecha} secondary={holiday.descripcion} />
-					</ListItem>
-				))}
-				<Menssagedeletion status={mutation} />
-			</List>
+			<Alert severity="error">
+				Hubo un problema. Por favor, recargue la página o contacte a servicio al cliente .
+			</Alert>
 		);
 	}
+
+	return (
+		<List>
+			{holidays.map((holiday) => (
+				<ListItem
+					key={holiday.id}
+					sx={{
+						'&:not(:last-child)': {
+							borderBottom: '1px solid #DADADAC5',
+							pb: 1,
+							mb: 1,
+						},
+					}}
+					secondaryAction={
+						<IconButton
+							edge="end"
+							aria-label="delete"
+							onClick={() => handleDeleteHoliday(holiday.id)}
+						>
+							<DeleteForeverIcon />
+						</IconButton>
+					}
+					disablePadding
+				>
+					<ListItemText
+						primary={dayjs(holiday.fecha).format('DD [de] MMMM, YYYY')}
+						secondary={holiday.descripcion}
+					/>
+				</ListItem>
+			))}
+		</List>
+	);
 };
 
 export const HolidaysPage = () => {

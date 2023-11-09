@@ -4,10 +4,10 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 /**
  * @typedef Store
  * @property {boolean} isLoggedIn
- * @property {object | null} clinic
- * @property {object | null} user
- * @property {(clinicData: object) => void} setClinic
- * @property {(userData: object) => void} setUser
+ * @property {import('./types').ClinicaData | null} clinic
+ * @property {import('./types').UserData | null} user
+ * @property {(clinicData: import('./types').ClinicaData) => void} setClinic
+ * @property {(userData: import('./types').UserData) => void} setUser
  * @property {(status: boolean) => void} setIsLoggedIn
  * @property {() => void} doLogout
  */

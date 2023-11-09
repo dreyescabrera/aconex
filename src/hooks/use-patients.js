@@ -14,10 +14,10 @@ const getPatients = async (clinicId, patientId) => {
  * @param {number} [patientId]
  */
 export const usePatients = (patientId) => {
-	const { clinicaId } = useStore((state) => state.clinic);
+	const { id } = useStore((state) => state.clinic);
 
 	return useQuery({
-		queryKey: ['patients', clinicaId, patientId],
-		queryFn: () => getPatients(clinicaId, patientId),
+		queryKey: ['patients', id, patientId],
+		queryFn: () => getPatients(id, patientId),
 	});
 };

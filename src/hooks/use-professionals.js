@@ -14,10 +14,10 @@ const getProfessionals = async (clinicId, professionalId) => {
  * @param {number} [professionalId]
  */
 export const useProfessionals = (professionalId) => {
-	const { clinicaId } = useStore((state) => state.clinic);
+	const { id } = useStore((state) => state.clinic);
 
 	return useQuery({
-		queryKey: ['professionals', clinicaId, professionalId],
-		queryFn: () => getProfessionals(clinicaId, professionalId),
+		queryKey: ['professionals', id, professionalId],
+		queryFn: () => getProfessionals(id, professionalId),
 	});
 };

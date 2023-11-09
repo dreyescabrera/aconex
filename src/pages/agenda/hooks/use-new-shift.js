@@ -23,14 +23,14 @@ const createShift = async (shiftInfo) => {
 };
 
 export const useNewShift = () => {
-	const { clinicaId } = useStore((state) => state.clinic);
+	const { id } = useStore((state) => state.clinic);
 	const queryClient = useQueryClient();
 
 	/**
 	 * @param {Omit<ShiftOptions, 'clinicaId'>} data
 	 */
 	const mutationFn = (data) => {
-		return createShift({ clinicaId, ...data });
+		return createShift({ clinicaId: id, ...data });
 	};
 
 	return useMutation({

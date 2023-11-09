@@ -1,34 +1,14 @@
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import Container from '@mui/material/Container';
 import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { useMutation } from '@tanstack/react-query';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
 import { useSpecialties } from '@/hooks/use-specialties';
-import { api } from '@/services/api';
 import { dayJsDayList } from '@/constants/day-list';
-import { useProfessionalsContext } from '../../context/professionals.context';
-
-const Mensajenewschedule = ({ status }) => {
-	if (status.isLoading) {
-		return (
-			<Stack direction="row" alignItems="center" spacing={1}>
-				<CircularProgress /> <p>Cargando...</p>
-			</Stack>
-		);
-	}
-	if (status.isSuccess) {
-		return <Alert severity="success">Horario agregado con exito!</Alert>;
-	}
-	if (status.isError) {
-		const errormensaje = status.error.response.data.message;
-		return <Alert severity="error">Error al agregar Horario: {errormensaje}</Alert>;
-	}
-};
+import { useCreateSchedule } from '../../hooks/use-create-schedule';
 
 const Drawer = styled(MuiDrawer)(() => ({
 	'& .MuiDrawer-paper': {
@@ -46,34 +26,25 @@ const Drawer = styled(MuiDrawer)(() => ({
  */
 export const NewSchedule = ({ open, onClose, professionalslist }) => {
 	const { data: specialties } = useSpecialties();
-	const { refetch } = useProfessionalsContext();
+	const { mutate, status, error } = useCreateSchedule();
 
-	async function setschedule(schedule) {
-		const res = await api.post('/horarios', schedule).then(() => refetch());
-		return res;
-	}
+	const handleSubmit = (formData) => {
+		const dateFrom = formData.fechaDesde.format('MM/DD/YYYY');
+		const dateTo = formData.fechaHasta.format('MM/DD/YYYY');
+		const hourFrom = formData.horaDesde.format('HH:mm');
+		const hourTo = formData.horaHasta.format('HH:mm');
+		const interval = formData.intervalo.format('mm');
 
-	const mutation = useMutation(setschedule);
-
-	const handleSubmit = (ev) => {
-		var desde = ev.fechaDesde.format('MM/DD/YYYY');
-		var hasta = ev.fechaHasta.format('MM/DD/YYYY');
-		var hdesde = ev.horaDesde.format('HH:mm');
-		var hhasta = ev.horaHasta.format('HH:mm');
-		var interval = ev.intervalo.format('mm');
-		let horario = {
-			profesionalId: ev.profesional.id,
-			especialidadId: ev.especialidad.id,
-			clinicaId: 1, //Es Necesario especificar la clinica
-			nroDia: ev.dia,
-			vigenciaDesde: desde,
-			vigenciaHasta: hasta,
-			horaDesde: hdesde,
-			horaHasta: hhasta,
+		mutate({
+			profesionalId: formData.profesional.id,
+			especialidadId: formData.especialidad.id,
+			nroDia: formData.dia,
+			vigenciaDesde: dateFrom,
+			vigenciaHasta: dateTo,
+			horaDesde: hourFrom,
+			horaHasta: hourTo,
 			intervalo: interval,
-		};
-
-		mutation.mutate(horario);
+		});
 	};
 
 	return (
@@ -94,7 +65,7 @@ export const NewSchedule = ({ open, onClose, professionalslist }) => {
 					fechaHasta: null,
 				}}
 			>
-				<Stack spacing={3}>
+				<Stack spacing={3} sx={{ mb: 3 }}>
 					<Autocomplete
 						options={professionalslist}
 						getOptionLabel={(option) =>
@@ -158,9 +129,26 @@ export const NewSchedule = ({ open, onClose, professionalslist }) => {
 					</Button>
 				</Stack>
 			</Form>
-			<Container sx={{ mt: 2, mb: 1 }}>
-				<Mensajenewschedule status={mutation} />
-			</Container>
+			{/* @ts-ignore*/}
+			<RequestStatusMessage status={status} errorMessage={error?.response.data.message} />
 		</Drawer>
 	);
 };
+
+function RequestStatusMessage({ status, errorMessage }) {
+	if (status === ' loading') {
+		return (
+			<Stack direction="row" alignItems="center" spacing={1}>
+				<CircularProgress /> <p>Cargando...</p>
+			</Stack>
+		);
+	}
+
+	if (status === 'error') {
+		return <Alert severity="error">Error al agregar Horario: {errorMessage}</Alert>;
+	}
+
+	if (status === 'success') {
+		return <Alert severity="success">Horario agregado con éxito!</Alert>;
+	}
+}

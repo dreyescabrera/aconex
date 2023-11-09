@@ -26,7 +26,7 @@ export const useEditParameters = () => {
 	 * @param {Partial<ClinicUpdate>} modifications
 	 */
 	const mutationFn = (modifications) => {
-		return updateClinicParameters(clinic.clinicaId, modifications);
+		return updateClinicParameters(clinic.id, modifications);
 	};
 
 	return useMutation({

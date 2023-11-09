@@ -1,32 +1,31 @@
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
-import { api } from '@/services/api';
-
-async function fetchspecialties() {
-	const res = await api.get(
-		'/especialidades/1' //Es Necesario especificar la clinica que maneja tales especialidades (especialidades/1)
-	);
-	return res;
-}
+import { useSpecialties } from '@/hooks/use-specialties';
 
 const Specialties = () => {
-	const { data, status } = useQuery(['specialty'], fetchspecialties);
+	const { data: specialties, status } = useSpecialties();
+
 	if (status === 'loading') {
-		return <p>Cargando...</p>;
+		return <Alert severity="info">Cargando...</Alert>;
 	}
 
 	if (status === 'error') {
-		return <p>Error al cargar!</p>;
+		return (
+			<Alert severity="error">
+				Hubo un problema. Por favor, recargue la página o contacte a servicio al cliente .
+			</Alert>
+		);
 	}
+
 	return (
 		<List>
-			{data.data.map((specialty) => (
+			{specialties.map((specialty) => (
 				<ListItem
 					key={specialty.id}
 					sx={{

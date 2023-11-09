@@ -1,4 +1,4 @@
-// import { useStore } from '@/store/use-store';
+import { useStore } from '@/store/use-store';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,7 +13,7 @@ import { useEditProfile } from '@/hooks/use-edit-profile';
 import { useEditParameters } from './hooks/use-edit-parameters';
 
 export const ParametersPage = () => {
-	// const clinic = useStore((state) => state.clinic);
+	const clinic = useStore((state) => state.clinic);
 	const editGeneralParameters = useEditParameters();
 	const editProfileParameters = useEditProfile({ queryKeyToInvalidate: ['clinics'] });
 	const [status, setStatus] = useState('idle');
@@ -32,8 +32,7 @@ export const ParametersPage = () => {
 
 		try {
 			await editGeneralParameters.mutateAsync(newGeneralParameters);
-			// perfilId será reemplazado por clinic.perfil.id cuando Luciano modifique la API
-			await editProfileParameters.mutateAsync({ perfilId: 3131, ...perfil });
+			await editProfileParameters.mutateAsync({ perfilId: clinic.perfilId, ...perfil });
 			setStatus('success');
 		} catch (err) {
 			setError(err);
@@ -55,24 +54,13 @@ export const ParametersPage = () => {
 				<Form
 					onSubmit={handleSubmit}
 					defaultValues={{
-						nombre: '',
-						direccion: '',
-						celular: '',
-						email: '',
-						condicionFiscal: '',
-						region: '',
-						username: '',
-						/*
-							Para cuando Luciano devuelva los datos de la clinica desde el endpoint POST /login
-
-							nombre: clinic.perfil.nombre,
-							direccion: clinic.perfil.direccion,
-							celular: clinic.perfil.celular,
-							email: clinic.perfil.email,
-							condicionFiscal: clinic.condicionFiscal,
-							region: clinic.region,
-							username: clinic.username,
-						*/
+						nombre: clinic.perfil.nombre,
+						direccion: clinic.perfil.direccion,
+						celular: clinic.perfil.celular,
+						email: clinic.perfil.email,
+						condicionFiscal: clinic.condicionFiscal,
+						region: clinic.region,
+						username: clinic.username,
 					}}
 				>
 					<Stack gap={4}>

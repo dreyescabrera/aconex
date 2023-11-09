@@ -5,26 +5,8 @@ import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { useMutation } from '@tanstack/react-query';
 import { DatePicker, Form, TextInput } from '@/components/form';
-import { api } from '@/services/api';
-import { useProfessionalsContext } from '../../context/professionals.context';
-
-const Messaged = ({ status, cargando, exito, erro }) => {
-	if (status.isLoading) {
-		return (
-			<Stack direction="row" alignItems="center" spacing={1}>
-				<CircularProgress /> <p>{cargando}</p>
-			</Stack>
-		);
-	}
-	if (status.isSuccess) {
-		return <Alert severity="success">{exito}</Alert>;
-	}
-	if (status.isError) {
-		return <Alert severity="error">{erro}</Alert>;
-	}
-};
+import { useCreateProfessional } from '../../hooks/use-create-professional';
 
 const Drawer = styled(MuiDrawer)(() => ({
 	'& .MuiDrawer-paper': {
@@ -40,40 +22,23 @@ const Drawer = styled(MuiDrawer)(() => ({
  * @param {() => void} props.onClose
  */
 export const NewProfessionalData = ({ open, onClose }) => {
-	const { refetch } = useProfessionalsContext();
+	const { mutate, status } = useCreateProfessional();
 
-	async function createprofessional(response) {
-		const id = response.data.data.id;
-		const cid = 1; //Es Necesario especificar la clinica
-		const profesional = { clinicaId: cid, perfilId: id };
-		const res = await api.post('/profesionales', profesional).then(() => refetch());
-		return res;
-	}
-	const mutationcreateprofessional = useMutation(createprofessional);
-
-	async function createprofile(data) {
-		const res = await api
-			.post('/perfiles', data)
-			.then((response) => mutationcreateprofessional.mutate(response));
-		return res;
-	}
-	const mutationcreateprofile = useMutation(createprofile);
-
-	const handleSubmit = (ev) => {
-		const cellphone = parseInt(ev.celular);
-		const ced = parseInt(ev.cedula);
-		const birthday = ev.nacimiento.format('MM/DD/YYYY');
+	const handleSubmit = (formData) => {
+		const cellphone = parseInt(formData.celular);
+		const ced = parseInt(formData.cedula);
+		const birthday = formData.nacimiento.format('MM/DD/YYYY');
 		const data = {
-			nombre: ev.nombre,
-			apellido: ev.apellido,
+			nombre: formData.nombre,
+			apellido: formData.apellido,
 			cedula: ced,
 			celular: cellphone,
-			direccion: ev.direccion,
-			email: ev.email,
+			direccion: formData.direccion,
+			email: formData.email,
 			nacimiento: birthday,
 		};
 
-		mutationcreateprofile.mutate(data);
+		mutate(data);
 	};
 
 	return (
@@ -93,7 +58,7 @@ export const NewProfessionalData = ({ open, onClose }) => {
 					nacimiento: null,
 				}}
 			>
-				<Stack spacing={3}>
+				<Stack spacing={3} sx={{ mb: 2 }}>
 					<TextInput name="nombre" label="Nombre" />
 					<TextInput name="apellido" label="Apellido" />
 					<TextInput name="cedula" label="Número de Cédula" />
@@ -112,18 +77,22 @@ export const NewProfessionalData = ({ open, onClose }) => {
 					</Button>
 				</Stack>
 			</Form>
-			<Messaged
-				status={mutationcreateprofile}
-				cargando="Creando Perfil..."
-				exito="Perfil Creado."
-				erro="Error al crear perfil"
-			/>
-			<Messaged
-				status={mutationcreateprofessional}
-				cargando="Creando Profesional..."
-				exito="Profesional creado con exito!"
-				erro="Error al crear Profesional"
-			/>
+
+			{status === 'loading' && (
+				<Stack direction="row" alignItems="center" spacing={1}>
+					<CircularProgress />
+				</Stack>
+			)}
+
+			{status === 'error' && (
+				<Alert severity="error">
+					Hubo un problema creando el profesional. Por favor, intente de nuevo.
+				</Alert>
+			)}
+
+			{status === 'success' && (
+				<Alert severity="success">El profesional fue creado exitosamente.</Alert>
+			)}
 		</Drawer>
 	);
 };

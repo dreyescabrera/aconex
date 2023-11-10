@@ -9,12 +9,22 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
 import { useUsers } from '../hooks/use-users';
+import { UserDialog } from './components/user-dialog';
 
 export const Component = () => {
 	const { data: users, status } = useUsers();
+	const [open, setOpen] = useState(false);
+
+	const handleOpendialog = () => {
+		setOpen(true);
+	};
+
+	const handleClosedialog = () => {
+		setOpen(false);
+	};
 
 	return (
 		<>
@@ -38,10 +48,11 @@ export const Component = () => {
 						<List disablePadding>
 							{users.map((user, index) => (
 								<ListItem key={index} disablePadding>
-									<ListItemButton component={Link} state={{ user }} to="./editar">
+									<ListItemButton onClick={handleOpendialog}>
 										<ListItemText primary={user.perfil.nombre + ' ' + user.perfil.apellido} />
 										<KeyboardArrowRight />
 									</ListItemButton>
+									<UserDialog open={open} onClose={handleClosedialog} usuario={user} />
 								</ListItem>
 							))}
 						</List>

@@ -5,7 +5,9 @@ import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import dayjs from 'dayjs';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
+import { useProfessionals } from '@/hooks/use-professionals';
 import { useSpecialties } from '@/hooks/use-specialties';
 import { dayJsDayList } from '@/constants/day-list';
 import { useCreateSchedule } from '../../hooks/use-create-schedule';
@@ -22,9 +24,9 @@ const Drawer = styled(MuiDrawer)(() => ({
  * @param {object} props
  * @param {boolean} props.open
  * @param {() => void} props.onClose
- * @param {object} props.professionalslist
  */
-export const NewSchedule = ({ open, onClose, professionalslist }) => {
+export const NewSchedule = ({ open, onClose }) => {
+	const { data: professionals } = useProfessionals();
 	const { data: specialties } = useSpecialties();
 	const { mutate, status, error } = useCreateSchedule();
 
@@ -60,14 +62,14 @@ export const NewSchedule = ({ open, onClose, professionalslist }) => {
 					especialidad: null,
 					horaDesde: null,
 					horaHasta: null,
-					intervalo: null,
+					intervalo: dayjs(new Date(0, 0, 0, 0, 30)),
 					fechaDesde: null,
 					fechaHasta: null,
 				}}
 			>
 				<Stack spacing={3} sx={{ mb: 3 }}>
 					<Autocomplete
-						options={professionalslist}
+						options={professionals ?? []}
 						getOptionLabel={(option) =>
 							typeof option !== 'string'
 								? `${option.perfil.nombre} ${option.perfil.apellido}`

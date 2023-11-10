@@ -5,10 +5,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { QueryClientProvider } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es-us';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { Helmet } from 'react-helmet';
 import { RouterProvider } from 'react-router-dom';
 
 dayjs.locale('es-us');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export function App() {
 	return (

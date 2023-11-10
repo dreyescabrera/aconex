@@ -55,7 +55,7 @@ export const Header = ({ toggleMobileBar, open }) => {
 
 	const handleLogout = () => {
 		doLogout();
-		navigate('/login');
+		navigate('/login', { replace: true });
 	};
 
 	const ResponsiveAppBar = isMobile ? MuiAppBar : AppBar;

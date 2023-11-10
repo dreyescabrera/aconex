@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { agendaRouter } from './agenda';
 import { patientsRouter } from './patients';
 import { settingsRouter } from './settings';
+import { userRouter } from './user';
 
 const Home = () => import('@/pages/home');
 const Login = () => import('@/pages/login');
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
 			...agendaRouter,
 			...settingsRouter,
 			...patientsRouter,
+			...userRouter,
 			{
 				path: '*',
 				lazy: NotFound,

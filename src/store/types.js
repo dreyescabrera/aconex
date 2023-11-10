@@ -25,6 +25,7 @@ import { UserData } from '../pages/settings/system/users/new-user/components/use
 
 /**
  * @typedef {object} UserData
+ * @property {number} id - The id of the user.
  * @property {string} username - The username of the user.
  * @property {number} perfilId - The profile ID associated with the user data.
  * @property {string} createdAt - The creation timestamp.

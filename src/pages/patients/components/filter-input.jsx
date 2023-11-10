@@ -2,7 +2,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import { usePatientsContext } from '../context/patient.content';
+import { usePatientsContext } from '../context/patient.context';
 
 export const FilterInput = () => {
 	const { patients, filterQuery, handleFilterChange, handleAutocompleteClick } =
@@ -10,9 +10,9 @@ export const FilterInput = () => {
 	return (
 		<Autocomplete
 			freeSolo
-			options={patients}
+			options={patients ?? []}
 			getOptionLabel={(option) =>
-				typeof option !== 'string' ? `${option.nombre} ${option.apellido}` : option
+				typeof option !== 'string' ? `${option.perfil.nombre} ${option.perfil.apellido}` : option
 			}
 			onChange={handleAutocompleteClick}
 			renderInput={(params) => (

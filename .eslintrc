@@ -15,7 +15,7 @@
 	},
 	"plugins": ["react-refresh", "import"],
 	"rules": {
-		"react-refresh/only-export-components": ["warn", { "allowConstantExport": true }],
+		// "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }],
 		"no-console": ["warn", { "allow": ["warn", "error", "info"] }],
 		"react/prop-types": "off",
 		"jsdoc/require-param-description": "off",

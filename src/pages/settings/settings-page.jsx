@@ -53,7 +53,7 @@ const cards = [
 	},
 ];
 
-export const SettingsPage = () => {
+export const Component = () => {
 	return (
 		<>
 			<Helmet>

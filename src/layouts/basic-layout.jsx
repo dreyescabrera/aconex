@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Outlet } from 'react-router-dom';
 
-export const BasicLayout = () => {
+export const Component = () => {
 	return (
 		<>
 			<AppBar position="sticky" sx={{ mb: 4 }}>

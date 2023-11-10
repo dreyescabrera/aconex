@@ -1,7 +1,7 @@
-import { AgendaPage } from '@/pages/agenda';
-import { EditShiftPage } from '@/pages/agenda/edit-shift';
-import { NewOvertimePage } from '@/pages/agenda/new-overtime';
-import { NewShiftPage } from '@/pages/agenda/new-shift';
+const AgendaPage = () => import('@/pages/agenda');
+const EditShiftPage = () => import('@/pages/agenda/edit-shift');
+const NewOvertimePage = () => import('@/pages/agenda/new-overtime');
+const NewShiftPage = () => import('@/pages/agenda/new-shift');
 
 /**
  * @type {Array<import('react-router-dom').RouteObject>}
@@ -9,18 +9,18 @@ import { NewShiftPage } from '@/pages/agenda/new-shift';
 export const agendaRouter = [
 	{
 		path: '/agenda',
-		element: <AgendaPage />,
+		lazy: AgendaPage,
 	},
 	{
 		path: '/agenda/nuevo_turno',
-		element: <NewShiftPage />,
+		lazy: NewShiftPage,
 	},
 	{
 		path: '/agenda/nuevo_sobreturno',
-		element: <NewOvertimePage />,
+		lazy: NewOvertimePage,
 	},
 	{
 		path: '/agenda/editar_turno',
-		element: <EditShiftPage />,
+		lazy: EditShiftPage,
 	},
 ];

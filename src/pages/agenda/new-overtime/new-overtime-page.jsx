@@ -12,7 +12,7 @@ import { usePatients } from '@/hooks/use-patients';
 import { useProfessionals } from '@/hooks/use-professionals';
 import { useNewShift } from '../hooks/use-new-shift';
 
-export const NewOvertimePage = () => {
+export const Component = () => {
 	const { data: patients } = usePatients();
 	const { data: professionals } = useProfessionals();
 	const {

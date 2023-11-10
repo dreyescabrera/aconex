@@ -1,8 +1,11 @@
-import { PatientPage } from '@/pages/patients/patient-page';
+const PatientPage = () => import('@/pages/patients/patient-page');
 
+/**
+ * @type {Array<import('react-router-dom').RouteObject>}
+ */
 export const patientsRouter = [
 	{
 		path: '/pacientes',
-		element: <PatientPage />,
+		lazy: PatientPage,
 	},
 ];

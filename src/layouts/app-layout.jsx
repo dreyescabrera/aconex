@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { DesktopBar, Footer, Header, MobileBar } from './components';
 
-export const AppLayout = () => {
+export const Component = () => {
 	const [isOpenMobile, setIsOpenMobile] = useState(false);
 	const isMobile = useMediaQuery('(max-width:768px)');
 	const { pathname } = useLocation();

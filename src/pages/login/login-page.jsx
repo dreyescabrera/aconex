@@ -12,7 +12,7 @@ import { Helmet } from 'react-helmet';
 import { Form, TextInput } from '@/components/form';
 import { useLogin } from './hooks/use-login';
 
-export const LoginPage = () => {
+export const Component = () => {
 	const [hasFailedOnce, setHasFailedOnce] = useState(false);
 	const { mutate, isError, isLoading } = useLogin();
 	const handleLogin = (credentials) => {

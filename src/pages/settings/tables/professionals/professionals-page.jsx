@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 import { Absences, FilterInput, ProfessionalsData, ProfessionalsSchedule } from './components';
 import { ProfessionalsProvider } from './context/professionals.context';
 
-export const ProfessionalsPage = () => {
+export const Component = () => {
 	const [tabValue, setTabValue] = useState(0);
 
 	const handleTabChange = (ev, newValue) => {

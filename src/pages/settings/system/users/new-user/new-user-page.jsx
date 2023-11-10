@@ -6,7 +6,7 @@ import { ProfileData } from './components/profile-data';
 import { UserData } from './components/user-data';
 import { NewUserProvider } from './context/new-user.context';
 
-export const NewUsersPage = () => {
+export const Component = () => {
 	return (
 		<>
 			<Helmet>

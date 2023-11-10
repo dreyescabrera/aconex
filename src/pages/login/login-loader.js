@@ -1,7 +1,7 @@
 import { useStore } from '@/store/use-store';
 import { redirect } from 'react-router-dom';
 
-export const loginLoader = () => {
+export const loader = () => {
 	const isLoggedIn = useStore.getState().isLoggedIn;
 
 	if (isLoggedIn) {

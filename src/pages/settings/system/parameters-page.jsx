@@ -12,7 +12,7 @@ import { Form, TextInput } from '@/components/form';
 import { useEditProfile } from '@/hooks/use-edit-profile';
 import { useEditParameters } from './hooks/use-edit-parameters';
 
-export const ParametersPage = () => {
+export const Component = () => {
 	const clinic = useStore((state) => state.clinic);
 	const editGeneralParameters = useEditParameters();
 	const editProfileParameters = useEditProfile({ queryKeyToInvalidate: ['clinics'] });

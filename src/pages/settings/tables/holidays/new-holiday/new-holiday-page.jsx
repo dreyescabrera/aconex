@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 import { DatePicker, Form, TextInput } from '@/components/form';
 import { useCreateHoliday } from '../hooks/use-create-holiday';
 
-export const NewHolidaysPage = () => {
+export const Component = () => {
 	const { mutate, status } = useCreateHoliday();
 
 	const handleSubmit = (formData) => {

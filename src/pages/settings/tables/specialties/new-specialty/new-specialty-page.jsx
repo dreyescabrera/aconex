@@ -31,7 +31,7 @@ const Message = ({ status }) => {
 	}
 };
 
-export const NewSpecialtiesPage = () => {
+export const Component = () => {
 	const mutation = useMutation(addspecialty);
 	const handleSubmit = (event) => {
 		let specialty = { clinicaId: 1, nombre: event.descripcion }; //el Codigo de la clinica debe obtenerse desde los datos del usuario a traves del backend Arreglar esto

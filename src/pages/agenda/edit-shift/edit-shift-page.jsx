@@ -11,7 +11,7 @@ import { Autocomplete, Form, TextInput } from '@/components/form';
 import { usePatients } from '@/hooks/use-patients';
 import { useEditShifts } from '../hooks/use-edit-shifts';
 
-export const EditShiftPage = () => {
+export const Component = () => {
 	const { data: patients } = usePatients();
 	const { mutate, isSuccess } = useEditShifts();
 	const {

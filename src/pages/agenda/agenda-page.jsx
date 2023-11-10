@@ -10,7 +10,7 @@ import { FilterOptions } from './components/filters/filter-options';
 import { Shifts } from './components/shifts/shifts';
 import { AgendaProvider } from './context/agenda.context';
 
-export const AgendaPage = () => {
+export const Component = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (

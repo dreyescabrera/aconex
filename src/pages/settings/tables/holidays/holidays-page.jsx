@@ -65,7 +65,7 @@ const Holidays = () => {
 	);
 };
 
-export const HolidaysPage = () => {
+export const Component = () => {
 	return (
 		<>
 			<Helmet>

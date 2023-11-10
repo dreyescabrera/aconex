@@ -1,37 +1,41 @@
-import { HomePage } from '@/pages/home';
-import { loginLoader, LoginPage } from '@/pages/login';
-import { NotFoundPage } from '@/pages/not-found';
 import { createBrowserRouter } from 'react-router-dom';
-import { AppLayout, appLayoutLoader, BasicLayout } from '@/layouts';
 import { agendaRouter } from './agenda';
 import { patientsRouter } from './patients';
 import { settingsRouter } from './settings';
 
+const Home = () => import('@/pages/home');
+const Login = () => import('@/pages/login');
+const NotFound = () => import('@/pages/not-found');
+const AppLayout = () => import('@/layouts/app-layout');
+const BasicLayout = () => import('@/layouts/basic-layout');
+
 export const router = createBrowserRouter([
 	{
-		element: <AppLayout />,
-		loader: appLayoutLoader,
+		lazy: AppLayout,
+		loader: async () => {
+			const { appLayoutLoader } = await import('@/layouts/app-layout-loader');
+			return appLayoutLoader();
+		},
 		children: [
 			{
 				path: '/home',
-				element: <HomePage />,
+				lazy: Home,
 			},
 			...agendaRouter,
 			...settingsRouter,
 			...patientsRouter,
 			{
 				path: '*',
-				element: <NotFoundPage />,
+				lazy: NotFound,
 			},
 		],
 	},
 	{
-		element: <BasicLayout />,
+		lazy: BasicLayout,
 		children: [
 			{
 				path: '/login',
-				element: <LoginPage />,
-				loader: loginLoader,
+				lazy: Login,
 			},
 		],
 	},

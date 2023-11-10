@@ -12,7 +12,7 @@ import { Autocomplete, Form, TextInput } from '@/components/form';
 import { usePatients } from '@/hooks/use-patients';
 import { useEditShifts } from '../hooks/use-edit-shifts';
 
-export const NewShiftPage = () => {
+export const Component = () => {
 	const { data: patients, isLoading } = usePatients();
 	const {
 		state: { shift },

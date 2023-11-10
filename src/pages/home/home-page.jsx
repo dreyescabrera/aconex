@@ -30,7 +30,7 @@ const navLinks = [
 	},
 ];
 
-export const HomePage = () => {
+export const Component = () => {
 	const { user, clinic } = useStore();
 
 	return (

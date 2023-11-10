@@ -44,7 +44,7 @@ const Specialties = () => {
 	);
 };
 
-export const SpecialtiesPage = () => {
+export const Component = () => {
 	return (
 		<>
 			<Helmet>

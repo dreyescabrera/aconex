@@ -13,7 +13,7 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { useUsers } from '../hooks/use-users';
 
-export const UsersPage = () => {
+export const Component = () => {
 	const { data: users, status } = useUsers();
 
 	return (

@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { DatePicker, Form, TextInput } from '@/components/form';
 import { useEditProfile } from '@/hooks/use-edit-profile';
 
-export const EditUserPage = () => {
+export const Component = () => {
 	const {
 		state: { user },
 	} = useLocation();

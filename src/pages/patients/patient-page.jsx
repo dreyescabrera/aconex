@@ -5,7 +5,7 @@ import { FilterInput } from './components/filter-input';
 import { Patients } from './components/patients';
 import { PatientsProvider } from './context/patient.context';
 
-export const PatientPage = () => {
+export const Component = () => {
 	return (
 		<>
 			<Helmet>

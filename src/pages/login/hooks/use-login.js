@@ -34,6 +34,7 @@ export const useLogin = () => {
 		onSuccess: ({ data }) => {
 			setClinic({ ...data.clinica });
 			setUser({
+				id: data.id,
 				username: data.username,
 				createdAt: data.createdAt,
 				perfilId: data.perfilId,

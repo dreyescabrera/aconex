@@ -3,6 +3,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiAppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
@@ -104,7 +105,11 @@ export const Header = ({ toggleMobileBar, open }) => {
 					open={Boolean(anchorEl)}
 					onClose={handleClose}
 				>
-					<MenuItem onClick={handleClose}>Mi perfil</MenuItem>
+					<MenuItem>
+						<Link href="/usuario" underline="none" color="inherit">
+							Mi perfil
+						</Link>
+					</MenuItem>
 					<MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
 				</Menu>
 			</Toolbar>

@@ -1,8 +1,5 @@
 import { useStore } from '@/store/use-store';
 import { groupBy } from '@/utils/groupBy';
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 import { useProfessionals } from '@/hooks/use-professionals';
 import { useAgendaContext } from '../../context/agenda.context';
 import { useShifts } from '../../hooks/use-shifts';
@@ -10,9 +7,6 @@ import { EmptyShiftOptions } from './empty-shift-options';
 import { MultiProfessionalShiftsTable } from './multi-professional-shifts-table';
 import { ShiftOptions } from './shift-options';
 import { SingleProfessionalShiftsTable } from './single-professional-shifts-table';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 export const Shifts = () => {
 	const { filters, drawerToOpen, closeDrawer, handleShiftOptions } = useAgendaContext();

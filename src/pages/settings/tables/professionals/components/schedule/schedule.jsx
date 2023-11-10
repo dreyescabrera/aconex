@@ -82,11 +82,7 @@ export const ProfessionalsSchedule = () => {
 						</Paper>
 					</Grid>
 				))}
-				<NewSchedule
-					open={isDrawerOpen && drawerToOpen === 'newSchedule'}
-					onClose={closeDrawer}
-					professionalslist={listToRender}
-				/>
+				<NewSchedule open={isDrawerOpen && drawerToOpen === 'newSchedule'} onClose={closeDrawer} />
 				<EditSchedule
 					open={isDrawerOpen && drawerToOpen === 'editSchedule'}
 					onClose={closeDrawer}

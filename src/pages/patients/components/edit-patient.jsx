@@ -1,11 +1,13 @@
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import dayjs from 'dayjs';
 import { DatePicker, Form, TextInput } from '@/components/form';
-import { updateProfile } from '@/services/profiles';
-import { usePatientsContext } from '../context/patient.content';
+import { useEditProfile } from '@/hooks/use-edit-profile';
+import { usePatientsContext } from '../context/patient.context';
 
 const Drawer = styled(MuiDrawer)(() => ({
 	'& .MuiDrawer-paper': {
@@ -20,44 +22,36 @@ const Drawer = styled(MuiDrawer)(() => ({
  * @param {() => void} props.onClose
  */
 export const EditPatientData = ({ open, onClose }) => {
+	const { mutate, status, error } = useEditProfile({ queryKeyToInvalidate: ['patients'] });
 	const { patientInVIew } = usePatientsContext();
 
-	const handleSubmit = async (data) => {
-		const updatedPatientData = {
-			nombre: data.nombre,
-			apellido: data.apellido,
-			cedula: data.cedula,
-			celular: data.celular,
-			direccion: data.direccion,
-			email: data.email,
-			nacimiento: data.nacimiento,
-		};
-		const response = await updateProfile(patientInVIew.perfil.id, updatedPatientData);
-		if (response) {
-			onClose();
-		}
+	const handleSubmit = (data) => {
+		mutate({ ...data, perfilId: patientInVIew?.perfilId });
 	};
 	return (
 		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
-				Paciente: {patientInVIew?.nombre} {patientInVIew?.apellido}
+				Paciente:
 			</Typography>
-			<Typography variant="h6" component="p" sx={{ mt: 1, mb: 3 }}>
-				Datos requeridos
+			<Typography variant="h6" component="p" sx={{ mt: 1 }}>
+				{patientInVIew?.perfil.nombre} {patientInVIew?.perfil.apellido}{' '}
+			</Typography>
+			<Typography variant="h6" component="p" sx={{ mb: 3 }}>
+				{patientInVIew?.perfil.email}
 			</Typography>
 			<Form
 				onSubmit={handleSubmit}
 				defaultValues={{
-					nombre: patientInVIew?.nombre,
-					apellido: patientInVIew?.apellido,
-					cedula: patientInVIew?.cedula,
-					celular: patientInVIew?.celular,
-					direccion: patientInVIew?.direccion,
-					email: patientInVIew?.email,
-					nacimiento: null,
+					nombre: patientInVIew?.perfil.nombre,
+					apellido: patientInVIew?.perfil.apellido,
+					cedula: patientInVIew?.perfil.cedula,
+					celular: patientInVIew?.perfil.celular,
+					direccion: patientInVIew?.perfil.direccion,
+					email: patientInVIew?.perfil.email,
+					nacimiento: dayjs(patientInVIew?.perfil.nacimiento),
 				}}
 			>
-				<Stack spacing={3}>
+				<Stack spacing={3} sx={{ mb: 3 }}>
 					<TextInput name="nombre" label="Nombre" required={false} />
 					<TextInput name="apellido" label="Apellido" required={false} />
 					<TextInput name="cedula" label="Número de Cédula" required={false} />
@@ -75,6 +69,15 @@ export const EditPatientData = ({ open, onClose }) => {
 					</Button>
 				</Stack>
 			</Form>
+
+			{status === 'loading' && <Alert severity="info">Cargando...</Alert>}
+
+			{status === 'error' && (
+				// @ts-ignore
+				<Alert severity="error">Error al editar paciente: {error.response.data.message}</Alert>
+			)}
+
+			{status === 'success' && <Alert severity="success">Paciente editado con éxito.</Alert>}
 		</Drawer>
 	);
 };

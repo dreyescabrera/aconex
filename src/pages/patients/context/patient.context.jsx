@@ -1,33 +1,5 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { api } from '../../../services/api';
-
-/**
- * Get an array of patients by clinicId.
- * @param {number} clinicaId - The ID of the clinic.
- * @returns {Promise<Array<Object>>} Array of patient objects.
- */
-const getPatients = async (clinicaId) => {
-	try {
-		const response = await api.get(`/pacientes/${clinicaId}`);
-		return response.data;
-	} catch (error) {
-		throw error;
-	}
-};
-
-const getClinicId = () => {
-	const fakeClinicId = 1;
-	return getPatients(fakeClinicId);
-};
-const getClinicData = async () => {
-	try {
-		const allPatients = await getClinicId();
-		initialData.listToRender = allPatients;
-	} catch (error) {
-		throw error;
-	}
-};
-getClinicData();
+import { createContext, useContext, useState } from 'react';
+import { usePatients } from '@/hooks/use-patients';
 
 /**
  * @typedef {"newPatient" | "editPatient" | null } DrawerToOpen
@@ -48,42 +20,33 @@ const initialData = {
 const PatientsContext = createContext(initialData);
 
 export const PatientsProvider = ({ children }) => {
-	const [patients, setPatients] = useState([]);
-
-	useEffect(() => {
-		async function fetchPatients() {
-			try {
-				const allPatients = await getClinicId();
-				setPatients(allPatients);
-			} catch (error) {
-				throw error;
-			}
-		}
-		fetchPatients();
-	}, []);
-
+	const { data: patients } = usePatients();
 	const [patientInVIew, setPatientInView] = useState(null);
 	const [filteredPatients, setFilteredPatients] = useState([]);
 	const [filterQuery, setFilterQuery] = useState('');
-	const [drawerToOpen, setdrawerToOpen] = useState(null);
+	const [drawerToOpen, setDrawerToOpen] = useState(null);
 
 	const listToRender = filterQuery ? filteredPatients : patients;
 
 	const openDrawer = (drawerToOpen) => {
-		setdrawerToOpen(drawerToOpen);
+		setDrawerToOpen(drawerToOpen);
 	};
+
 	const closeDrawer = () => {
-		setdrawerToOpen(null);
+		setDrawerToOpen(null);
 	};
+
 	const handleEditPatient = (patient, drawerToOpen) => {
 		return () => {
 			setPatientInView(patient);
 			openDrawer(drawerToOpen);
 		};
 	};
+
 	const updateFilteredPatients = (newList) => {
 		setFilteredPatients(newList);
 	};
+
 	const handleAutocompleteClick = (ev, value) => {
 		if (!value) {
 			setFilterQuery('');

@@ -1,5 +1,6 @@
 import { useStore } from '@/store/use-store';
 import { groupBy } from '@/utils/groupBy';
+import Alert from '@mui/material/Alert';
 import { useProfessionals } from '@/hooks/use-professionals';
 import { useAgendaContext } from '../../context/agenda.context';
 import { useShifts } from '../../hooks/use-shifts';
@@ -30,13 +31,21 @@ export const Shifts = () => {
 		}
 	}
 
+	if (shifts?.length === 0) {
+		return <Alert severity="warning">No se Encontro ningun turno</Alert>;
+	}
+
 	return (
 		<>
 			{shiftsGroupedByProfessionals ? (
-				<MultiProfessionalShiftsTable
-					shiftsToRender={shiftsGroupedByProfessionals}
-					handleShiftOptions={handleShiftOptions}
-				/>
+				shiftsGroupedByProfessionals > 0 ? (
+					<MultiProfessionalShiftsTable
+						shiftsToRender={shiftsGroupedByProfessionals}
+						handleShiftOptions={handleShiftOptions}
+					/>
+				) : (
+					<Alert severity="warning">No se Encontro ningun turno</Alert>
+				)
 			) : (
 				<SingleProfessionalShiftsTable
 					shiftsToRender={shifts}

@@ -1,7 +1,7 @@
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
 import Container from '@mui/material/Container';
-import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
@@ -18,7 +18,7 @@ export const Component = () => {
 	const {
 		state: { shift },
 	} = useLocation();
-	const { mutate, isSuccess } = useNewShift();
+	const { mutate, isSuccess, error } = useNewShift();
 	const navigate = useNavigate();
 
 	const handleSubmit = (formdata) => {
@@ -36,7 +36,7 @@ export const Component = () => {
 				obraSocial: formdata.obraSocial,
 				date: date.toISOString(),
 			},
-			{ onSuccess: () => setTimeout(() => navigate('..', { relative: 'path' }), 4_000) }
+			{ onSuccess: () => setTimeout(() => navigate(-1), 4_000) }
 		);
 	};
 
@@ -122,11 +122,17 @@ export const Component = () => {
 						</Button>
 					</Stack>
 				</Form>
-				<Slide direction="up" in={isSuccess} mountOnEnter unmountOnExit>
+				<Collapse in={isSuccess}>
 					<Alert severity="success" sx={{ mt: 2 }}>
 						Sobreturno creado con éxito!
 					</Alert>
-				</Slide>
+				</Collapse>
+				<Collapse in={Boolean(error)}>
+					<Alert severity="error" sx={{ mt: 2 }}>
+						{/* @ts-ignore */}
+						Hubo un problema creando el sobreturno: {error?.response.data.message}
+					</Alert>
+				</Collapse>
 			</Container>
 		</>
 	);

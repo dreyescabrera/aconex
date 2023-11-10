@@ -1,12 +1,12 @@
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Grow from '@mui/material/Grow';
 import dayjs from 'dayjs';
 import { useEditShifts } from '../../hooks/use-edit-shifts';
 
@@ -17,7 +17,7 @@ import { useEditShifts } from '../../hooks/use-edit-shifts';
  * @param {any} props.shift
  */
 export const DisableShift = ({ open, onClose, shift }) => {
-	const { mutate, isLoading, isSuccess } = useEditShifts();
+	const { mutate, isLoading, isSuccess, isError } = useEditShifts();
 
 	const disableShift = () => {
 		mutate(
@@ -59,11 +59,12 @@ export const DisableShift = ({ open, onClose, shift }) => {
 					)}
 				</Button>
 			</DialogActions>
-			{isSuccess && (
-				<Grow appear in={isSuccess}>
-					<Alert severity="success">Éxito</Alert>
-				</Grow>
-			)}
+			<Collapse in={isSuccess}>
+				<Alert severity="success">Éxito</Alert>
+			</Collapse>
+			<Collapse in={isError}>
+				<Alert severity="error">Hubo un problema. Por favor, intenta de nuevo.</Alert>
+			</Collapse>
 		</Dialog>
 	);
 };

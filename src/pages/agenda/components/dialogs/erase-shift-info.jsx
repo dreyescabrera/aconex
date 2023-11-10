@@ -1,11 +1,11 @@
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Grow from '@mui/material/Grow';
 import { useCancelShift } from '../../hooks/use-cancel-shift';
 
 /**
@@ -42,16 +42,12 @@ export const EraseShiftInfo = ({ open, onClose, shift }) => {
 					No, cerrar
 				</Button>
 			</DialogActions>
-			{isSuccess && (
-				<Grow appear in={isSuccess}>
-					<Alert severity="success">Éxito</Alert>
-				</Grow>
-			)}
-			{isError && (
-				<Grow appear in={isError}>
-					<Alert severity="error">Hubo un problema. Por favor, intenta de nuevo.</Alert>
-				</Grow>
-			)}
+			<Collapse in={isSuccess}>
+				<Alert severity="success">Éxito</Alert>
+			</Collapse>
+			<Collapse in={isError}>
+				<Alert severity="error">Hubo un problema. Por favor, intenta de nuevo.</Alert>
+			</Collapse>
 		</Dialog>
 	);
 };

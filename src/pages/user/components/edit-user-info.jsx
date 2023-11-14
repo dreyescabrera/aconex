@@ -1,20 +1,11 @@
 import { useStore } from '@/store/use-store';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { RightDrawer } from '@/components/drawers';
 import { Form, TextInput } from '@/components/form';
 import { useEditUser } from '../hooks/use-edit-user';
-
-const Drawer = styled(MuiDrawer)(() => ({
-	'& .MuiDrawer-paper': {
-		padding: '1.45rem',
-		minWidth: '300px',
-		maxWidth: '50vw',
-	},
-}));
 
 /**
  * @param {object} props
@@ -30,7 +21,7 @@ export const EditUserInfo = ({ open, onClose }) => {
 	};
 
 	return (
-		<Drawer
+		<RightDrawer
 			open={open}
 			onClose={onClose}
 			anchor="right"
@@ -67,6 +58,6 @@ export const EditUserInfo = ({ open, onClose }) => {
 			)}
 
 			{status === 'success' && <Alert severity="success">Usuario editado con éxito.</Alert>}
-		</Drawer>
+		</RightDrawer>
 	);
 };

@@ -1,24 +1,15 @@
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { RightDrawer } from '@/components/drawers';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
 import { useProfessionals } from '@/hooks/use-professionals';
 import { useSpecialties } from '@/hooks/use-specialties';
 import { dayJsDayList } from '@/constants/day-list';
 import { useCreateSchedule } from '../../hooks/use-create-schedule';
-
-const Drawer = styled(MuiDrawer)(() => ({
-	'& .MuiDrawer-paper': {
-		padding: '1.45rem',
-		minWidth: '300px',
-		maxWidth: '50vw',
-	},
-}));
 
 /**
  * @param {object} props
@@ -50,7 +41,7 @@ export const NewSchedule = ({ open, onClose }) => {
 	};
 
 	return (
-		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
+		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2" sx={{ mb: 3 }}>
 				Horarios disponible
 			</Typography>
@@ -133,7 +124,7 @@ export const NewSchedule = ({ open, onClose }) => {
 			</Form>
 			{/* @ts-ignore*/}
 			<RequestStatusMessage status={status} errorMessage={error?.response.data.message} />
-		</Drawer>
+		</RightDrawer>
 	);
 };
 

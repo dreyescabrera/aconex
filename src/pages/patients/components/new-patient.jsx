@@ -1,19 +1,10 @@
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { RightDrawer } from '@/components/drawers';
 import { DatePicker, Form, TextInput } from '@/components/form';
 import { useCreatePatient } from '../hooks/use-create-patient';
-
-const Drawer = styled(MuiDrawer)(() => ({
-	'& .MuiDrawer-paper': {
-		padding: '1.45rem',
-		minWidth: '300px',
-		maxWidth: '50vw',
-	},
-}));
 
 /**
  * @param {object} props
@@ -29,7 +20,7 @@ export const NewPatient = ({ open, onClose }) => {
 	};
 
 	return (
-		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
+		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
 				Información del paciente
 			</Typography>
@@ -73,6 +64,6 @@ export const NewPatient = ({ open, onClose }) => {
 			)}
 
 			{status === 'success' && <Alert severity="success">Paciente creado con éxito.</Alert>}
-		</Drawer>
+		</RightDrawer>
 	);
 };

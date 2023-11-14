@@ -2,24 +2,15 @@ import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
-import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { RightDrawer } from '@/components/drawers';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
 import { useSpecialties } from '@/hooks/use-specialties';
 import { dayJsDayList } from '@/constants/day-list';
 import { useProfessionalsContext } from '../../context/professionals.context';
 import { useEditSchedule } from '../../hooks/use-edit-schedule';
-
-const Drawer = styled(MuiDrawer)(() => ({
-	'& .MuiDrawer-paper': {
-		padding: '1.45rem',
-		minWidth: '300px',
-		maxWidth: '50vw',
-	},
-}));
 
 const cutTimezone = (vigencia) => {
 	//Recorta la zona horaria de la fecha de forma tal que dayjs no la modifique
@@ -88,7 +79,7 @@ export const EditSchedule = ({ open, onClose }) => {
 	);
 
 	return (
-		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
+		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
 				Horarios disponible
 			</Typography>
@@ -175,6 +166,6 @@ export const EditSchedule = ({ open, onClose }) => {
 			)}
 
 			{status === 'success' && <Alert severity="success">Horario editado con éxito!</Alert>}
-		</Drawer>
+		</RightDrawer>
 	);
 };

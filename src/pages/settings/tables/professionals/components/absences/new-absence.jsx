@@ -2,21 +2,12 @@ import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
-import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { RightDrawer } from '@/components/drawers';
 import { Autocomplete, DatePicker, Form } from '@/components/form';
 import { useProfessionalsContext } from '../../context/professionals.context';
 import { useCreateAbsence } from '../../hooks/use-create-absence';
-
-const Drawer = styled(MuiDrawer)(() => ({
-	'& .MuiDrawer-paper': {
-		padding: '1.45rem',
-		minWidth: '300px',
-		maxWidth: '50vw',
-	},
-}));
 
 const Mensajeabsence = ({ status }) => {
 	if (status === 'loading') {
@@ -55,7 +46,7 @@ export const NewAbsence = ({ open, onClose }) => {
 	};
 
 	return (
-		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
+		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2" sx={{ mb: 3 }}>
 				Nueva Ausencia
 			</Typography>
@@ -104,6 +95,6 @@ export const NewAbsence = ({ open, onClose }) => {
 			<Container sx={{ mt: 2, mb: 1 }}>
 				<Mensajeabsence status={status} />
 			</Container>
-		</Drawer>
+		</RightDrawer>
 	);
 };

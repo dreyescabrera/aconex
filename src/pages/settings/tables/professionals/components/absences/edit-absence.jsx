@@ -2,11 +2,10 @@ import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
-import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
+import { RightDrawer } from '@/components/drawers';
 import { DatePicker, Form } from '@/components/form';
 import { api } from '@/services/api';
 import { useProfessionalsContext } from '../../context/professionals.context';
@@ -26,14 +25,6 @@ const Mensajeedit = ({ status }) => {
 		return <Alert severity="error">Error al editar</Alert>;
 	}
 };
-
-const Drawer = styled(MuiDrawer)(() => ({
-	'& .MuiDrawer-paper': {
-		padding: '1.45rem',
-		minWidth: '300px',
-		maxWidth: '50vw',
-	},
-}));
 
 /**
  * @param {object} props
@@ -63,7 +54,7 @@ export const EditAbsence = ({ open, onClose }) => {
 	};
 
 	return (
-		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
+		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
 				Ausencias
 			</Typography>
@@ -104,6 +95,6 @@ export const EditAbsence = ({ open, onClose }) => {
 			<Container sx={{ mt: 2, mb: 1 }}>
 				<Mensajeedit status={mutation} />
 			</Container>
-		</Drawer>
+		</RightDrawer>
 	);
 };

@@ -1,25 +1,16 @@
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import Container from '@mui/material/Container';
-import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { BottomDrawer } from '@/components/drawers';
 import { useAgendaContext } from '../../context/agenda.context';
 import { EraseShiftInfo, PatientInfo, ShiftDetails } from '../dialogs';
-
-const Drawer = styled(MuiDrawer)(({ theme }) => ({
-	'& .MuiDrawer-paper': {
-		padding: '1rem',
-		background: theme.palette.primary.main,
-		color: 'white',
-	},
-}));
 
 /**
  * @param {object} props
@@ -59,7 +50,7 @@ export const ShiftOptions = ({ open, onClose }) => {
 	];
 
 	return (
-		<Drawer
+		<BottomDrawer
 			anchor="bottom"
 			open={open}
 			onClose={onClose}
@@ -97,6 +88,6 @@ export const ShiftOptions = ({ open, onClose }) => {
 				onClose={onCloseDialog}
 				patient={shiftInView?.paciente}
 			/>
-		</Drawer>
+		</BottomDrawer>
 	);
 };

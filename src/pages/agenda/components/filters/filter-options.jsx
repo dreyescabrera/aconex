@@ -1,21 +1,12 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { RightDrawer } from '@/components/drawers';
 import { Autocomplete, Checkbox, DatePicker, Form } from '@/components/form';
 
 const especialidades = ['Cirugia', 'Odontologia'];
-
-const Drawer = styled(MuiDrawer)(() => ({
-	'& .MuiDrawer-paper': {
-		padding: '1.45rem',
-		minWidth: '300px',
-		maxWidth: '50vw',
-	},
-}));
 
 /**
  * @param {object} props
@@ -24,7 +15,7 @@ const Drawer = styled(MuiDrawer)(() => ({
  */
 export const FilterOptions = ({ open, onClose }) => {
 	return (
-		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
+		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Form onSubmit={console.info} defaultValues={{}}>
 				<Typography variant="h4" component="h2" sx={{ mb: 3 }}>
 					Filtrar por:
@@ -71,6 +62,6 @@ export const FilterOptions = ({ open, onClose }) => {
 					Filtrar
 				</Button>
 			</Form>
-		</Drawer>
+		</RightDrawer>
 	);
 };

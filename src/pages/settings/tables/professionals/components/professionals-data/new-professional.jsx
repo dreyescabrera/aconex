@@ -1,20 +1,11 @@
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import MuiDrawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { RightDrawer } from '@/components/drawers';
 import { DatePicker, Form, TextInput } from '@/components/form';
 import { useCreateProfessional } from '../../hooks/use-create-professional';
-
-const Drawer = styled(MuiDrawer)(() => ({
-	'& .MuiDrawer-paper': {
-		padding: '1.45rem',
-		minWidth: '300px',
-		maxWidth: '50vw',
-	},
-}));
 
 /**
  * @param {object} props
@@ -42,7 +33,7 @@ export const NewProfessionalData = ({ open, onClose }) => {
 	};
 
 	return (
-		<Drawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
+		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
 				Información personal
 			</Typography>
@@ -93,6 +84,6 @@ export const NewProfessionalData = ({ open, onClose }) => {
 			{status === 'success' && (
 				<Alert severity="success">El profesional fue creado exitosamente.</Alert>
 			)}
-		</Drawer>
+		</RightDrawer>
 	);
 };

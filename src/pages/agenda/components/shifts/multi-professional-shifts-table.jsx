@@ -38,7 +38,7 @@ export const MultiProfessionalShiftsTable = ({ shiftsToRender, handleShiftOption
 										</TableCell>
 									</TableRow>
 									{shifts.map((shift) => (
-										<>
+										<Fragment key={shift.id}>
 											{shift.pacienteId ? (
 												<BodyRow>
 													<TimeCell date={shift.date} />
@@ -68,7 +68,7 @@ export const MultiProfessionalShiftsTable = ({ shiftsToRender, handleShiftOption
 													<OptionsCell disabled />
 												</TableRow>
 											)}
-										</>
+										</Fragment>
 									))}
 								</Fragment>
 							))}

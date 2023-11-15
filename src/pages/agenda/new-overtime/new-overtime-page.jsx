@@ -11,22 +11,35 @@ import { Autocomplete, DatePicker, Form, TextInput, TimePicker } from '@/compone
 import { usePatients } from '@/hooks/use-patients';
 import { useProfessionals } from '@/hooks/use-professionals';
 import { useNewShift } from '../hooks/use-new-shift';
+import { useShifts } from '../hooks/use-shifts';
 
 export const Component = () => {
-	const { data: patients } = usePatients();
-	const { data: professionals } = useProfessionals();
 	const {
 		state: { shift },
 	} = useLocation();
+	const shiftDate = dayjs.utc(shift.date);
+	const { data: allDayShifts } = useShifts({
+		fechaDesde: shiftDate.format('MM/DD/YY'),
+		fechaHasta: shiftDate.format('MM/DD/YY'),
+	});
+	const { data: patients } = usePatients();
+	const { data: professionals } = useProfessionals();
 	const { mutate, isSuccess, error } = useNewShift();
 	const navigate = useNavigate();
 
+	const unavailableMinutes = allDayShifts?.reduce((array, currentShift) => {
+		const date = dayjs.utc(currentShift.date);
+		if (date.hour() === shiftDate.hour()) {
+			array.push(dayjs(currentShift.date).minute());
+		}
+		return array;
+	}, []);
+
 	const handleSubmit = (formdata) => {
-		const time = dayjs(formdata.time);
-		const date = dayjs(formdata.date)
-			.set('hour', time.hour())
-			.set('minute', time.minute())
-			.set('second', time.second());
+		const hour = dayjs(formdata.hour);
+		const minute = dayjs(formdata.minute);
+		const date = dayjs.utc(formdata.date).set('hour', hour.hour()).set('minute', minute.minute());
+
 		mutate(
 			{
 				profesionalId: formdata.profesional.id,
@@ -57,8 +70,9 @@ export const Component = () => {
 						observacion: '',
 						presentismo: '',
 						paciente: null,
-						time: null,
-						date: dayjs(shift.date),
+						date: dayjs.utc(shift.date),
+						hour: dayjs.utc(shift.date),
+						minute: null,
 						profesional: null,
 						obraSocial: '',
 					}}
@@ -66,20 +80,34 @@ export const Component = () => {
 				>
 					<Stack spacing={4}>
 						<Stack direction="row" spacing={4}>
-							<TimePicker
-								name="time"
-								slotProps={{ textField: { variant: 'standard', label: 'Hora del turno' } }}
-								sx={{ flex: '1' }}
-								minTime={dayjs(shift.date).subtract(29, 'minutes')}
-								maxTime={dayjs(shift.date).add(29, 'minutes')}
-								minutesStep={5}
-								closeOnSelect={false}
-							/>
 							<DatePicker
 								name="date"
-								slotProps={{ textField: { variant: 'standard', label: 'Fecha' } }}
+								slotProps={{
+									textField: { variant: 'standard', label: 'Fecha' },
+									inputAdornment: { style: { display: 'none' } },
+								}}
 								readOnly
 								sx={{ flex: '1' }}
+							/>
+							<TimePicker
+								name="hour"
+								slotProps={{
+									textField: { variant: 'standard', label: 'Hora del turno' },
+									inputAdornment: { style: { display: 'none' } },
+								}}
+								readOnly
+								views={['hours']}
+								view="hours"
+							/>
+							<TimePicker
+								name="minute"
+								slotProps={{ textField: { variant: 'standard', label: 'Minuto del turno' } }}
+								minutesStep={5}
+								views={['minutes']}
+								view="minutes"
+								shouldDisableTime={(value, view) => {
+									return view === 'minutes' && unavailableMinutes.includes(value.minute());
+								}}
 							/>
 						</Stack>
 						<Autocomplete

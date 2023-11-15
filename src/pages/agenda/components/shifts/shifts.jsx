@@ -1,4 +1,3 @@
-import { useStore } from '@/store/use-store';
 import { groupBy } from '@/utils/groupBy';
 import { useProfessionals } from '@/hooks/use-professionals';
 import { useAgendaContext } from '../../context/agenda.context';
@@ -10,9 +9,8 @@ import { SingleProfessionalShiftsTable } from './single-professional-shifts-tabl
 
 export const Shifts = () => {
 	const { filters, drawerToOpen, closeDrawer, handleShiftOptions } = useAgendaContext();
-	const clinic = useStore((state) => state.clinic);
 
-	const { data: shifts } = useShifts(clinic.id, Object.fromEntries(filters.entries()));
+	const { data: shifts } = useShifts(Object.fromEntries(filters.entries()));
 	const { data: professionals } = useProfessionals();
 
 	let shiftsGroupedByProfessionals;

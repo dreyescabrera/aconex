@@ -23,7 +23,7 @@ export const NewSchedule = ({ open, onClose }) => {
 
 	const handleSubmit = (formData) => {
 		const dateFrom = formData.fechaDesde.format('MM/DD/YYYY');
-		const dateTo = formData.fechaHasta.format('MM/DD/YYYY');
+		const dateTo = formData.fechaHasta?.format('MM/DD/YYYY') || formData.fechaDesde.add(2, 'year');
 		const hourFrom = formData.horaDesde.format('HH:mm');
 		const hourTo = formData.horaHasta.format('HH:mm');
 		const interval = formData.intervalo.format('mm');
@@ -98,7 +98,7 @@ export const NewSchedule = ({ open, onClose }) => {
 					</Stack>
 					<TimePicker
 						name="intervalo"
-						label="Intervalo"
+						label="Intervalo en minutos"
 						slotProps={{ textField: { variant: 'standard' } }}
 						views={['minutes']}
 					/>
@@ -111,9 +111,14 @@ export const NewSchedule = ({ open, onClose }) => {
 						/>
 						<DatePicker
 							name="fechaHasta"
-							label="Fecha hasta"
+							label="Fecha hasta (Opcional)"
 							rules={{ required: false }}
-							slotProps={{ textField: { variant: 'standard' } }}
+							slotProps={{
+								textField: {
+									variant: 'standard',
+									helperText: 'Si no se especifica, se creará por dos (2) años.',
+								},
+							}}
 							format="DD/MM/YYYY"
 						/>
 					</Stack>

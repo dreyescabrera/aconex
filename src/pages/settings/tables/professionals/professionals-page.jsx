@@ -3,7 +3,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Absences, FilterInput, ProfessionalsData, ProfessionalsSchedule } from './components';
 import { ProfessionalsProvider } from './context/professionals.context';
 

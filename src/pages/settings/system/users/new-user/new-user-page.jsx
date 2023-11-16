@@ -1,7 +1,7 @@
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { ProfileData } from './components/profile-data';
 import { UserData } from './components/user-data';
 import { NewUserProvider } from './context/new-user.context';

@@ -7,7 +7,7 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Form, TextInput } from '@/components/form';
 import { useEditProfile } from '@/hooks/use-edit-profile';
 import { useEditParameters } from './hooks/use-edit-parameters';

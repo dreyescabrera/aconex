@@ -5,7 +5,7 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Autocomplete, DatePicker, Form, TextInput, TimePicker } from '@/components/form';
 import { usePatients } from '@/hooks/use-patients';

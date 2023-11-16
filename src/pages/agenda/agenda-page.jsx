@@ -2,7 +2,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { FilterByAvailability } from './components/filters/filter-by-availability';
 import { FilterByDate } from './components/filters/filter-by-date';
 import { FilterByProfessional } from './components/filters/filter-by-professional';

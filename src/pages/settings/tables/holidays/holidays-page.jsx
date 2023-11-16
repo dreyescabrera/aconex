@@ -8,7 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { useDeleteHoliday } from './hooks/use-delete-holiday';
 import { useHolidays } from './hooks/use-holidays';
 

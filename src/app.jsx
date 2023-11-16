@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es-us';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { RouterProvider } from 'react-router-dom';
 
 dayjs.locale('es-us');
@@ -16,7 +16,7 @@ dayjs.extend(timezone);
 
 export function App() {
 	return (
-		<>
+		<HelmetProvider>
 			<Helmet
 				titleTemplate="%s | AConex - Boot & Calendar"
 				defaultTitle="AConex - Boot & Calendar"
@@ -26,6 +26,6 @@ export function App() {
 					<RouterProvider router={router} />
 				</LocalizationProvider>
 			</QueryClientProvider>
-		</>
+		</HelmetProvider>
 	);
 }

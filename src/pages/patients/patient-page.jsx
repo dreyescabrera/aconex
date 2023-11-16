@@ -1,6 +1,6 @@
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { FilterInput } from './components/filter-input';
 import { Patients } from './components/patients';
 import { PatientsProvider } from './context/patient.context';

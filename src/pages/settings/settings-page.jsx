@@ -13,7 +13,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const cards = [
 	{

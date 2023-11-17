@@ -4,19 +4,11 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '@/services/api';
+import { useState } from 'react';
 import { useProfessionalsContext } from '../../context/professionals.context';
+import { DeleteProfessional } from './delete-professional';
 import { EditProfessionalData } from './edit-professional-data';
 import { NewProfessionalData } from './new-professional';
-
-async function deleteProfessional(data) {
-	const idprof = data.toString();
-	const idclinica = '1'; //Especificar clinica
-	const urldelete = '/profesionales/' + idclinica + '/' + idprof;
-	const response = await api.delete(urldelete);
-	return response;
-}
 
 export const ProfessionalsData = () => {
 	const {
@@ -26,14 +18,18 @@ export const ProfessionalsData = () => {
 		listToRender,
 		openDrawer,
 		drawerToOpen,
+		setProfessionalInView,
 	} = useProfessionalsContext();
+	const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-	const queryClient = useQueryClient();
+	const handleDeleteProfessional = (professional) => () => {
+		setOpenDeleteModal(true);
+		setProfessionalInView(professional);
+	};
 
-	const mutation = useMutation({
-		mutationFn: deleteProfessional,
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['professionals'] }),
-	});
+	const closeDeleteModal = () => {
+		setOpenDeleteModal(false);
+	};
 
 	if (!listToRender) {
 		return (
@@ -91,7 +87,7 @@ export const ProfessionalsData = () => {
 								>
 									Editar
 								</Button>
-								<Button color="error" size="small" onClick={() => mutation.mutate(professional.id)}>
+								<Button color="error" size="small" onClick={handleDeleteProfessional(professional)}>
 									Eliminar
 								</Button>
 							</Box>
@@ -107,6 +103,7 @@ export const ProfessionalsData = () => {
 				open={isDrawerOpen && drawerToOpen === 'editProfessional'}
 				onClose={closeDrawer}
 			/>
+			<DeleteProfessional open={openDeleteModal} onClose={closeDeleteModal} />
 		</Box>
 	);
 };

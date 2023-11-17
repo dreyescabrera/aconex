@@ -38,13 +38,16 @@ const initialData = {
 		/**@type {import('./types').Absence} */ absence,
 		/**@type {DrawerToOpen} */ drawerToOpen
 	) => undefined,
+	setProfessionalInView: (/**@type {import('./types').Professional} */ professional) => undefined,
+	setScheduleInView: (/**@type {import('./types').Schedule} */ schedule) => undefined,
+	setAbsenceInView: (/**@type {import('./types').Absence} */ absence) => undefined,
 };
 /* eslint-enable */
 
 const ProfessionalsContext = createContext(initialData);
 
 export const ProfessionalsProvider = ({ children }) => {
-	const { data: professionals, refetch } = useProfessionals();
+	const { data: professionals } = useProfessionals();
 
 	const [professionalInView, setProfessionalInView] = useState(null);
 	const [scheduleInView, setScheduleInView] = useState(null);
@@ -52,17 +55,17 @@ export const ProfessionalsProvider = ({ children }) => {
 	const [filteredProfessionals, setFilteredProfessionals] = useState([]);
 	const [filterQuery, setFilterQuery] = useState('');
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-	const [drawerToOpen, setdrawerToOpen] = useState(null);
+	const [drawerToOpen, setDrawerToOpen] = useState(null);
 
 	const listToRender = filterQuery ? filteredProfessionals : professionals;
 
 	const openDrawer = (drawerToOpen) => {
-		setdrawerToOpen(drawerToOpen);
+		setDrawerToOpen(drawerToOpen);
 		setIsDrawerOpen(true);
 	};
 
 	const closeDrawer = () => {
-		setdrawerToOpen(null);
+		setDrawerToOpen(null);
 		setIsDrawerOpen(false);
 	};
 
@@ -132,7 +135,9 @@ export const ProfessionalsProvider = ({ children }) => {
 		handleEditProfessional,
 		handleEditSchedule,
 		handleEditAbsence,
-		refetch,
+		setProfessionalInView,
+		setScheduleInView,
+		setAbsenceInView,
 	};
 
 	return <ProfessionalsContext.Provider value={state}>{children}</ProfessionalsContext.Provider>;

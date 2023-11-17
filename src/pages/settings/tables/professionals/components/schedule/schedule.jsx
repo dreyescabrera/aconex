@@ -4,19 +4,34 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
+import { useState } from 'react';
 import { dayList } from '@/constants/day-list';
 import { useProfessionalsContext } from '../../context/professionals.context';
-import { useDeleteSchedule } from '../../hooks/use-delete-schedule';
+import { DeleteSchedule } from './delete-schedule';
 import { EditSchedule } from './edit-schedule';
 import { NewSchedule } from './new-schedule';
 
 export const ProfessionalsSchedule = () => {
-	const { isDrawerOpen, closeDrawer, handleEditSchedule, listToRender, openDrawer, drawerToOpen } =
-		useProfessionalsContext();
-	const mutation = useDeleteSchedule();
+	const {
+		isDrawerOpen,
+		closeDrawer,
+		handleEditSchedule,
+		listToRender,
+		openDrawer,
+		drawerToOpen,
+		setProfessionalInView,
+		setScheduleInView,
+	} = useProfessionalsContext();
+	const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-	const handleDelete = (schedule) => {
-		mutation.mutate({ horarioId: schedule.id, profesionalId: schedule.profesionalId });
+	const handleDeleteSchedule = (professional, schedule) => () => {
+		setOpenDeleteModal(true);
+		setProfessionalInView(professional);
+		setScheduleInView(schedule);
+	};
+
+	const closeDeleteModal = () => {
+		setOpenDeleteModal(false);
 	};
 
 	if (!listToRender) {
@@ -68,7 +83,7 @@ export const ProfessionalsSchedule = () => {
 													color="error"
 													variant="text"
 													size="small"
-													onClick={() => handleDelete(dia)}
+													onClick={handleDeleteSchedule(professional, dia)}
 												>
 													Eliminar
 												</Button>
@@ -82,12 +97,10 @@ export const ProfessionalsSchedule = () => {
 						</Paper>
 					</Grid>
 				))}
-				<NewSchedule open={isDrawerOpen && drawerToOpen === 'newSchedule'} onClose={closeDrawer} />
-				<EditSchedule
-					open={isDrawerOpen && drawerToOpen === 'editSchedule'}
-					onClose={closeDrawer}
-				/>
 			</Grid>
+			<NewSchedule open={isDrawerOpen && drawerToOpen === 'newSchedule'} onClose={closeDrawer} />
+			<EditSchedule open={isDrawerOpen && drawerToOpen === 'editSchedule'} onClose={closeDrawer} />
+			<DeleteSchedule open={openDeleteModal} onClose={closeDeleteModal} />
 		</Box>
 	);
 };

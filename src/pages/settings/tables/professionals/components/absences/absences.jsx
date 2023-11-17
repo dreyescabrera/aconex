@@ -4,10 +4,10 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useMutation } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { api } from '@/services/api';
+import { useState } from 'react';
 import { useProfessionalsContext } from '../../context/professionals.context';
+import { DeleteAbsence } from './delete-absence';
 import { EditAbsence } from './edit-absence';
 import { NewAbsence } from './new-absence';
 
@@ -19,19 +19,19 @@ export const Absences = () => {
 		closeDrawer,
 		handleEditAbsence,
 		listToRender,
-		refetch,
+		setAbsenceInView,
+		setProfessionalInView,
 	} = useProfessionalsContext();
+	const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-	async function deleteabscense(urlabsence) {
-		const res = await api.delete(urlabsence).then(() => refetch());
-		return res;
-	}
+	const handleDeleteAbsence = (professional, absence) => () => {
+		setOpenDeleteModal(true);
+		setProfessionalInView(professional);
+		setAbsenceInView(absence);
+	};
 
-	const mutation = useMutation(deleteabscense);
-
-	const handleDeletion = (ev) => {
-		const urldeletion = '/ausencias/' + ev.profesionalId.toString() + '/' + ev.id.toString();
-		mutation.mutate(urldeletion);
+	const closeDeleteModal = () => {
+		setOpenDeleteModal(false);
 	};
 
 	if (!listToRender) {
@@ -90,7 +90,7 @@ export const Absences = () => {
 													<Button
 														color="error"
 														size="small"
-														onClick={() => handleDeletion(absence)}
+														onClick={handleDeleteAbsence(professional, absence)}
 													>
 														Eliminar
 													</Button>
@@ -108,6 +108,7 @@ export const Absences = () => {
 			</Grid>
 			<NewAbsence open={isDrawerOpen && drawerToOpen === 'newAbsence'} onClose={closeDrawer} />
 			<EditAbsence open={isDrawerOpen && drawerToOpen === 'editAbsence'} onClose={closeDrawer} />
+			<DeleteAbsence open={openDeleteModal} onClose={closeDeleteModal} />
 		</Box>
 	);
 };

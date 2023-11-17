@@ -4,18 +4,25 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
+import { useState } from 'react';
 import { usePatientsContext } from '../context/patient.context';
-import { useDeletePatient } from '../hooks/use-delete-patient';
+import { DeletePatient } from './delete-patient';
 import { EditPatientData } from './edit-patient';
 import { NewPatient } from './new-patient';
 
 export const Patients = () => {
 	const { closeDrawer, drawerToOpen, openDrawer, listToRender, handleEditPatient } =
 		usePatientsContext();
-	const { mutate } = useDeletePatient();
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [patientToDelete, setPatientToDelete] = useState(null);
 
-	const handleDelete = async (patientId) => {
-		mutate(patientId);
+	const openDeleteModal = (patient) => () => {
+		setIsDeleteModalOpen(true);
+		setPatientToDelete(patient);
+	};
+
+	const closeDeleteModal = () => {
+		setIsDeleteModalOpen(false);
 	};
 
 	if (!listToRender) {
@@ -49,7 +56,7 @@ export const Patients = () => {
 								>
 									Editar
 								</Button>
-								<Button color="error" size="small" onClick={() => handleDelete(patient.id)}>
+								<Button color="error" size="small" onClick={openDeleteModal(patient)}>
 									Eliminar
 								</Button>
 							</Box>
@@ -60,6 +67,11 @@ export const Patients = () => {
 
 			<NewPatient open={drawerToOpen === 'newPatient'} onClose={closeDrawer} />
 			<EditPatientData open={drawerToOpen === 'editPatient'} onClose={closeDrawer} />
+			<DeletePatient
+				open={isDeleteModalOpen}
+				onClose={closeDeleteModal}
+				patientToDelete={patientToDelete}
+			/>
 		</Box>
 	);
 };

@@ -39,7 +39,7 @@ export const MultiProfessionalShiftsTable = ({ shiftsToRender, handleShiftOption
 									</TableRow>
 									{shifts.map((shift) => (
 										<Fragment key={shift.id}>
-											{shift.pacienteId ? (
+											{shift.pacienteId && (
 												<BodyRow>
 													<TimeCell date={shift.date} />
 
@@ -52,19 +52,33 @@ export const MultiProfessionalShiftsTable = ({ shiftsToRender, handleShiftOption
 													<ContactCell phoneNumber={shift.paciente.perfil.celular} />
 													<OptionsCell onClick={handleShiftOptions(shift, 'shiftOptions')} />
 												</BodyRow>
-											) : (
+											)}
+
+											{!shift.pacienteId && !shift.habilitado && (
+												<TableRow
+													sx={{
+														pointerEvents: shift.habilitado ? 'auto' : 'none',
+														background: '#FCC2',
+													}}
+												>
+													<TimeCell date={shift.date} />
+													<TableCell sx={{ fontStyle: 'italic' }} colSpan={5}>
+														Deshabilitado
+													</TableCell>
+													<OptionsCell disabled />
+												</TableRow>
+											)}
+
+											{!shift.pacienteId && shift.habilitado && (
 												<TableRow
 													sx={{
 														cursor: 'pointer',
-														pointerEvents: shift.habilitado ? 'auto' : 'none',
 														'&:hover': { background: '#CCC2' },
 													}}
 													onClick={handleShiftOptions(shift, 'emptyShiftOptions')}
 												>
 													<TimeCell date={shift.date} />
-													<TableCell sx={{ fontStyle: 'italic' }} colSpan={5}>
-														{!shift.habilitado ? 'Deshabilitado' : ''}
-													</TableCell>
+													<TableCell colSpan={5}></TableCell>
 													<OptionsCell disabled />
 												</TableRow>
 											)}

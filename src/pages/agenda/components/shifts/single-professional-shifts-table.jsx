@@ -1,5 +1,3 @@
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -31,7 +29,7 @@ export const SingleProfessionalShiftsTable = ({ shiftsToRender, handleShiftOptio
 						<>
 							{shiftsToRender?.map((shift) => (
 								<Fragment key={shift.id}>
-									{shift.pacienteId ? (
+									{shift.pacienteId && (
 										<BodyRow>
 											<TimeCell date={shift.date} />
 
@@ -42,25 +40,35 @@ export const SingleProfessionalShiftsTable = ({ shiftsToRender, handleShiftOptio
 											<TableCell>{shift.obraSocial}</TableCell>
 											<TableCell>{shift.observacion}</TableCell>
 											<ContactCell phoneNumber={shift.paciente.perfil.celular} />
-											<TableCell align="right">
-												<IconButton onClick={handleShiftOptions(shift, 'shiftOptions')}>
-													<MoreVertIcon />
-												</IconButton>
-											</TableCell>
+											<OptionsCell onClick={handleShiftOptions(shift, 'shiftOptions')} />
 										</BodyRow>
-									) : (
+									)}
+
+									{!shift.pacienteId && !shift.habilitado && (
+										<TableRow
+											sx={{
+												pointerEvents: shift.habilitado ? 'auto' : 'none',
+												background: '#FCC2',
+											}}
+										>
+											<TimeCell date={shift.date} />
+											<TableCell sx={{ fontStyle: 'italic' }} colSpan={5}>
+												Deshabilitado
+											</TableCell>
+											<OptionsCell disabled />
+										</TableRow>
+									)}
+
+									{!shift.pacienteId && shift.habilitado && (
 										<TableRow
 											sx={{
 												cursor: 'pointer',
-												pointerEvents: shift.habilitado ? 'auto' : 'none',
 												'&:hover': { background: '#CCC2' },
 											}}
 											onClick={handleShiftOptions(shift, 'emptyShiftOptions')}
 										>
 											<TimeCell date={shift.date} />
-											<TableCell sx={{ fontStyle: 'italic' }} colSpan={5}>
-												{!shift.habilitado ? 'Deshabilitado' : ''}
-											</TableCell>
+											<TableCell colSpan={5}></TableCell>
 											<OptionsCell disabled />
 										</TableRow>
 									)}

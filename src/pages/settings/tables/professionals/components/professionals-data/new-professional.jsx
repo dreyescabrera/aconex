@@ -16,20 +16,19 @@ export const NewProfessionalData = ({ open, onClose }) => {
 	const { mutate, status } = useCreateProfessional();
 
 	const handleSubmit = (formData) => {
-		const cellphone = parseInt(formData.celular);
-		const ced = parseInt(formData.cedula);
+		const phoneNumber = Number(formData.celular);
+		const ced = Number(formData.cedula);
 		const birthday = formData.nacimiento.format('MM/DD/YYYY');
-		const data = {
+		mutate({
 			nombre: formData.nombre,
 			apellido: formData.apellido,
 			cedula: ced,
-			celular: cellphone,
+			celular: phoneNumber,
 			direccion: formData.direccion,
 			email: formData.email,
 			nacimiento: birthday,
-		};
-
-		mutate(data);
+			matricula: formData.matricula,
+		});
 	};
 
 	return (
@@ -47,6 +46,7 @@ export const NewProfessionalData = ({ open, onClose }) => {
 					direccion: '',
 					email: '',
 					nacimiento: null,
+					matricula: '',
 				}}
 			>
 				<Stack spacing={3} sx={{ mb: 2 }}>
@@ -63,6 +63,7 @@ export const NewProfessionalData = ({ open, onClose }) => {
 						disableFuture
 						format="DD/MM/YYYY"
 					/>
+					<TextInput name="matricula" label="Matrícula" />
 					<Button type="submit" variant="contained">
 						Crear
 					</Button>

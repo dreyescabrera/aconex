@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
 /**
- * @typedef Perfil
+ * @typedef Patient
  * @property {string} nombre - The first name.
  * @property {string} apellido - The last name.
  * @property {number} cedula - The identification number.
@@ -11,17 +11,20 @@ import { api } from '@/services/api';
  * @property {string} direccion - The address.
  * @property {string} email - The email address.
  * @property {string} nacimiento - The date of birth (in the format "DD/MM/YYYY").
+ * @property {string} CondIVA - The VAT status.
  */
 
 /**
  * @param {number} clinicaId
- * @param {Perfil} profile
+ * @param {Patient} patient
  */
-const createPatient = async (clinicaId, profile) => {
+const createPatient = async (clinicaId, patient) => {
+	const { CondIVA, ...profile } = patient;
 	const profileResponse = await api.post('/perfiles', profile);
 	const res = await api.post('/pacientes', {
 		clinicaId,
 		perfilId: profileResponse.data.data.id,
+		CondIVA,
 	});
 	return res.data;
 };
@@ -31,10 +34,10 @@ export const useCreatePatient = () => {
 	const { id } = useStore((state) => state.clinic);
 
 	/**
-	 * @param {Perfil} profile
+	 * @param {Patient} patient
 	 */
-	const mutationFn = (profile) => {
-		return createPatient(id, profile);
+	const mutationFn = (patient) => {
+		return createPatient(id, patient);
 	};
 
 	return useMutation({

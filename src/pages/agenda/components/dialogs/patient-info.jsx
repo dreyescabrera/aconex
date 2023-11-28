@@ -43,6 +43,13 @@ export const PatientInfo = ({ open, onClose, patient }) => {
 							sx={{ textTransform: 'capitalize' }}
 						/>
 					</ListItem>
+					<ListItem disableGutters disablePadding>
+						<ListItemText
+							primary="Condición ante el IVA"
+							secondary={patient.CondIVA}
+							sx={{ textTransform: 'capitalize' }}
+						/>
+					</ListItem>
 				</List>
 			</DialogContent>
 			<DialogActions>

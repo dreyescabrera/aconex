@@ -35,6 +35,7 @@ export const NewPatient = ({ open, onClose }) => {
 					direccion: '',
 					email: '',
 					nacimiento: null,
+					CondIVA: '',
 				}}
 			>
 				<Stack spacing={3} sx={{ mb: 3 }}>
@@ -50,6 +51,7 @@ export const NewPatient = ({ open, onClose }) => {
 						slotProps={{ textField: { variant: 'standard' } }}
 						disableFuture
 					/>
+					<TextInput name="CondIVA" label="Condición ante el IVA" />
 					<Button type="submit" variant="contained">
 						Crear
 					</Button>

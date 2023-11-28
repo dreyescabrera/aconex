@@ -77,7 +77,7 @@ export const ProfessionalsData = () => {
 								{professional.perfil.nombre} {professional.perfil.apellido}
 							</Typography>
 							<Typography>Tel: {professional.perfil.celular}</Typography>
-							<Typography>Cédula: {professional.perfil.cedula}</Typography>
+							<Typography>DNI/Pasaporte: {professional.perfil.cedula}</Typography>
 							<Box sx={{ display: 'flex', gap: 3, mt: 2 }}>
 								<Button
 									color="primary"

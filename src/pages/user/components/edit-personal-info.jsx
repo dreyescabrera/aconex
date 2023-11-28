@@ -59,7 +59,7 @@ export const EditPersonalInfo = ({ open, onClose }) => {
 				<Stack gap={4} sx={{ mb: 2 }}>
 					<TextInput name="nombre" label="Nombre" />
 					<TextInput name="apellido" label="Apellido" />
-					<TextInput name="cedula" label="Cédula" />
+					<TextInput name="cedula" label="Número de DNI o Pasaporte" />
 					<TextInput name="celular" label="Celular" />
 					<TextInput name="direccion" label="Dirección" />
 					<TextInput name="email" label="Email" />

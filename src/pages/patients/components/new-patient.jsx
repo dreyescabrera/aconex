@@ -41,7 +41,7 @@ export const NewPatient = ({ open, onClose }) => {
 				<Stack spacing={3} sx={{ mb: 3 }}>
 					<TextInput name="nombre" label="Nombre" />
 					<TextInput name="apellido" label="Apellido" />
-					<TextInput name="cedula" label="Número de Cédula" />
+					<TextInput name="cedula" label="Número de DNI o Pasaporte" />
 					<TextInput name="celular" label="Celular" />
 					<TextInput name="direccion" label="Dirección" />
 					<TextInput name="email" label="Correo electrónico" />

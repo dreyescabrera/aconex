@@ -45,7 +45,7 @@ export const Patients = () => {
 							<Typography fontWeight="bold" variant="h6" component="p">
 								{patient.perfil.nombre} {patient.perfil.apellido}
 							</Typography>
-							<Typography>Cedula: {patient.perfil.cedula} </Typography>
+							<Typography>DNI/Pasaporte: {patient.perfil.cedula} </Typography>
 							<Typography>Tel: {patient.perfil.celular} </Typography>
 							<Box sx={{ display: 'flex', gap: 3, mt: 2 }}>
 								<Button

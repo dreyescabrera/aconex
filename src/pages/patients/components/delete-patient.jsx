@@ -38,7 +38,7 @@ export const DeletePatient = ({ open, onClose, patientToDelete }) => {
 			<DialogContent>
 				<DialogContentText>
 					Los datos del paciente {patientToDelete?.perfil.nombre} {patientToDelete?.perfil.apellido}{' '}
-					(Nº de cédula {patientToDelete?.perfil.cedula}) no se podrán recuperar. ¿Quieres
+					(Nº de DNI/Pasaporte {patientToDelete?.perfil.cedula}) no se podrán recuperar. ¿Quieres
 					continuar?
 				</DialogContentText>
 			</DialogContent>

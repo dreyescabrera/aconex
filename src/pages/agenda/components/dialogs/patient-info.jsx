@@ -27,7 +27,7 @@ export const PatientInfo = ({ open, onClose, patient }) => {
 						/>
 					</ListItem>
 					<ListItem disableGutters disablePadding>
-						<ListItemText primary="Número de cédula" secondary={patient.perfil.cedula} />
+						<ListItemText primary="Número de DNI o Pasaporte" secondary={patient.perfil.cedula} />
 					</ListItem>
 					<ListItem disableGutters disablePadding>
 						<ListItemText primary="Dirección" secondary={patient.perfil.direccion} />

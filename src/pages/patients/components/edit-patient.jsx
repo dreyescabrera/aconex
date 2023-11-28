@@ -46,7 +46,7 @@ export const EditPatientData = ({ open, onClose }) => {
 				<Stack spacing={3} sx={{ mb: 3 }}>
 					<TextInput name="nombre" label="Nombre" required={false} />
 					<TextInput name="apellido" label="Apellido" required={false} />
-					<TextInput name="cedula" label="Número de Cédula" required={false} />
+					<TextInput name="cedula" label="Número de DNI o Pasaporte" required={false} />
 					<TextInput name="celular" label="Celular" required={false} />
 					<TextInput name="direccion" label="Dirección" required={false} />
 					<TextInput name="email" label="Correo electrónico" required={false} />

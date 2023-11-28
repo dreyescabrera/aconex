@@ -43,7 +43,7 @@ export const Component = () => {
 						<ListItemText primary="Número de teléfono" secondary={user.perfil.celular} />
 					</ListItem>
 					<ListItem>
-						<ListItemText primary="Número de cédula" secondary={user.perfil.cedula} />
+						<ListItemText primary="Número de DNI o Pasaporte" secondary={user.perfil.cedula} />
 					</ListItem>
 					<ListItem>
 						<ListItemText primary="Dirección" secondary={user.perfil.direccion} />

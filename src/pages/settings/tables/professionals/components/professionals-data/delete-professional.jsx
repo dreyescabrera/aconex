@@ -42,8 +42,8 @@ export const DeleteProfessional = ({ open, onClose }) => {
 			<DialogContent>
 				<DialogContentText>
 					Los datos del profesional {professionalInView?.perfil.nombre}{' '}
-					{professionalInView?.perfil.apellido} (Nº de cédula {professionalInView?.perfil.cedula})
-					no se podrán recuperar. ¿Quieres continuar?
+					{professionalInView?.perfil.apellido} (Nº de DNI/Pasaporte{' '}
+					{professionalInView?.perfil.cedula}) no se podrán recuperar. ¿Quieres continuar?
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>

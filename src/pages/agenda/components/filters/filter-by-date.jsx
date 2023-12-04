@@ -7,9 +7,11 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { dayJsDayList } from '@/constants/day-list';
 import { useAgendaContext } from '../../context/agenda.context';
+import { useAvailableDays } from '../../hooks/use-available-days';
 
 export const FilterByDate = () => {
 	const { updateFilters, filters } = useAgendaContext();
+	const { data: availableDays } = useAvailableDays();
 	const [inputValue, setInputValue] = useState(dayjs(filters.get('fechaDesde')));
 
 	const handleInputChange = (date) => {
@@ -64,9 +66,16 @@ export const FilterByDate = () => {
 					const currentDay = inputValue;
 
 					let boxBackground;
+					let textColor = 'black';
 
 					if (Number(dayNumber) === currentDay.day()) {
 						boxBackground = 'lightgray';
+					} else if (availableDays?.includes(dayName)) {
+						boxBackground = '#c662dd';
+						textColor = 'white';
+					} else {
+						boxBackground = '#bf3401';
+						textColor = 'white';
 					}
 
 					return (
@@ -76,6 +85,7 @@ export const FilterByDate = () => {
 							sx={{
 								px: 1,
 								py: 0.5,
+								color: textColor,
 								flex: 1,
 								textAlign: 'center',
 								backgroundColor: boxBackground,

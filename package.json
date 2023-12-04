@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "vite build",
+		"start": "bash serve.sh",
 		"preview": "vite preview",
 		"check": "tsc --noEmit",
 		"lint": "eslint --ext js,jsx --max-warnings 0",
@@ -47,6 +48,7 @@
 		"husky": "^8.0.3",
 		"lint-staged": "^14.0.1",
 		"prettier": "^3.0.3",
+		"serve": "^14.2.1",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.5"
 	}

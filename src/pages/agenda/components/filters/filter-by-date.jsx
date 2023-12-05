@@ -47,7 +47,7 @@ export const FilterByDate = () => {
 					onChange={handleInputChange}
 				/>
 				<Button
-					onClick={() => handleInputChange(dayjs(filters.get('fechaDesde')))}
+					onClick={() => handleInputChange(dayjs())}
 					sx={{
 						borderRadius: 1,
 						ml: 2,
@@ -71,7 +71,7 @@ export const FilterByDate = () => {
 					if (Number(dayNumber) === currentDay.day()) {
 						boxBackground = 'lightgray';
 					} else if (availableDays?.includes(dayName)) {
-						boxBackground = '#c662dd';
+						boxBackground = '#45b619';
 						textColor = 'white';
 					} else {
 						boxBackground = '#bf3401';

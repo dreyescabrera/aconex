@@ -40,11 +40,21 @@ export const ProfileData = () => {
 						>
 							<Stack gap={4}>
 								<TextInput fullWidth name="nombre" label="Nombre" />
-								<TextInput fullWidth name="apellido" label="Apellido" />
-								<TextInput fullWidth name="cedula" label="Número de DNI o Pasaporte" />
-								<TextInput fullWidth name="celular" label="Celular" />
-								<TextInput fullWidth name="direccion" label="Dirección" />
-								<TextInput fullWidth name="email" label="Email" />
+								<TextInput fullWidth name="apellido" label="Apellido" rules={{ required: false }} />
+								<TextInput
+									fullWidth
+									name="cedula"
+									label="Número de DNI o Pasaporte"
+									rules={{ required: false }}
+								/>
+								<TextInput fullWidth name="celular" label="Celular" rules={{ required: false }} />
+								<TextInput
+									fullWidth
+									name="direccion"
+									label="Dirección"
+									rules={{ required: false }}
+								/>
+								<TextInput fullWidth name="email" label="Email" rules={{ required: false }} />
 								<DatePicker
 									name="nacimiento"
 									label="Nacimiento"

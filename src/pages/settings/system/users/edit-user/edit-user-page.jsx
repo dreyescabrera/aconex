@@ -46,11 +46,15 @@ export const Component = () => {
 				>
 					<Stack gap={4}>
 						<TextInput name="nombre" label="Nombre" />
-						<TextInput name="apellido" label="Apellido" />
-						<TextInput name="cedula" label="Número de DNI o Pasaporte" />
-						<TextInput name="celular" label="Celular" />
-						<TextInput name="direccion" label="Dirección" />
-						<TextInput name="email" label="Email" />
+						<TextInput name="apellido" label="Apellido" rules={{ required: false }} />
+						<TextInput
+							name="cedula"
+							label="Número de DNI o Pasaporte"
+							rules={{ required: false }}
+						/>
+						<TextInput name="celular" label="Celular" rules={{ required: false }} />
+						<TextInput name="direccion" label="Dirección" rules={{ required: false }} />
+						<TextInput name="email" label="Email" rules={{ required: false }} />
 						<DatePicker
 							name="nacimiento"
 							label="Nacimiento"

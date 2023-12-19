@@ -51,11 +51,11 @@ export const NewProfessionalData = ({ open, onClose }) => {
 			>
 				<Stack spacing={3} sx={{ mb: 2 }}>
 					<TextInput name="nombre" label="Nombre" />
-					<TextInput name="apellido" label="Apellido" />
-					<TextInput name="cedula" label="Número de DNI o Pasaporte" />
-					<TextInput name="celular" label="Celular" />
-					<TextInput name="direccion" label="Dirección" />
-					<TextInput name="email" label="Correo electrónico" />
+					<TextInput name="apellido" label="Apellido" rules={{ required: false }} />
+					<TextInput name="cedula" label="Número de DNI o Pasaporte" rules={{ required: false }} />
+					<TextInput name="celular" label="Celular" rules={{ required: false }} />
+					<TextInput name="direccion" label="Dirección" rules={{ required: false }} />
+					<TextInput name="email" label="Correo electrónico" rules={{ required: false }} />
 					<DatePicker
 						name="nacimiento"
 						label="Fecha de nacimiento"

@@ -16,7 +16,14 @@ export const NewPatient = ({ open, onClose }) => {
 	const { mutate, status, error } = useCreatePatient();
 
 	const handleSubmit = (formData) => {
-		mutate(formData);
+		let datos = {};
+		for (var key in formData) {
+			if (formData[key] != null && formData[key] != '') {
+				datos = { [key]: formData[key], ...datos };
+			}
+		}
+
+		mutate(datos);
 	};
 
 	return (
@@ -50,6 +57,7 @@ export const NewPatient = ({ open, onClose }) => {
 						label="Fecha de nacimiento"
 						slotProps={{ textField: { variant: 'standard' } }}
 						disableFuture
+						rules={{ required: false }}
 					/>
 					<TextInput name="CondIVA" label="Condición ante el IVA" rules={{ required: false }} />
 					<Button type="submit" variant="contained">

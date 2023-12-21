@@ -2,7 +2,7 @@ import { useStore } from '@/store/use-store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
-/**
+/*
  * @typedef Patient
  * @property {string} nombre - The first name.
  * @property {string} apellido - The last name.
@@ -14,18 +14,19 @@ import { api } from '@/services/api';
  * @property {string} CondIVA - The VAT status.
  */
 
-/**
+/*
  * @param {number} clinicaId
  * @param {Patient} patient
  */
 const createPatient = async (clinicaId, patient) => {
 	const { CondIVA, ...profile } = patient;
 	const profileResponse = await api.post('/perfiles', profile);
-	const res = await api.post('/pacientes', {
-		clinicaId,
-		perfilId: profileResponse.data.data.id,
-		CondIVA,
-	});
+
+	let paciente = { clinicaId, perfilId: profileResponse.data.data.id };
+	if (CondIVA) {
+		paciente = { CondIVA, ...paciente };
+	}
+	const res = await api.post('/pacientes', paciente);
 	return res.data;
 };
 
@@ -33,7 +34,7 @@ export const useCreatePatient = () => {
 	const queryClient = useQueryClient();
 	const { id } = useStore((state) => state.clinic);
 
-	/**
+	/*
 	 * @param {Patient} patient
 	 */
 	const mutationFn = (patient) => {

@@ -18,7 +18,15 @@ export const EditPatientData = ({ open, onClose }) => {
 	const { patientInVIew } = usePatientsContext();
 
 	const handleSubmit = (data) => {
-		mutate({ ...data, perfilId: patientInVIew?.perfilId });
+		let datos = {};
+		for (var key in data) {
+			if (data[key] && data[key] != null && data[key] != '') {
+				if (key === 'nacimiento' && data[key].isvalid) {
+					datos = { [key]: data[key], ...datos };
+				}
+			}
+		}
+		mutate({ ...datos, perfilId: patientInVIew?.perfilId });
 	};
 	return (
 		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
@@ -46,15 +54,16 @@ export const EditPatientData = ({ open, onClose }) => {
 				<Stack spacing={3} sx={{ mb: 3 }}>
 					<TextInput name="nombre" label="Nombre" required={false} />
 					<TextInput name="apellido" label="Apellido" required={false} />
-					<TextInput name="cedula" label="Número de DNI o Pasaporte" required={false} />
-					<TextInput name="celular" label="Celular" required={false} />
-					<TextInput name="direccion" label="Dirección" required={false} />
-					<TextInput name="email" label="Correo electrónico" required={false} />
+					<TextInput name="cedula" label="Número de DNI o Pasaporte" rules={{ required: false }} />
+					<TextInput name="celular" label="Celular" rules={{ required: false }} />
+					<TextInput name="direccion" label="Dirección" rules={{ required: false }} />
+					<TextInput name="email" label="Correo electrónico" rules={{ required: false }} />
 					<DatePicker
 						name="nacimiento"
 						label="Fecha de nacimiento"
 						slotProps={{ textField: { variant: 'standard' } }}
 						disableFuture
+						rules={{ required: false }}
 					/>
 					<Button type="submit" variant="contained">
 						Guardar

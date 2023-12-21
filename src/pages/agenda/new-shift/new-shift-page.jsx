@@ -6,13 +6,24 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Autocomplete, Form, TextInput } from '@/components/form';
 import { usePatients } from '@/hooks/use-patients';
+import { NewPatientDialog } from '../components/dialogs';
 import { useEditShifts } from '../hooks/use-edit-shifts';
 
 export const Component = () => {
+	const [isopen, setIsopen] = useState(false);
+
+	const handleOpendialog = () => {
+		setIsopen(true);
+	};
+
+	const handleClosedialog = () => {
+		setIsopen(false);
+	};
 	const { data: patients, isLoading } = usePatients();
 	const {
 		state: { shift },
@@ -60,6 +71,9 @@ export const Component = () => {
 					onSubmit={assignPatientToShift}
 				>
 					<Stack spacing={4}>
+						<Button onClick={handleOpendialog} variant="outlined">
+							Crear Nuevo Paciente
+						</Button>
 						<Autocomplete
 							name="patient"
 							options={patients ?? []}
@@ -106,6 +120,7 @@ export const Component = () => {
 						Turno asignado con éxito!
 					</Alert>
 				</Collapse>
+				<NewPatientDialog open={isopen} onClose={handleClosedialog} />
 			</Container>
 		</>
 	);

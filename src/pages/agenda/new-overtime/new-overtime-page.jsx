@@ -5,15 +5,27 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Autocomplete, DatePicker, Form, TextInput, TimePicker } from '@/components/form';
 import { usePatients } from '@/hooks/use-patients';
 import { useProfessionals } from '@/hooks/use-professionals';
+import { NewPatientDialog } from '../components/dialogs';
 import { useNewShift } from '../hooks/use-new-shift';
 import { useShifts } from '../hooks/use-shifts';
 
 export const Component = () => {
+	const [isopen, setIsopen] = useState(false);
+
+	const handleOpendialog = () => {
+		setIsopen(true);
+	};
+
+	const handleClosedialog = () => {
+		setIsopen(false);
+	};
+
 	const {
 		state: { shift },
 	} = useLocation();
@@ -110,6 +122,9 @@ export const Component = () => {
 								}}
 							/>
 						</Stack>
+						<Button onClick={handleOpendialog} variant="outlined">
+							Crear Nuevo Paciente
+						</Button>
 						<Autocomplete
 							name="paciente"
 							options={patients ?? []}
@@ -161,6 +176,7 @@ export const Component = () => {
 						Hubo un problema creando el sobreturno: {error?.response.data.message}
 					</Alert>
 				</Collapse>
+				<NewPatientDialog open={isopen} onClose={handleClosedialog} />
 			</Container>
 		</>
 	);

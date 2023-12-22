@@ -10,7 +10,7 @@ const patchShifts = async (professionalId, shiftId, modifications) => {
 export const useEditShifts = () => {
 	const queryClient = useQueryClient();
 
-	/**
+	/*
 	 * @param {object} data
 	 * @param {number} data.shiftId
 	 * @param {number} data.profesionalId

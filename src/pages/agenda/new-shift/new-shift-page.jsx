@@ -32,17 +32,19 @@ export const Component = () => {
 	const navigate = useNavigate();
 
 	const assignPatientToShift = (formdata) => {
-		mutate(
-			{
-				shiftId: shift.id,
-				profesionalId: shift.profesionalId,
-				pacienteId: formdata.patient.id,
-				observacion: formdata.notes,
-				presentismo: formdata.attendance,
-				obraSocial: formdata.socialWork,
-			},
-			{ onSuccess: () => setTimeout(() => navigate(-1), 4_000) }
-		);
+		let datos = {};
+		for (var key in formdata) {
+			if (formdata[key] != '' && key != 'patient') {
+				datos = { [key]: formdata[key], ...datos };
+			}
+		}
+		datos = {
+			shiftId: shift.id,
+			profesionalId: shift.profesionalId,
+			pacienteId: formdata.patient.id,
+			...datos,
+		};
+		mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
 	};
 
 	return (
@@ -67,7 +69,7 @@ export const Component = () => {
 					Datos requeridos
 				</Typography>
 				<Form
-					defaultValues={{ notes: '', presentismo: '', patient: null }}
+					defaultValues={{ observacion: '', presentismo: '', patient: null }}
 					onSubmit={assignPatientToShift}
 				>
 					<Stack spacing={4}>
@@ -90,10 +92,20 @@ export const Component = () => {
 							}}
 						/>
 
-						<TextInput name="notes" variant="standard" label="Observación" />
-						<TextInput name="attendance" variant="standard" label="Presentismo" />
 						<TextInput
-							name="socialWork"
+							name="observacion"
+							variant="standard"
+							label="Observación"
+							rules={{ required: false }}
+						/>
+						<TextInput
+							name="presentismo"
+							variant="standard"
+							label="Presentismo"
+							rules={{ required: false }}
+						/>
+						<TextInput
+							name="obraSocial"
 							variant="standard"
 							label="Obra Social"
 							rules={{ required: false }}

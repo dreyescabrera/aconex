@@ -52,17 +52,24 @@ export const Component = () => {
 		const minute = dayjs(formdata.minute);
 		const date = dayjs.utc(formdata.date).set('hour', hour.hour()).set('minute', minute.minute());
 
-		mutate(
-			{
-				profesionalId: formdata.profesional.id,
-				pacienteId: formdata.paciente.id,
-				observacion: formdata.observacion,
-				presentismo: formdata.presentismo,
-				obraSocial: formdata.obraSocial,
-				date: date.toISOString(),
-			},
-			{ onSuccess: () => setTimeout(() => navigate(-1), 4_000) }
-		);
+		let datos = {};
+		for (var key in formdata) {
+			if (
+				formdata[key] != '' &&
+				(key === 'observacion' || key === 'presentismo' || key === 'obraSocial')
+			) {
+				datos = { [key]: formdata[key], ...datos };
+			}
+		}
+
+		datos = {
+			profesionalId: formdata.profesional.id,
+			pacienteId: formdata.paciente.id,
+			date: date.toISOString(),
+			...datos,
+		};
+
+		mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
 	};
 
 	return (
@@ -152,8 +159,18 @@ export const Component = () => {
 							}}
 						/>
 
-						<TextInput name="observacion" variant="standard" label="Observación" />
-						<TextInput name="presentismo" variant="standard" label="Presentismo" />
+						<TextInput
+							name="observacion"
+							variant="standard"
+							label="Observación"
+							rules={{ required: false }}
+						/>
+						<TextInput
+							name="presentismo"
+							variant="standard"
+							label="Presentismo"
+							rules={{ required: false }}
+						/>
 						<TextInput
 							name="obraSocial"
 							variant="standard"

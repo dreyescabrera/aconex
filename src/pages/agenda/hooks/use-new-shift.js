@@ -1,9 +1,10 @@
 import { useStore } from '@/store/use-store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
-import { ShiftOptions } from '../components/shifts/shift-options';
 
-/**
+//import { ShiftOptions } from '../components/shifts/shift-options';
+
+/*
  * @typedef ShiftOptions
  * @property {number} clinicaId
  * @property {number} profesionalId
@@ -14,7 +15,7 @@ import { ShiftOptions } from '../components/shifts/shift-options';
  * @property {string} date
  */
 
-/**
+/*
  * @param {ShiftOptions} shiftInfo
  */
 const createShift = async (shiftInfo) => {
@@ -26,7 +27,7 @@ export const useNewShift = () => {
 	const { id } = useStore((state) => state.clinic);
 	const queryClient = useQueryClient();
 
-	/**
+	/*
 	 * @param {Omit<ShiftOptions, 'clinicaId'>} data
 	 */
 	const mutationFn = (data) => {

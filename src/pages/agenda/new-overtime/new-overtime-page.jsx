@@ -1,3 +1,4 @@
+import { useCreatePatient } from '@/pages/patients/hooks/use-create-patient';
 import Alert from '@mui/material/Alert';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -6,13 +7,11 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
-import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Autocomplete, DatePicker, Form, TextInput, TimePicker } from '@/components/form';
 import { usePatients } from '@/hooks/use-patients';
 import { useProfessionals } from '@/hooks/use-professionals';
-import { NewPatientDialog } from '../components/dialogs';
 import { useNewShift } from '../hooks/use-new-shift';
 import { useShifts } from '../hooks/use-shifts';
 
@@ -30,29 +29,6 @@ const opciones = (opt) => {
 };
 
 export const Component = () => {
-	const [isopen, setIsopen] = useState(false);
-	const [namevalue, setNamevalue] = useState('');
-	const [value, setValue] = useState('');
-
-	const handleOnChange = (event, newValue) => {
-		if (typeof newValue === 'string') {
-			// timeout to avoid instant validation of the dialog's form.
-			setTimeout(() => {
-				setIsopen(true);
-				setNamevalue(newValue);
-			});
-		} else if (newValue && newValue.inputValue) {
-			setIsopen(true);
-			setNamevalue(newValue.inputValue);
-		} else {
-			setValue(newValue);
-		}
-	};
-
-	const handleClosedialog = () => {
-		setIsopen(false);
-	};
-
 	const {
 		state: { shift },
 	} = useLocation();
@@ -61,6 +37,7 @@ export const Component = () => {
 		fechaDesde: shiftDate.format('MM/DD/YY'),
 		fechaHasta: shiftDate.format('MM/DD/YY'),
 	});
+	const { mutate: createpatient, status: patientstatus } = useCreatePatient();
 	const { data: patients } = usePatients();
 	const { data: professionals } = useProfessionals();
 	const { mutate, isSuccess, error } = useNewShift();
@@ -89,14 +66,28 @@ export const Component = () => {
 			}
 		}
 
-		datos = {
-			profesionalId: formdata.profesional.id,
-			pacienteId: formdata.paciente.id,
-			date: date.toISOString(),
-			...datos,
-		};
-
-		mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
+		if (formdata.patient.inputValue) {
+			let pacienteobj = { nombre: formdata.patient.inputValue, apellido: ' ' };
+			createpatient(pacienteobj, {
+				onSuccess: async (patientdata) => {
+					datos = {
+						profesionalId: formdata.profesional.id,
+						pacienteId: patientdata.data.id,
+						date: date.toISOString(),
+						...datos,
+					};
+					mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
+				},
+			});
+		} else {
+			datos = {
+				profesionalId: formdata.profesional.id,
+				pacienteId: formdata.patient.id,
+				date: date.toISOString(),
+				...datos,
+			};
+			mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
+		}
 	};
 
 	return (
@@ -115,7 +106,7 @@ export const Component = () => {
 					defaultValues={{
 						observacion: '',
 						presentismo: '',
-						paciente: null,
+						patient: null,
 						date: dayjs.utc(shift.date),
 						hour: dayjs.utc(shift.date),
 						minute: null,
@@ -159,8 +150,6 @@ export const Component = () => {
 						<Autocomplete
 							name="patient"
 							options={patients ?? []}
-							value={value}
-							onChange={handleOnChange}
 							filterOptions={(options, params) => {
 								const filtered = filter(options, params);
 								if (params.inputValue != '') {
@@ -236,6 +225,16 @@ export const Component = () => {
 						</Button>
 					</Stack>
 				</Form>
+				{patientstatus === 'loading' && <Alert severity="info">Cargando...</Alert>}
+
+				{patientstatus === 'error' && (
+					// @ts-ignore
+					<Alert severity="error">Error al crear el paciente</Alert>
+				)}
+
+				{patientstatus === 'success' && (
+					<Alert severity="success">Paciente creado con éxito.</Alert>
+				)}
 				<Collapse in={isSuccess}>
 					<Alert severity="success" sx={{ mt: 2 }}>
 						Sobreturno creado con éxito!
@@ -247,7 +246,6 @@ export const Component = () => {
 						Hubo un problema creando el sobreturno: {error?.response.data.message}
 					</Alert>
 				</Collapse>
-				<NewPatientDialog open={isopen} onClose={handleClosedialog} name={namevalue} />
 			</Container>
 		</>
 	);

@@ -1,3 +1,4 @@
+import { useCreatePatient } from '@/pages/patients/hooks/use-create-patient';
 import Alert from '@mui/material/Alert';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -7,12 +8,10 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
-import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Autocomplete, Form, TextInput } from '@/components/form';
 import { usePatients } from '@/hooks/use-patients';
-import { NewPatientDialog } from '../components/dialogs';
 import { useEditShifts } from '../hooks/use-edit-shifts';
 
 const filter = createFilterOptions();
@@ -29,28 +28,7 @@ const opciones = (opt) => {
 };
 
 export const Component = () => {
-	const [isopen, setIsopen] = useState(false);
-	const [namevalue, setNamevalue] = useState('');
-	const [value, setValue] = useState('');
-
-	const handleOnChange = (event, newValue) => {
-		if (typeof newValue === 'string') {
-			// timeout to avoid instant validation of the dialog's form.
-			setTimeout(() => {
-				setIsopen(true);
-				setNamevalue(newValue);
-			});
-		} else if (newValue && newValue.inputValue) {
-			setIsopen(true);
-			setNamevalue(newValue.inputValue);
-		} else {
-			setValue(newValue);
-		}
-	};
-
-	const handleClosedialog = () => {
-		setIsopen(false);
-	};
+	const { mutate: createpatient, status: patientstatus } = useCreatePatient();
 	const { data: patients, isLoading } = usePatients();
 	const {
 		state: { shift },
@@ -65,13 +43,29 @@ export const Component = () => {
 				datos = { [key]: formdata[key], ...datos };
 			}
 		}
-		datos = {
-			shiftId: shift.id,
-			profesionalId: shift.profesionalId,
-			pacienteId: formdata.patient.id,
-			...datos,
-		};
-		mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
+
+		if (formdata.patient.inputValue) {
+			let pacienteobj = { nombre: formdata.patient.inputValue, apellido: ' ' };
+			createpatient(pacienteobj, {
+				onSuccess: async (patientdata) => {
+					datos = {
+						shiftId: shift.id,
+						profesionalId: shift.profesionalId,
+						pacienteId: patientdata.data.id,
+						...datos,
+					};
+					mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
+				},
+			});
+		} else {
+			datos = {
+				shiftId: shift.id,
+				profesionalId: shift.profesionalId,
+				pacienteId: formdata.patient.id,
+				...datos,
+			};
+			mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
+		}
 	};
 
 	return (
@@ -103,10 +97,8 @@ export const Component = () => {
 						<Autocomplete
 							name="patient"
 							options={patients ?? []}
-							value={value}
 							loading={isLoading}
 							loadingText="Cargando lista de pacientes..."
-							onChange={handleOnChange}
 							filterOptions={(options, params) => {
 								const filtered = filter(options, params);
 								if (params.inputValue != '') {
@@ -181,12 +173,21 @@ export const Component = () => {
 						</Button>
 					</Stack>
 				</Form>
+				{patientstatus === 'loading' && <Alert severity="info">Cargando...</Alert>}
+
+				{patientstatus === 'error' && (
+					// @ts-ignore
+					<Alert severity="error">Error al crear el paciente</Alert>
+				)}
+
+				{patientstatus === 'success' && (
+					<Alert severity="success">Paciente creado con éxito.</Alert>
+				)}
 				<Collapse in={mutationIsSuccess}>
 					<Alert severity="success" sx={{ mt: 2 }}>
 						Turno asignado con éxito!
 					</Alert>
 				</Collapse>
-				<NewPatientDialog open={isopen} onClose={handleClosedialog} name={namevalue} />
 			</Container>
 		</>
 	);

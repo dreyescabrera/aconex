@@ -1,4 +1,5 @@
 import Alert from '@mui/material/Alert';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import Container from '@mui/material/Container';
@@ -15,11 +16,37 @@ import { NewPatientDialog } from '../components/dialogs';
 import { useNewShift } from '../hooks/use-new-shift';
 import { useShifts } from '../hooks/use-shifts';
 
+const filter = createFilterOptions();
+const opciones = (opt) => {
+	if (typeof opt === 'string') {
+		return opt;
+	}
+	if (opt.inputValue) {
+		return opt.inputValue;
+	}
+	if (opt.perfil?.nombre != undefined) {
+		return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
+	}
+};
+
 export const Component = () => {
 	const [isopen, setIsopen] = useState(false);
+	const [namevalue, setNamevalue] = useState('');
+	const [value, setValue] = useState('');
 
-	const handleOpendialog = () => {
-		setIsopen(true);
+	const handleOnChange = (event, newValue) => {
+		if (typeof newValue === 'string') {
+			// timeout to avoid instant validation of the dialog's form.
+			setTimeout(() => {
+				setIsopen(true);
+				setNamevalue(newValue);
+			});
+		} else if (newValue && newValue.inputValue) {
+			setIsopen(true);
+			setNamevalue(newValue.inputValue);
+		} else {
+			setValue(newValue);
+		}
 	};
 
 	const handleClosedialog = () => {
@@ -129,21 +156,48 @@ export const Component = () => {
 								}}
 							/>
 						</Stack>
-						<Button onClick={handleOpendialog} variant="outlined">
-							Crear Nuevo Paciente
-						</Button>
 						<Autocomplete
-							name="paciente"
+							name="patient"
 							options={patients ?? []}
-							getOptionLabel={(opt) =>
-								`${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`
-							}
-							isOptionEqualToValue={(option, value) => option.id === value.id}
+							value={value}
+							onChange={handleOnChange}
+							filterOptions={(options, params) => {
+								const filtered = filter(options, params);
+								if (params.inputValue != '') {
+									filtered.push({
+										inputValue: params.inputValue,
+										title: `Agregar "${params.inputValue}"`,
+									});
+								}
+
+								return filtered;
+							}}
+							getOptionLabel={(opt) => {
+								if (typeof opt === 'string') {
+									return opt;
+								}
+								if (opt.inputValue) {
+									return opt.inputValue;
+								}
+								if (opt.perfil?.nombre != undefined) {
+									return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
+								}
+								return opt.title;
+							}}
 							inputProps={{
 								variant: 'standard',
 								label: 'Paciente',
 								placeholder: 'Nombre del Paciente e email',
 							}}
+							selectOnFocus
+							clearOnBlur
+							handleHomeEndKeys
+							renderOption={(props, option) => (
+								<li {...props}>
+									{typeof option.title === 'string' ? option.title : opciones(option)}
+								</li>
+							)}
+							freeSolo
 						/>
 						<Autocomplete
 							name="profesional"
@@ -193,7 +247,7 @@ export const Component = () => {
 						Hubo un problema creando el sobreturno: {error?.response.data.message}
 					</Alert>
 				</Collapse>
-				<NewPatientDialog open={isopen} onClose={handleClosedialog} />
+				<NewPatientDialog open={isopen} onClose={handleClosedialog} name={namevalue} />
 			</Container>
 		</>
 	);

@@ -12,8 +12,9 @@ import { DatePicker, Form, TextInput } from '@/components/form';
  * @param {object} props
  * @param {boolean} props.open
  * @param {() => void} props.onClose
+ * @param {string} props.name
  */
-export const NewPatientDialog = ({ open, onClose }) => {
+export const NewPatientDialog = ({ open, onClose, name }) => {
 	const { mutate, status, error } = useCreatePatient();
 
 	const handleSubmit = (formData) => {
@@ -33,7 +34,7 @@ export const NewPatientDialog = ({ open, onClose }) => {
 				<Form
 					onSubmit={handleSubmit}
 					defaultValues={{
-						nombre: '',
+						nombre: name,
 						apellido: '',
 						cedula: '',
 						celular: '',

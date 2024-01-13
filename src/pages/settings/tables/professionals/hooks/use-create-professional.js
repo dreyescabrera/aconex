@@ -2,7 +2,7 @@ import { useStore } from '@/store/use-store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
-/**
+/*
  * @typedef Professional
  * @property {string} nombre - The first name.
  * @property {string} apellido - The last name.
@@ -14,7 +14,7 @@ import { api } from '@/services/api';
  * @property {string} matricula - The registration.
  */
 
-/**
+/*
  * @param {number} clinicaId
  * @param {Professional} professional
  */
@@ -36,7 +36,7 @@ export const useCreateProfessional = () => {
 	const queryClient = useQueryClient();
 	const { id } = useStore((state) => state.clinic);
 
-	/**
+	/*
 	 * @param {Professional} profile
 	 */
 	const mutationFn = (profile) => {

@@ -21,8 +21,12 @@ export const EditPatientData = ({ open, onClose }) => {
 		let datos = {};
 		for (var key in data) {
 			if (data[key] && data[key] != null && data[key] != '') {
-				if (key === 'nacimiento' && data[key].isvalid) {
+				if (key != 'nacimiento') {
 					datos = { [key]: data[key], ...datos };
+				} else {
+					if (data[key].isvalid) {
+						datos = { [key]: data[key], ...datos };
+					}
 				}
 			}
 		}

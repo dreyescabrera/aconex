@@ -16,19 +16,26 @@ export const NewProfessionalData = ({ open, onClose }) => {
 	const { mutate, status } = useCreateProfessional();
 
 	const handleSubmit = (formData) => {
-		const phoneNumber = Number(formData.celular);
-		const ced = Number(formData.cedula);
-		const birthday = formData.nacimiento.format('MM/DD/YYYY');
-		mutate({
-			nombre: formData.nombre,
-			apellido: formData.apellido,
-			cedula: ced,
-			celular: phoneNumber,
-			direccion: formData.direccion,
-			email: formData.email,
-			nacimiento: birthday,
-			matricula: formData.matricula,
-		});
+		let datos = {};
+		for (var key in formData) {
+			if (formData[key] != null && formData[key] != '') {
+				datos = { [key]: formData[key], ...datos };
+			}
+		}
+
+		if (datos.celular) {
+			datos.celular = Number(datos.celular);
+		}
+
+		if (datos.cedula) {
+			datos.cedula = Number(datos.cedula);
+		}
+
+		if (datos.nacimiento) {
+			datos.nacimiento = datos.nacimiento.format('MM/DD/YYYY');
+		}
+
+		mutate(datos);
 	};
 
 	return (
@@ -62,6 +69,7 @@ export const NewProfessionalData = ({ open, onClose }) => {
 						slotProps={{ textField: { variant: 'standard' } }}
 						disableFuture
 						format="DD/MM/YYYY"
+						rules={{ required: false }}
 					/>
 					<TextInput name="matricula" label="Matrícula" />
 					<Button type="submit" variant="contained">

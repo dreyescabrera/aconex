@@ -60,17 +60,21 @@ export const EditProfessionalData = ({ open, onClose }) => {
 	});
 
 	const handleSubmit = (ev) => {
-		const birthday = ev.nacimiento.format('MM/DD/YYYY');
-		const perfil = {
-			nombre: ev.nombre,
-			apellido: ev.apellido,
-			cedula: ev.cedula,
-			celular: ev.celular,
-			direccion: ev.direccion,
-			email: ev.email,
-			nacimiento: birthday,
-		};
-		const dataperfil = [professionalInView.perfil.id, perfil];
+		let datos = {};
+		for (var key in ev) {
+			if (ev[key] && ev[key] != null && ev[key] != '') {
+				if (key != 'nacimiento') {
+					datos = { [key]: ev[key], ...datos };
+				} else {
+					if (ev[key].isvalid) {
+						const birthday = ev.nacimiento.format('MM/DD/YYYY');
+						datos = { [key]: birthday, ...datos };
+					}
+				}
+			}
+		}
+
+		const dataperfil = [professionalInView.perfil.id, datos];
 		mutation.mutate(dataperfil);
 	};
 
@@ -107,6 +111,7 @@ export const EditProfessionalData = ({ open, onClose }) => {
 						label="Fecha de nacimiento"
 						slotProps={{ textField: { variant: 'standard' } }}
 						disableFuture
+						rules={{ required: false }}
 					/>
 					<Button type="submit" variant="contained">
 						Guardar

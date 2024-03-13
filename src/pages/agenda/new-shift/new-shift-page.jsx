@@ -151,6 +151,12 @@ export const Component = () => {
 							rules={{ required: false }}
 						/>
 						<TextInput
+							name="celular"
+							variant="standard"
+							label="telefono/celular"
+							rules={{ required: false }}
+						/>
+						<TextInput
 							name="obraSocial"
 							variant="standard"
 							label="Obra Social"

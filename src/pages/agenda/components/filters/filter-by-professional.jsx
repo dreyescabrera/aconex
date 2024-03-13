@@ -31,10 +31,10 @@ export const FilterByProfessional = () => {
 	};
 
 	const initialProfessional = filters.get('profesionalId')
-		? professionals.find((prof) => prof.id === Number(filters.get('profesionalId')))
+		? professionals?.find((prof) => prof.id === Number(filters.get('profesionalId')))
 		: null;
 	const initialSpecialty = filters.get('especialidadId')
-		? specialties.find((specialty) => specialty.id === Number(filters.get('especialidadId')))
+		? specialties?.find((specialty) => specialty.id === Number(filters.get('especialidadId')))
 		: null;
 
 	return (

@@ -19,9 +19,9 @@ export const Shifts = () => {
 		shiftsGroupedByProfessionals = groupBy(shifts, 'profesionalId');
 
 		for (const id in shiftsGroupedByProfessionals) {
-			const professional = professionals.find((prof) => prof.id === Number(id));
+			const professional = professionals?.find((prof) => prof.id === Number(id));
 			shiftsGroupedByProfessionals[
-				`${professional.perfil.nombre} ${professional.perfil.apellido}`
+				`${professional?.perfil.nombre} ${professional?.perfil.apellido}`
 			] = shiftsGroupedByProfessionals[id];
 
 			delete shiftsGroupedByProfessionals[id];

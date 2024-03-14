@@ -33,10 +33,11 @@ export const Component = () => {
 	const {
 		state: { shift },
 	} = useLocation();
-	const { mutate, isLoading: mutationIsLoading, isSuccess: mutationIsSuccess } = useEditShifts();
+	const editshiftmutation = useEditShifts();
 	const navigate = useNavigate();
 
 	const assignPatientToShift = (formdata) => {
+		formdata.celular = Number(formdata.celular);
 		let datos = {};
 		for (var key in formdata) {
 			if (formdata[key] != '' && key != 'patient') {
@@ -54,7 +55,9 @@ export const Component = () => {
 						pacienteId: patientdata.data.id,
 						...datos,
 					};
-					mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
+					editshiftmutation.mutate(datos, {
+						onSuccess: () => setTimeout(() => navigate(-1), 1_000),
+					});
 				},
 			});
 		} else {
@@ -64,7 +67,7 @@ export const Component = () => {
 				pacienteId: formdata.patient.id,
 				...datos,
 			};
-			mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
+			editshiftmutation.mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 1_000) });
 		}
 	};
 
@@ -84,7 +87,7 @@ export const Component = () => {
 					component="p"
 					sx={{ mb: 3, mt: 1 }}
 				>
-					{dayjs(shift.date).format('MMMM DD | HH:mm')}
+					{dayjs(shift.date).add(3, 'hour').format('MMMM DD | HH:mm')}
 				</Typography>
 				<Typography variant="h6" component="h2" sx={{ mb: 3 }}>
 					Datos requeridos
@@ -162,9 +165,9 @@ export const Component = () => {
 							label="Obra Social"
 							rules={{ required: false }}
 						/>
-						<Button type="submit" variant="contained" disabled={mutationIsLoading}>
+						<Button type="submit" variant="contained" disabled={editshiftmutation.isLoading}>
 							Asignar turno
-							{mutationIsLoading && (
+							{editshiftmutation.isLoading && (
 								<CircularProgress
 									size={24}
 									sx={{
@@ -189,7 +192,19 @@ export const Component = () => {
 				{patientstatus === 'success' && (
 					<Alert severity="success">Paciente creado con éxito.</Alert>
 				)}
-				<Collapse in={mutationIsSuccess}>
+
+				{editshiftmutation.isError ? (
+					<Alert severity="error">
+						Error al crear Turno{' '}
+						{
+							//@ts-ignore
+							editshiftmutation.error?.response?.data?.message
+						}
+					</Alert>
+				) : (
+					<div />
+				)}
+				<Collapse in={editshiftmutation.isSuccess}>
 					<Alert severity="success" sx={{ mt: 2 }}>
 						Turno asignado con éxito!
 					</Alert>

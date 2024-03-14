@@ -5,6 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import { Fragment } from 'react';
+import { ColoriconPresentism } from '@/components/Coloricon/Coloriconpresentism';
 import { SkeletonRows } from './skeleton-rows';
 import { BodyRow } from './table/body-row';
 import { ContactCell } from './table/contact-cell';
@@ -46,7 +47,18 @@ export const MultiProfessionalShiftsTable = ({ shiftsToRender, handleShiftOption
 													<TableCell>
 														{shift.paciente.perfil.nombre} {shift.paciente.perfil.apellido}
 													</TableCell>
-													<TableCell>{shift.presentismo}</TableCell>
+													<TableCell>
+														<div
+															style={{
+																display: 'flex',
+																flexDirection: 'row',
+																alignItems: 'center',
+															}}
+														>
+															{<ColoriconPresentism presentism={shift.presentismo} />}
+															{shift.presentismo}
+														</div>
+													</TableCell>
 													<TableCell>{shift.obraSocial}</TableCell>
 													<TableCell>{shift.observacion}</TableCell>
 													<ContactCell phoneNumber={shift.paciente.perfil.celular} />

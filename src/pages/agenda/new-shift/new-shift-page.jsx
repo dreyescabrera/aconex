@@ -37,7 +37,11 @@ export const Component = () => {
 	const navigate = useNavigate();
 
 	const assignPatientToShift = (formdata) => {
-		formdata.celular = Number(formdata.celular);
+		if (formdata.celular) {
+			formdata.celular = Number(formdata.celular);
+		} else {
+			formdata.celular = 0;
+		}
 		let datos = {};
 		for (var key in formdata) {
 			if (formdata[key] != '' && key != 'patient') {
@@ -48,7 +52,7 @@ export const Component = () => {
 		if (formdata.patient.inputValue) {
 			let pacienteobj = { nombre: formdata.patient.inputValue, apellido: ' ' };
 			createpatient(pacienteobj, {
-				onSuccess: async (patientdata) => {
+				onSuccess: (patientdata) => {
 					datos = {
 						shiftId: shift.id,
 						profesionalId: shift.profesionalId,
@@ -156,6 +160,7 @@ export const Component = () => {
 						<TextInput
 							name="celular"
 							variant="standard"
+							type="number"
 							label="telefono/celular"
 							rules={{ required: false }}
 						/>

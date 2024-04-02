@@ -46,6 +46,11 @@ export const Component = () => {
 
 		if (formdata.patient.inputValue) {
 			let pacienteobj = { nombre: formdata.patient.inputValue, apellido: ' ' };
+
+			if (datos?.celular) {
+				pacienteobj = { ...pacienteobj, celular: datos.celular };
+			}
+
 			createpatient(pacienteobj, {
 				onSuccess: async (patientdata) => {
 					datos = {

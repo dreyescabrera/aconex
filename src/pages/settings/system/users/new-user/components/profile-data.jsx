@@ -10,9 +10,21 @@ export const ProfileData = () => {
 	const { view, updateView, updateNewUser } = useNewUser();
 
 	const handleSubmit = (profile) => {
-		const dateOfBirth = profile.nacimiento.format('MM/DD/YYYY');
+		let finalprofile = {};
+		let temporalkeys = null;
+		temporalkeys = Object.keys(profile);
+		for (var llave in temporalkeys) {
+			if (profile[temporalkeys[llave]] != '' && profile[temporalkeys[llave]] != null) {
+				if (temporalkeys[llave] === 'nacimiento') {
+					let dateOfBirth = profile.nacimiento.format('MM/DD/YYYY');
+					finalprofile = { ...finalprofile, nacimiento: dateOfBirth };
+				} else {
+					finalprofile = { ...finalprofile, [temporalkeys[llave]]: profile[temporalkeys[llave]] };
+				}
+			}
+		}
 		updateView('USER_DATA');
-		updateNewUser({ ...profile, nacimiento: dateOfBirth });
+		updateNewUser(finalprofile);
 	};
 
 	return (
@@ -40,7 +52,7 @@ export const ProfileData = () => {
 						>
 							<Stack gap={4}>
 								<TextInput fullWidth name="nombre" label="Nombre" />
-								<TextInput fullWidth name="apellido" label="Apellido" rules={{ required: false }} />
+								<TextInput fullWidth name="apellido" label="Apellido" />
 								<TextInput
 									fullWidth
 									name="cedula"
@@ -60,6 +72,7 @@ export const ProfileData = () => {
 									label="Nacimiento"
 									disableFuture
 									slotProps={{ textField: { variant: 'standard' } }}
+									rules={{ required: false }}
 								/>
 								<Button variant="contained" type="submit">
 									Siguiente

@@ -47,7 +47,7 @@ export const NewPatient = ({ open, onClose }) => {
 			>
 				<Stack spacing={3} sx={{ mb: 3 }}>
 					<TextInput name="nombre" label="Nombre" />
-					<TextInput name="apellido" label="Apellido" rules={{ required: false }} />
+					<TextInput name="apellido" label="Apellido" />
 					<TextInput name="cedula" label="Número de DNI o Pasaporte" rules={{ required: false }} />
 					<TextInput name="celular" label="Celular" rules={{ required: false }} />
 					<TextInput name="direccion" label="Dirección" rules={{ required: false }} />

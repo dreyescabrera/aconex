@@ -1,5 +1,4 @@
-import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
-import CoPresentIcon from '@mui/icons-material/CoPresent';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import Container from '@mui/material/Container';
 import List from '@mui/material/List';
@@ -14,6 +13,7 @@ import { BottomDrawer } from '@/components/drawers';
 import { useAgendaContext } from '../../context/agenda.context';
 import { useEditShifts } from '../../hooks/use-edit-shifts';
 import { EraseShiftInfo, PatientInfo, ShiftDetails } from '../dialogs';
+import { Presentismoselect } from '../dialogs/presentismo-select';
 
 /**
  * @param {object} props
@@ -27,19 +27,64 @@ export const ShiftOptions = ({ open, onClose }) => {
 	const [dialog, setDialog] = useState(null);
 	const [present, setPresent] = useState('');
 
+	/*como el presentismo no se actualiza con los cambios en el contexto, 
+se uso un usestate que se activa solamente cuando ocurre un cambio 
+hasta que se cierra el componente (present y setpresent) */
+
 	if (!open && present != '') {
 		setPresent('');
 	}
 
-	const handleChangepresentismo = (presentismostatus) => {
-		editarturnomutation.mutate(
-			{
-				shiftId: shiftInView.id,
-				profesionalId: shiftInView.profesionalId,
-				presentismo: presentismostatus,
-			},
-			{ onSuccess: () => setPresent(presentismostatus) }
-		);
+	const Coloricon = ({ isshiftinview }) => {
+		if (isshiftinview) {
+			if (shiftInView && shiftInView != null) {
+				if (
+					shiftInView?.presentismo === null ||
+					shiftInView?.presentismo === '' ||
+					shiftInView?.presentismo === ' '
+				) {
+					return <FiberManualRecordIcon sx={{ color: 'transparent' }} />;
+				} else {
+					switch (shiftInView?.presentismo) {
+						case 'Presente':
+							return <FiberManualRecordIcon sx={{ color: '#63db8b' }} />;
+						case 'Atendido':
+							return <FiberManualRecordIcon sx={{ color: '#6ad3ee' }} />;
+						case 'Ausento con aviso':
+							return <FiberManualRecordIcon sx={{ color: '#d9e25d' }} />;
+						case 'Ausento sin aviso':
+							return <FiberManualRecordIcon sx={{ color: '#ee1919' }} />;
+						case 'Confirmado':
+							return <FiberManualRecordIcon sx={{ color: '#0f8519' }} />;
+						case 'Cancelado':
+							return <FiberManualRecordIcon sx={{ color: '#000000' }} />;
+						default:
+							return <FiberManualRecordIcon sx={{ color: 'transparent' }} />;
+					}
+				}
+			}
+		} else {
+			switch (present) {
+				case 'Presente':
+					return <FiberManualRecordIcon sx={{ color: '#63db8b' }} />;
+				case 'Atendido':
+					return <FiberManualRecordIcon sx={{ color: '#6ad3ee' }} />;
+				case 'Ausento con aviso':
+					return <FiberManualRecordIcon sx={{ color: '#d9e25d' }} />;
+				case 'Ausento sin aviso':
+					return <FiberManualRecordIcon sx={{ color: '#ee1919' }} />;
+				case 'Confirmado':
+					return <FiberManualRecordIcon sx={{ color: '#0f8519' }} />;
+				case 'Cancelado':
+					return <FiberManualRecordIcon sx={{ color: '#000000' }} />;
+				default:
+					return <FiberManualRecordIcon sx={{ color: 'transparent' }} />;
+			}
+		}
+	};
+
+	const handleChangepresentismo = () => {
+		setDialog('changePresentismo');
 	};
 
 	const onCloseDialog = () => {
@@ -101,52 +146,36 @@ export const ShiftOptions = ({ open, onClose }) => {
 					{present === '' ? (
 						shiftInView === undefined || shiftInView === null ? (
 							<div />
-						) : shiftInView?.presentismo === null || shiftInView?.presentismo != 'Presente' ? (
-							<ListItem disablePadding>
-								<ListItemButton onClick={() => handleChangepresentismo('Presente')}>
-									{shiftInView?.presentismo === null ? (
-										<ListItemText primary="Presentismo: sin datos" secondary="Cambiar a Presente" />
-									) : (
-										<ListItemText
-											primary={`Presentismo: ${shiftInView.presentismo}`}
-											secondary="Cambiar a Presente"
-										/>
-									)}
-									<ListItemIcon>
-										<CoPresentIcon />
-									</ListItemIcon>
-								</ListItemButton>
-							</ListItem>
 						) : (
 							<ListItem disablePadding>
-								<ListItemButton onClick={() => handleChangepresentismo('Ausente')}>
-									<ListItemText
-										primary={`Presentismo: ${shiftInView.presentismo}`}
-										secondary="Cambiar a Ausente"
-									/>
-									<ListItemIcon>
-										<CancelPresentationIcon />
-									</ListItemIcon>
+								<ListItemButton onClick={() => handleChangepresentismo()}>
+									{shiftInView?.presentismo === null ||
+									shiftInView?.presentismo === '' ||
+									shiftInView?.presentismo === ' ' ? (
+										<ListItemText
+											primary="Presentismo: sin datos"
+											secondary="Cambiar presentismo"
+										/>
+									) : (
+										<ListItemText
+											primary={`Presentismo: ${shiftInView?.presentismo}`}
+											secondary="Cambiar presentismo"
+										/>
+									)}
 								</ListItemButton>
+								<ListItemIcon>
+									<Coloricon isshiftinview={true} />
+								</ListItemIcon>
 							</ListItem>
 						)
-					) : present === 'Ausente' ? (
-						<ListItem disablePadding>
-							<ListItemButton onClick={() => handleChangepresentismo('Presente')}>
-								<ListItemText primary={`Presentismo: ${present}`} secondary="Cambiar a Presente" />
-								<ListItemIcon>
-									<CancelPresentationIcon />
-								</ListItemIcon>
-							</ListItemButton>
-						</ListItem>
 					) : (
 						<ListItem disablePadding>
-							<ListItemButton onClick={() => handleChangepresentismo('Ausente')}>
-								<ListItemText primary={`Presentismo: ${present}`} secondary="Cambiar a Ausente" />
-								<ListItemIcon>
-									<CoPresentIcon />
-								</ListItemIcon>
+							<ListItemButton onClick={() => handleChangepresentismo()}>
+								<ListItemText primary={`Presentismo: ${present}`} secondary="Cambiar presentismo" />
 							</ListItemButton>
+							<ListItemIcon>
+								<Coloricon isshiftinview={false} />
+							</ListItemIcon>
 						</ListItem>
 					)}
 				</List>
@@ -167,6 +196,15 @@ export const ShiftOptions = ({ open, onClose }) => {
 				open={dialog === 'patientInfo'}
 				onClose={onCloseDialog}
 				patient={shiftInView?.paciente}
+			/>
+			<Presentismoselect
+				open={dialog === 'changePresentismo'}
+				onClose={onCloseDialog}
+				id={shiftInView?.id}
+				profesionalId={shiftInView?.profesionalId}
+				presentismo={shiftInView?.presentismo}
+				presentstate={present}
+				presentedit={setPresent}
 			/>
 		</BottomDrawer>
 	);

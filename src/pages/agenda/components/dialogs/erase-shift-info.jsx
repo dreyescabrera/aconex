@@ -23,7 +23,7 @@ export const EraseShiftInfo = ({ open, onClose, shift }) => {
 				turnoId: shift.id,
 				profesionalId: shift.profesionalId,
 			},
-			{ onSuccess: () => setTimeout(onClose, 4_000) }
+			{ onSuccess: () => setTimeout(onClose, 1_000) }
 		);
 	};
 

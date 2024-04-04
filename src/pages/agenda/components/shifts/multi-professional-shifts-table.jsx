@@ -49,7 +49,11 @@ export const MultiProfessionalShiftsTable = ({ shiftsToRender, handleShiftOption
 													<TableCell>{shift.presentismo}</TableCell>
 													<TableCell>{shift.obraSocial}</TableCell>
 													<TableCell>{shift.observacion}</TableCell>
-													<ContactCell phoneNumber={shift.paciente.perfil.celular} />
+													<ContactCell
+														phoneNumber={shift.paciente.perfil.celular}
+														name={shift.paciente.perfil.nombre}
+														date={shift.date}
+													/>
 													<OptionsCell onClick={handleShiftOptions(shift, 'shiftOptions')} />
 												</BodyRow>
 											)}

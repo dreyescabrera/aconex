@@ -43,7 +43,7 @@ export const EnableShift = ({ open, onClose, shift }) => {
 				<Button variant="outlined" onClick={onClose} disabled={isLoading}>
 					No, cerrar
 				</Button>
-				<Button variant="contained" onClick={enableShift} disabled={isLoading || isSuccess}>
+				<Button variant="contained" onClick={enableShift} disabled={isLoading}>
 					Sí, continuar
 					{isLoading && (
 						<CircularProgress

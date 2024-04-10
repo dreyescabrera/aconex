@@ -7,6 +7,7 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Autocomplete, DatePicker, Form, TextInput, TimePicker } from '@/components/form';
@@ -42,6 +43,7 @@ export const Component = () => {
 	const { data: professionals } = useProfessionals();
 	const { mutate, isSuccess, error } = useNewShift();
 	const navigate = useNavigate();
+	const [cellphone, setCellphone] = useState(0);
 
 	const unavailableMinutes = allDayShifts?.reduce((array, currentShift) => {
 		const date = dayjs.utc(currentShift.date);
@@ -51,10 +53,20 @@ export const Component = () => {
 		return array;
 	}, []);
 
+	const handleCellphonechange = (data) => {
+		setCellphone(data.target.value);
+	};
+
 	const handleSubmit = (formdata) => {
 		const hour = dayjs(formdata.hour);
 		const minute = dayjs(formdata.minute);
 		const date = dayjs.utc(formdata.date).set('hour', hour.hour()).set('minute', minute.minute());
+
+		if (formdata.celular) {
+			formdata.celular = Number(formdata.celular);
+		} else {
+			formdata.celular = 0;
+		}
 
 		let datos = {};
 		for (var key in formdata) {
@@ -68,6 +80,11 @@ export const Component = () => {
 
 		if (formdata.patient.inputValue) {
 			let pacienteobj = { nombre: formdata.patient.inputValue, apellido: ' ' };
+
+			if (datos?.celular) {
+				pacienteobj = { ...pacienteobj, celular: datos.celular };
+			}
+
 			createpatient(pacienteobj, {
 				onSuccess: async (patientdata) => {
 					datos = {
@@ -163,14 +180,22 @@ export const Component = () => {
 							}}
 							getOptionLabel={(opt) => {
 								if (typeof opt === 'string') {
+									setCellphone(0);
 									return opt;
 								}
 								if (opt.inputValue) {
+									setCellphone(0);
 									return opt.inputValue;
 								}
 								if (opt.perfil?.nombre != undefined) {
+									if (opt.perfil?.celular != undefined && opt.perfil?.celular != null) {
+										setCellphone(opt.perfil.celular);
+									} else {
+										setCellphone(0);
+									}
 									return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
 								}
+								setCellphone(0);
 								return opt.title;
 							}}
 							inputProps={{
@@ -206,6 +231,15 @@ export const Component = () => {
 							name="observacion"
 							variant="standard"
 							label="Observación"
+							rules={{ required: false }}
+						/>
+						<TextInput
+							name="celular"
+							value={cellphone}
+							onChange={handleCellphonechange}
+							variant="standard"
+							type="number"
+							label="telefono/celular"
 							rules={{ required: false }}
 						/>
 						<TextInput

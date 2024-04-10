@@ -8,6 +8,7 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Autocomplete, Form, TextInput } from '@/components/form';
@@ -35,6 +36,11 @@ export const Component = () => {
 	} = useLocation();
 	const editshiftmutation = useEditShifts();
 	const navigate = useNavigate();
+	const [cellphone, setCellphone] = useState(0);
+
+	const handleCellphonechange = (data) => {
+		setCellphone(data.target.value);
+	};
 
 	const assignPatientToShift = (formdata) => {
 		if (formdata.celular) {
@@ -124,14 +130,22 @@ export const Component = () => {
 							}}
 							getOptionLabel={(opt) => {
 								if (typeof opt === 'string') {
+									setCellphone(0);
 									return opt;
 								}
 								if (opt.inputValue) {
+									setCellphone(0);
 									return opt.inputValue;
 								}
 								if (opt.perfil?.nombre != undefined) {
+									if (opt.perfil?.celular != undefined && opt.perfil?.celular != null) {
+										setCellphone(opt.perfil.celular);
+									} else {
+										setCellphone(0);
+									}
 									return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
 								}
+								setCellphone(0);
 								return opt.title;
 							}}
 							inputProps={{
@@ -164,6 +178,8 @@ export const Component = () => {
 						/>
 						<TextInput
 							name="celular"
+							value={cellphone}
+							onChange={handleCellphonechange}
 							variant="standard"
 							type="number"
 							label="telefono/celular"

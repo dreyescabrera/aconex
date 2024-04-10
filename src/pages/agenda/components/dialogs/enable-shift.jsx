@@ -16,22 +16,22 @@ import { useEditShifts } from '../../hooks/use-edit-shifts';
  * @param {() => void} props.onClose
  * @param {any} props.shift
  */
-export const DisableShift = ({ open, onClose, shift }) => {
+export const EnableShift = ({ open, onClose, shift }) => {
 	const { mutate, isLoading, isSuccess, isError } = useEditShifts();
 
-	const disableShift = () => {
+	const enableShift = () => {
 		mutate(
-			{ shiftId: shift?.id, profesionalId: shift?.profesionalId, habilitado: false },
+			{ shiftId: shift?.id, profesionalId: shift?.profesionalId, habilitado: true },
 			{ onSuccess: () => setTimeout(onClose, 2_000) }
 		);
 	};
 
 	return (
 		<Dialog open={open} onClose={onClose} sx={{ transition: 'height' }}>
-			<DialogTitle>Deshabilitar turno</DialogTitle>
+			<DialogTitle>Habilitar turno</DialogTitle>
 			<DialogContent>
 				<DialogContentText>
-					Si confirmas, deshabilitarás el turno seleccionado. Quieres continuar?
+					Si confirmas, se volvera a habilitar el turno. Quieres continuar?
 				</DialogContentText>
 				<DialogContentText
 					sx={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 20, mt: 1 }}
@@ -43,7 +43,7 @@ export const DisableShift = ({ open, onClose, shift }) => {
 				<Button variant="outlined" onClick={onClose} disabled={isLoading}>
 					No, cerrar
 				</Button>
-				<Button variant="contained" onClick={disableShift} disabled={isLoading || isSuccess}>
+				<Button variant="contained" onClick={enableShift} disabled={isLoading || isSuccess}>
 					Sí, continuar
 					{isLoading && (
 						<CircularProgress

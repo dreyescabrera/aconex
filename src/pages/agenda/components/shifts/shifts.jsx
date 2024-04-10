@@ -2,6 +2,7 @@ import { groupBy } from '@/utils/groupBy';
 import { useProfessionals } from '@/hooks/use-professionals';
 import { useAgendaContext } from '../../context/agenda.context';
 import { useShifts } from '../../hooks/use-shifts';
+import { EnableShift } from '../dialogs/enable-shift';
 import { EmptyShiftOptions } from './empty-shift-options';
 import { MultiProfessionalShiftsTable } from './multi-professional-shifts-table';
 import { ShiftOptions } from './shift-options';
@@ -9,6 +10,7 @@ import { SingleProfessionalShiftsTable } from './single-professional-shifts-tabl
 
 export const Shifts = () => {
 	const { filters, drawerToOpen, closeDrawer, handleShiftOptions } = useAgendaContext();
+	const { shiftInView } = useAgendaContext();
 
 	const { data: shifts } = useShifts(Object.fromEntries(filters.entries()));
 	const { data: professionals } = useProfessionals();
@@ -43,6 +45,11 @@ export const Shifts = () => {
 			)}
 			<ShiftOptions open={drawerToOpen === 'shiftOptions'} onClose={closeDrawer} />
 			<EmptyShiftOptions open={drawerToOpen === 'emptyShiftOptions'} onClose={closeDrawer} />
+			<EnableShift
+				open={drawerToOpen === 'disabledshift'}
+				onClose={closeDrawer}
+				shift={shiftInView}
+			/>
 		</>
 	);
 };

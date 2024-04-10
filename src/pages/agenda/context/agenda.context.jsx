@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 /**
- * @typedef {'mobileFilter' | 'shiftOptions' | 'emptyShiftOptions' | null} DrawerToOpen
+ * @typedef {'mobileFilter' | 'shiftOptions' | 'emptyShiftOptions' | 'disabledshift' | null} DrawerToOpen
  */
 
 /**

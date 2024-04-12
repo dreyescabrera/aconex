@@ -63,7 +63,6 @@ export const SingleProfessionalShiftsTable = ({ shiftsToRender, handleShiftOptio
 									{!shift.pacienteId && !shift.habilitado && (
 										<TableRow
 											sx={{
-												pointerEvents: shift.habilitado ? 'auto' : 'none',
 												background: '#FCC2',
 											}}
 										>
@@ -71,7 +70,7 @@ export const SingleProfessionalShiftsTable = ({ shiftsToRender, handleShiftOptio
 											<TableCell sx={{ fontStyle: 'italic' }} colSpan={5}>
 												Deshabilitado
 											</TableCell>
-											<OptionsCell disabled />
+											<OptionsCell onClick={handleShiftOptions(shift, 'disabledshift')} />
 										</TableRow>
 									)}
 

@@ -7,7 +7,7 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Autocomplete, DatePicker, Form, TextInput, TimePicker } from '@/components/form';
@@ -44,6 +44,7 @@ export const Component = () => {
 	const { mutate, isSuccess, error } = useNewShift();
 	const navigate = useNavigate();
 	const [cellphone, setCellphone] = useState(0);
+	let flagobject = useRef(null); //flagobject
 
 	const unavailableMinutes = allDayShifts?.reduce((array, currentShift) => {
 		const date = dayjs.utc(currentShift.date);
@@ -55,6 +56,46 @@ export const Component = () => {
 
 	const handleCellphonechange = (data) => {
 		setCellphone(data.target.value);
+	};
+
+	const Isthesameobject = (data) => {
+		if (flagobject.current === null) {
+			return false;
+		}
+
+		if (typeof data != typeof flagobject.current) {
+			return false;
+		}
+
+		if (typeof data === 'string') {
+			if (data != flagobject.current) {
+				return false;
+			}
+			return true;
+		}
+
+		if (data.inputValue && flagobject.current.inputValue) {
+			if (data.inputValue != flagobject.current.inputValue) {
+				return false;
+			}
+			return true;
+		}
+
+		if (data.id && flagobject.current.id) {
+			if (data.id != flagobject.current.id) {
+				return false;
+			}
+			return true;
+		}
+
+		if (data.title && flagobject.current.title) {
+			if (data.title != flagobject.current.title) {
+				return false;
+			}
+			return true;
+		}
+
+		return false;
 	};
 
 	const handleSubmit = (formdata) => {
@@ -72,6 +113,7 @@ export const Component = () => {
 		for (var key in formdata) {
 			if (
 				formdata[key] != '' &&
+				formdata[key] != 0 &&
 				(key === 'observacion' || key === 'presentismo' || key === 'obraSocial')
 			) {
 				datos = { [key]: formdata[key], ...datos };
@@ -179,23 +221,39 @@ export const Component = () => {
 								return filtered;
 							}}
 							getOptionLabel={(opt) => {
+								let boolflag = Isthesameobject(opt);
 								if (typeof opt === 'string') {
-									setCellphone(0);
+									if (!boolflag) {
+										flagobject.current = opt;
+										setCellphone(0);
+									}
 									return opt;
 								}
 								if (opt.inputValue) {
-									setCellphone(0);
+									if (!boolflag) {
+										flagobject.current = opt;
+										setCellphone(0);
+									}
 									return opt.inputValue;
 								}
 								if (opt.perfil?.nombre != undefined) {
 									if (opt.perfil?.celular != undefined && opt.perfil?.celular != null) {
-										setCellphone(opt.perfil.celular);
+										if (!boolflag) {
+											flagobject.current = opt;
+											setCellphone(opt.perfil.celular);
+										}
 									} else {
-										setCellphone(0);
+										if (!boolflag) {
+											flagobject.current = opt;
+											setCellphone(0);
+										}
 									}
 									return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
 								}
-								setCellphone(0);
+								if (!boolflag) {
+									flagobject.current = opt;
+									setCellphone(0);
+								}
 								return opt.title;
 							}}
 							inputProps={{

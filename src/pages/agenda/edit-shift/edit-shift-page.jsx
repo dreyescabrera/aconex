@@ -20,17 +20,31 @@ export const Component = () => {
 	const navigate = useNavigate();
 
 	const handleMutate = (newFields) => {
-		mutate(
-			{
-				shiftId: shift.id,
-				pacienteId: newFields.paciente.id,
-				profesionalId: shift.profesionalId,
-				obraSocial: newFields.obraSocial,
-				observacion: newFields.observacion,
-				presentismo: newFields.presentismo,
-			},
-			{ onSuccess: () => setTimeout(() => navigate(-1), 4_000) }
-		);
+		let data = {
+			shiftId: shift.id,
+			pacienteId: newFields.paciente.id,
+			profesionalId: shift.profesionalId,
+		};
+
+		for (var key in newFields) {
+			if (
+				key === 'obraSocial' ||
+				key === 'observacion' ||
+				key === 'presentismo' ||
+				key === 'celular'
+			) {
+				if (newFields[key] != null && newFields[key] != '' && newFields[key] != ' ') {
+					if (key === 'celular') {
+						let numerito = Number(newFields[key]);
+						data = { [key]: numerito, ...data };
+					} else {
+						data = { [key]: newFields[key], ...data };
+					}
+				}
+			}
+		}
+
+		mutate(data, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
 	};
 
 	return (
@@ -57,6 +71,7 @@ export const Component = () => {
 						observacion: shift.observacion,
 						presentismo: shift.presentismo,
 						obraSocial: shift.obraSocial,
+						celular: shift.paciente.perfil.celular,
 					}}
 					onSubmit={handleMutate}
 				>
@@ -80,6 +95,12 @@ export const Component = () => {
 							name="presentismo"
 							variant="standard"
 							label="Presentismo"
+							rules={{ required: false }}
+						/>
+						<TextInput
+							name="celular"
+							variant="standard"
+							label="tel/celular"
 							rules={{ required: false }}
 						/>
 						<TextInput

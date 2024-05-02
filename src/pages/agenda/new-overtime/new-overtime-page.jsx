@@ -59,6 +59,10 @@ export const Component = () => {
 	};
 
 	const Isthesameobject = (data) => {
+		//due to an autocomplete malfunction where the input overwrites
+		// default data on every Render on the input hook
+		//ive created this piece of code that veryfies if the object
+		//changed so the input can be modifiable
 		if (flagobject.current === null) {
 			return false;
 		}
@@ -113,10 +117,14 @@ export const Component = () => {
 		for (var key in formdata) {
 			if (
 				formdata[key] != '' &&
-				formdata[key] != 0 &&
 				(key === 'observacion' || key === 'presentismo' || key === 'obraSocial')
 			) {
 				datos = { [key]: formdata[key], ...datos };
+			}
+		}
+		if (cellphone != null) {
+			if (cellphone.toString() != '' && cellphone != 0) {
+				datos = { celular: cellphone, ...datos };
 			}
 		}
 

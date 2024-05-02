@@ -84,15 +84,22 @@ export const Component = () => {
 	};
 
 	const assignPatientToShift = (formdata) => {
-		if (formdata.celular) {
-			formdata.celular = Number(formdata.celular);
-		} else {
-			formdata.celular = 0;
-		}
 		let datos = {};
 		for (var key in formdata) {
-			if (formdata[key] != '' && key != 'patient' && formdata[key] != 0) {
+			if (
+				formdata[key] != '' &&
+				key != 'patient' &&
+				key != 'celular' &&
+				formdata[key] != undefined &&
+				formdata[key] != null
+			) {
 				datos = { [key]: formdata[key], ...datos };
+			}
+		}
+
+		if (cellphone != null) {
+			if (cellphone.toString() != '' && cellphone != 0) {
+				datos = { celular: cellphone, ...datos };
 			}
 		}
 

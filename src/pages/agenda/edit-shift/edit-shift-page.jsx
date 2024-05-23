@@ -5,6 +5,7 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Autocomplete, Form, TextInput } from '@/components/form';
@@ -18,6 +19,56 @@ export const Component = () => {
 		state: { shift },
 	} = useLocation();
 	const navigate = useNavigate();
+	const [cellphone, setCellphone] = useState(0);
+	let flagobject = useRef(null); //flagobject
+
+	const handleCellphonechange = (data) => {
+		setCellphone(data.target.value);
+	};
+
+	const Isthesameobject = (data) => {
+		//due to an autocomplete malfunction where the input overwrites
+		// default data on every Render on the input hook
+		//ive created this piece of code that veryfies if the object
+		//changed so the input can be modifiable
+		if (flagobject.current === null) {
+			return false;
+		}
+
+		if (typeof data != typeof flagobject.current) {
+			return false;
+		}
+
+		if (typeof data === 'string') {
+			if (data != flagobject.current) {
+				return false;
+			}
+			return true;
+		}
+
+		if (data.inputValue && flagobject.current.inputValue) {
+			if (data.inputValue != flagobject.current.inputValue) {
+				return false;
+			}
+			return true;
+		}
+
+		if (data.id && flagobject.current.id) {
+			if (data.id != flagobject.current.id) {
+				return false;
+			}
+			return true;
+		}
+
+		if (data.title && flagobject.current.title) {
+			if (data.title != flagobject.current.title) {
+				return false;
+			}
+			return true;
+		}
+
+		return false;
+	};
 
 	const handleMutate = (newFields) => {
 		let data = {
@@ -27,24 +78,24 @@ export const Component = () => {
 		};
 
 		for (var key in newFields) {
-			if (
-				key === 'obraSocial' ||
-				key === 'observacion' ||
-				key === 'presentismo' ||
-				key === 'celular'
-			) {
+			if (key === 'obraSocial' || key === 'observacion' || key === 'presentismo') {
 				if (newFields[key] != null && newFields[key] != '' && newFields[key] != ' ') {
-					if (key === 'celular') {
-						let numerito = Number(newFields[key]);
-						data = { [key]: numerito, ...data };
-					} else {
-						data = { [key]: newFields[key], ...data };
-					}
+					data = { [key]: newFields[key], ...data };
 				}
 			}
 		}
 
-		mutate(data, { onSuccess: () => setTimeout(() => navigate(-1), 4_000) });
+		if (cellphone != null) {
+			if (cellphone.toString() != '' && cellphone != 0) {
+				let cell = cellphone;
+				if (typeof cellphone === 'string') {
+					cell = Number(cellphone);
+				}
+				data = { celular: cell, ...data };
+			}
+		}
+
+		mutate(data, { onSuccess: () => setTimeout(() => navigate(-1), 1_500) });
 	};
 
 	return (
@@ -80,9 +131,42 @@ export const Component = () => {
 							name="paciente"
 							inputProps={{ variant: 'standard', label: 'Paciente' }}
 							options={patients ?? []}
-							getOptionLabel={(opt) =>
-								`${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`
-							}
+							getOptionLabel={(opt) => {
+								let boolflag = Isthesameobject(opt);
+								if (typeof opt === 'string') {
+									if (!boolflag) {
+										flagobject.current = opt;
+										setCellphone(0);
+									}
+									return opt;
+								}
+								if (opt.inputValue) {
+									if (!boolflag) {
+										flagobject.current = opt;
+										setCellphone(0);
+									}
+									return opt.inputValue;
+								}
+								if (opt.perfil?.nombre != undefined) {
+									if (opt.perfil?.celular != undefined && opt.perfil?.celular != null) {
+										if (!boolflag) {
+											flagobject.current = opt;
+											setCellphone(opt.perfil.celular);
+										}
+									} else {
+										if (!boolflag) {
+											flagobject.current = opt;
+											setCellphone(0);
+										}
+									}
+									return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
+								}
+								if (!boolflag) {
+									flagobject.current = opt;
+									setCellphone(0);
+								}
+								return opt.title;
+							}}
 							isOptionEqualToValue={(option, value) => option.id === value.id}
 						/>
 						<TextInput
@@ -99,8 +183,11 @@ export const Component = () => {
 						/>
 						<TextInput
 							name="celular"
+							value={cellphone}
+							onChange={handleCellphonechange}
 							variant="standard"
 							label="tel/celular"
+							type="number"
 							rules={{ required: false }}
 						/>
 						<TextInput

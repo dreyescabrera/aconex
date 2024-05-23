@@ -99,7 +99,11 @@ export const Component = () => {
 
 		if (cellphone != null) {
 			if (cellphone.toString() != '' && cellphone != 0) {
-				datos = { celular: cellphone, ...datos };
+				let cell = cellphone;
+				if (typeof cellphone === 'string') {
+					cell = Number(cellphone);
+				}
+				datos = { celular: cell, ...datos };
 			}
 		}
 

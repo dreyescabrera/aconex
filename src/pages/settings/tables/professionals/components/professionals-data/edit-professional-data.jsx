@@ -6,12 +6,13 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 import { RightDrawer } from '@/components/drawers';
 import { DatePicker, Form, TextInput } from '@/components/form';
 import { api } from '@/services/api';
 import { useProfessionalsContext } from '../../context/professionals.context';
 
-const Mnjeditprof = ({ status }) => {
+const Mnjeditprof = ({ status, currentStatus }) => {
 	if (status.isLoading) {
 		return (
 			<Stack direction="row" alignItems="center" spacing={1}>
@@ -19,7 +20,7 @@ const Mnjeditprof = ({ status }) => {
 			</Stack>
 		);
 	}
-	if (status.isSuccess) {
+	if (currentStatus === 'success') {
 		return <Alert severity="success">Profesional editado con exito!</Alert>;
 	}
 	if (status.isError) {
@@ -51,12 +52,29 @@ const cuttimezone = (vigencia) => {
  * @param {boolean} props.open
  * @param {() => void} props.onClose
  */
+
 export const EditProfessionalData = ({ open, onClose }) => {
+	const [currentStatus, setCurrentStatus] = useState('idle');
+
+	useEffect(() => {
+		if (currentStatus === 'success') {
+			const timer = setTimeout(() => {
+				setCurrentStatus('idle');
+				onClose();
+			}, 2000);
+			return () => clearInterval(timer);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentStatus]);
+
 	const { professionalInView } = useProfessionalsContext();
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: editprofiledata,
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['professionals'] }),
+		onSuccess: () => {
+			setCurrentStatus('success');
+			queryClient.invalidateQueries({ queryKey: ['professionals'] });
+		},
 	});
 
 	const handleSubmit = (ev) => {
@@ -119,7 +137,7 @@ export const EditProfessionalData = ({ open, onClose }) => {
 				</Stack>
 			</Form>
 			<Container sx={{ mt: 2, mb: 1 }}>
-				<Mnjeditprof status={mutation} />
+				<Mnjeditprof status={mutation} currentStatus={currentStatus} />
 			</Container>
 		</RightDrawer>
 	);

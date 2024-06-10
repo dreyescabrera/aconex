@@ -32,7 +32,7 @@ async function createProfessional(clinicaId, professional) {
 	return res;
 }
 
-export const useCreateProfessional = () => {
+export const useCreateProfessional = (setCurrentStatus) => {
 	const queryClient = useQueryClient();
 	const { id } = useStore((state) => state.clinic);
 
@@ -45,6 +45,9 @@ export const useCreateProfessional = () => {
 
 	return useMutation({
 		mutationFn,
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['professionals'] }),
+		onSuccess: () => {
+			setCurrentStatus('success');
+			queryClient.invalidateQueries({ queryKey: ['professionals'] });
+		},
 	});
 };

@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useEffect, useState } from 'react';
 import { RightDrawer } from '@/components/drawers';
 import { DatePicker, Form, TextInput } from '@/components/form';
 import { useCreateProfessional } from '../../hooks/use-create-professional';
@@ -13,7 +14,8 @@ import { useCreateProfessional } from '../../hooks/use-create-professional';
  * @param {() => void} props.onClose
  */
 export const NewProfessionalData = ({ open, onClose }) => {
-	const { mutate, status } = useCreateProfessional();
+	const [currentStatus, setCurrentStatus] = useState('idle');
+	const { mutate, status } = useCreateProfessional(setCurrentStatus);
 
 	const handleSubmit = (formData) => {
 		let datos = {};
@@ -37,7 +39,17 @@ export const NewProfessionalData = ({ open, onClose }) => {
 
 		mutate(datos);
 	};
-
+	useEffect(() => {
+		if (status === 'success') {
+			const timer = setTimeout(() => {
+				setCurrentStatus('idle');
+				onClose();
+			}, 2000);
+			return () => clearInterval(timer);
+		}
+		return;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [status]);
 	return (
 		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
@@ -84,13 +96,13 @@ export const NewProfessionalData = ({ open, onClose }) => {
 				</Stack>
 			)}
 
-			{status === 'error' && (
+			{currentStatus === 'error' && (
 				<Alert severity="error">
 					Hubo un problema creando el profesional. Por favor, intente de nuevo.
 				</Alert>
 			)}
 
-			{status === 'success' && (
+			{currentStatus === 'success' && (
 				<Alert severity="success">El profesional fue creado exitosamente.</Alert>
 			)}
 		</RightDrawer>

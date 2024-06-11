@@ -36,7 +36,7 @@ export const FilterByDate = () => {
 				Selección de fechas
 			</Typography>
 
-			<p>Selecciona el día que quires ver y el tipo de agenda.</p>
+			<p>Selecciona el día que quieres ver y el tipo de agenda.</p>
 
 			<Stack direction="row">
 				<DatePicker

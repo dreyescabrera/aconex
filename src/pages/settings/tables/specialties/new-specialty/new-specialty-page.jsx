@@ -37,7 +37,7 @@ export const Component = () => {
 	const { id } = useStore((state) => state.clinic);
 
 	const handleSubmit = (event) => {
-		//let specialty = { clinicaId: null, nombre: event.descripcion }; //el Codigo de la clinica debe obtenerse desde los datos del usuario a traves del backend Arreglar esto
+		//let specialty = { clinicaId: 1, nombre: event.descripcion }; //el Codigo de la clinica debe obtenerse desde los datos del usuario a traves del backend Arreglar esto
 		let specialty = { clinicaId: id, nombre: event.descripcion };
 		mutation.mutate(specialty);
 	};

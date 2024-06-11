@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RightDrawer } from '@/components/drawers';
 import { DatePicker, Form } from '@/components/form';
 import { api } from '@/services/api';
@@ -32,14 +32,17 @@ const Mensajeedit = ({ status }) => {
  * @param {() => void} props.onClose
  */
 export const EditAbsence = ({ open, onClose }) => {
-	const { professionalInView, absenceInView, refetch } = useProfessionalsContext();
+	const { professionalInView, absenceInView } = useProfessionalsContext();
 
 	async function updateabsence(listdata) {
-		const res = await api.patch(listdata[0], listdata[1]).then(() => refetch());
+		const res = await api.patch(listdata[0], listdata[1]);
 		return res;
 	}
-
-	const mutation = useMutation(updateabsence);
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: updateabsence,
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['professionals'] }),
+	});
 
 	const handleEdit = (ev) => {
 		const idstring = absenceInView.id.toString();

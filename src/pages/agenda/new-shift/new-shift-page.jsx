@@ -1,4 +1,5 @@
 import { useCreatePatient } from '@/pages/patients/hooks/use-create-patient';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import Alert from '@mui/material/Alert';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -15,6 +16,14 @@ import { Autocomplete, Form, TextInput } from '@/components/form';
 import { usePatients } from '@/hooks/use-patients';
 import { useEditShifts } from '../hooks/use-edit-shifts';
 
+const opcionesPresentismo = [
+	{ estado: 'Presente', color: '#63db8b' },
+	{ estado: 'Atendido', color: '#6ad3ee' },
+	{ estado: 'Ausente con aviso', color: '#d9e25d' },
+	{ estado: 'Ausente sin aviso', color: '#ee1919' },
+	{ estado: 'Confirmado', color: '#0f8519' },
+	{ estado: 'Cancelado', color: '#000000' },
+];
 const filter = createFilterOptions();
 const opciones = (opt) => {
 	if (typeof opt === 'string') {
@@ -38,11 +47,13 @@ export const Component = () => {
 	const navigate = useNavigate();
 	const [cellphone, setCellphone] = useState(0);
 	let flagobject = useRef(null); //flagobject
-
+	let selectedoptions = useRef(opcionesPresentismo[1]);
 	const handleCellphonechange = (data) => {
 		setCellphone(data.target.value);
 	};
-
+	const handleOnChange = (selected) => {
+		selectedoptions.current = selected;
+	};
 	const Isthesameobject = (data) => {
 		if (flagobject.current === null) {
 			return false;
@@ -96,14 +107,19 @@ export const Component = () => {
 				datos = { [key]: formdata[key], ...datos };
 			}
 		}
-
-		if (cellphone != null) {
+		datos.presentismo = datos.presentismo.estado;
+		if (cellphone == undefined || cellphone == null || cellphone < 0) {
+			datos.celular = null;
+		} else {
 			if (cellphone.toString() != '' && cellphone != 0) {
 				let cell = cellphone;
 				if (typeof cellphone === 'string') {
 					cell = Number(cellphone);
 				}
 				datos = { celular: cell, ...datos };
+			} else {
+				setCellphone(null);
+				datos = { celular: cellphone, ...datos };
 			}
 		}
 
@@ -160,7 +176,7 @@ export const Component = () => {
 					Datos requeridos
 				</Typography>
 				<Form
-					defaultValues={{ observacion: '', presentismo: '', patient: null }}
+					defaultValues={{ observacion: '', presentismo: opcionesPresentismo[0], patient: null }}
 					onSubmit={assignPatientToShift}
 				>
 					<Stack spacing={4}>
@@ -238,11 +254,22 @@ export const Component = () => {
 							label="Observación"
 							rules={{ required: false }}
 						/>
-						<TextInput
+						<Autocomplete
 							name="presentismo"
-							variant="standard"
-							label="Presentismo"
-							rules={{ required: false }}
+							onChange={handleOnChange}
+							options={opcionesPresentismo}
+							getOptionLabel={(opt) => `${opt.estado}`}
+							isOptionEqualToValue={(option, value) => option.estado === value.estado}
+							renderOption={(props, option) => (
+								<li {...props}>
+									{<FiberManualRecordIcon sx={{ color: option.color }} />}
+									{option.estado}
+								</li>
+							)}
+							inputProps={{
+								variant: 'standard',
+								label: 'Presentismo',
+							}}
 						/>
 						<TextInput
 							name="celular"

@@ -109,8 +109,9 @@ export const ProfessionalsProvider = ({ children }) => {
 	const handleFilterChange = (ev) => {
 		setFilterQuery(ev.target.value);
 
-		const stringifiedProfessionals = professionals.map((professional) =>
-			Object.values(professional).join(' ')
+		const stringifiedProfessionals = professionals.map(
+			(professional) =>
+				`${professional.perfil.nombre} ${professional.perfil.apellido} ${professional.perfil.celular} ${professional.perfil.cedula}`
 		);
 
 		const filteredProfessionals = professionals.filter((_, index) =>

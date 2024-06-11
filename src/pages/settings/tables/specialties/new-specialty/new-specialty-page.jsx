@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
@@ -33,8 +34,11 @@ const Message = ({ status }) => {
 
 export const Component = () => {
 	const mutation = useMutation(addspecialty);
+	const { id } = useStore((state) => state.clinic);
+
 	const handleSubmit = (event) => {
-		let specialty = { clinicaId: 1, nombre: event.descripcion }; //el Codigo de la clinica debe obtenerse desde los datos del usuario a traves del backend Arreglar esto
+		//let specialty = { clinicaId: null, nombre: event.descripcion }; //el Codigo de la clinica debe obtenerse desde los datos del usuario a traves del backend Arreglar esto
+		let specialty = { clinicaId: id, nombre: event.descripcion };
 		mutation.mutate(specialty);
 	};
 

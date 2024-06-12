@@ -20,6 +20,11 @@ import { useDeleteHoliday } from '../hooks/use-delete-holiday';
 export const DeleteHoliday = ({ open, onClose, holidayToDelete }) => {
 	const { mutate, isLoading, isError, isSuccess, reset } = useDeleteHoliday();
 
+	const formatHolidayDate = (date) => {
+		const adjustedDate = dayjs(date).add(1, 'day');
+		return adjustedDate.format('DD [de] MMMM, YYYY');
+	};
+
 	const handleDeleteHoliday = () => {
 		mutate(holidayToDelete.id, {
 			onSuccess: () =>
@@ -39,8 +44,8 @@ export const DeleteHoliday = ({ open, onClose, holidayToDelete }) => {
 			<DialogContent>
 				<DialogContentText>
 					Los datos del día feriado {holidayToDelete?.descripcion},{' '}
-					{dayjs(holidayToDelete?.fecha).format('DD [de] MMMM, YYYY')} no se podrán recuperar.
-					¿Quieres continuar?
+					{holidayToDelete?.fecha ? formatHolidayDate(holidayToDelete.fecha) : ''} no se podrán
+					recuperar. ¿Quieres continuar?
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>

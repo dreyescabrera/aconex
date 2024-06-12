@@ -5,6 +5,7 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 import { RightDrawer } from '@/components/drawers';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
 import { useSpecialties } from '@/hooks/use-specialties';
@@ -48,9 +49,22 @@ const createIntervalString = (intervalNumber) => {
  * @param {() => void} props.onClose
  */
 export const EditSchedule = ({ open, onClose }) => {
+	const [currentStatus, setCurrentStatus] = useState('idle');
 	const { scheduleInView, professionalInView } = useProfessionalsContext();
 	const { data: specialties } = useSpecialties();
 	const { mutate, status, error } = useEditSchedule();
+
+	useEffect(() => {
+		if (status === 'success') {
+			let timer = setTimeout(() => {
+				setCurrentStatus('idle');
+				onClose();
+			}, 2000);
+			return () => clearInterval(timer);
+		}
+		return;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [status]);
 
 	const handleSubmit = (formData) => {
 		const dateFrom = formData.fechaDesde.format('MM/DD/YYYY');
@@ -160,12 +174,12 @@ export const EditSchedule = ({ open, onClose }) => {
 				</Stack>
 			)}
 
-			{status === 'error' && (
+			{currentStatus === 'error' && (
 				// @ts-ignore
 				<Alert severity="success">Error al editar horario: {error.response.data.message}</Alert>
 			)}
 
-			{status === 'success' && <Alert severity="success">Horario editado con éxito!</Alert>}
+			{currentStatus === 'success' && <Alert severity="success">Horario editado con éxito!</Alert>}
 		</RightDrawer>
 	);
 };

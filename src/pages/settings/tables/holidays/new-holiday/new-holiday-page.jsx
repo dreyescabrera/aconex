@@ -11,7 +11,7 @@ export const Component = () => {
 	const { mutate, status } = useCreateHoliday();
 
 	const handleSubmit = (formData) => {
-		const date = formData.dia.format('MM/DD');
+		const date = formData.dia.format('DD/MM');
 
 		mutate({ descripcion: formData.descripcion, fecha: date });
 	};

@@ -45,6 +45,7 @@ export const FilterByDate = () => {
 					}}
 					value={inputValue}
 					onChange={handleInputChange}
+					format="DD/MM/YYYY"
 				/>
 				<Button
 					onClick={() => handleInputChange(dayjs())}

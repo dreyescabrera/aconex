@@ -31,7 +31,7 @@ const navLinks = [
 ];
 
 export const Component = () => {
-	const { user } = useStore();
+	const { user, clinic } = useStore();
 
 	return (
 		<>
@@ -40,7 +40,7 @@ export const Component = () => {
 			</Helmet>
 			<Container>
 				<Typography variant="h3" component="h1">
-					AConex
+					{clinic.username}
 				</Typography>
 				<Typography variant="subtitle1">
 					Hola, {user.perfil.nombre} {user.perfil.apellido}

@@ -23,6 +23,12 @@ export const Holidays = () => {
 		setOpenDeleteModal(false);
 	};
 
+	const showDate = (holiday) => {
+		const newHoliday = dayjs(holiday.fecha);
+		const actHoliDay = newHoliday.add(1, 'day');
+		return actHoliDay.format('DD [de] MMMM');
+	};
+
 	if (status === 'loading') {
 		return <Alert severity="info">Cargando...</Alert>;
 	}
@@ -53,10 +59,7 @@ export const Holidays = () => {
 					}
 					disablePadding
 				>
-					<ListItemText
-						primary={dayjs(holiday.fecha).format('DD [de] MMMM, YYYY')}
-						secondary={holiday.descripcion}
-					/>
+					<ListItemText primary={showDate(holiday)} secondary={holiday.descripcion} />
 				</ListItem>
 			))}
 

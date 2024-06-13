@@ -13,25 +13,25 @@ const navLinks = [
 	{
 		title: 'Agenda',
 		Icon: EventNoteIcon,
-		text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+		text: 'Optimiza la atención de tus pacientes: agenda citas, visualiza horarios disponibles y gestiona turnos de manera eficiente.',
 		href: '/agenda',
 	},
 	{
 		title: 'Pacientes',
 		Icon: Face6Icon,
-		text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+		text: 'Administra la información de tus pacientes de forma sencilla: agrega, edita, elimina y busca con total comodidad.',
 		href: '/pacientes',
 	},
 	{
 		title: 'Configuración de Sistema',
 		Icon: SettingsIcon,
-		text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+		text: 'Configura, administra y organiza el sistema de manera integral: desde datos de profesionales, horarios, ausencias, especialidades y días feriados, para una atención al paciente sin contratiempos.',
 		href: '/configuracion',
 	},
 ];
 
 export const Component = () => {
-	const { user, clinic } = useStore();
+	const { user } = useStore();
 
 	return (
 		<>
@@ -40,7 +40,7 @@ export const Component = () => {
 			</Helmet>
 			<Container>
 				<Typography variant="h3" component="h1">
-					{clinic.perfil.nombre}
+					AConex
 				</Typography>
 				<Typography variant="subtitle1">
 					Hola, {user.perfil.nombre} {user.perfil.apellido}

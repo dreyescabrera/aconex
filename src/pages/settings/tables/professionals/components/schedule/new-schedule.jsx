@@ -78,7 +78,7 @@ export const NewSchedule = ({ open, onClose }) => {
 						inputProps={{ label: 'Seleccionar día', variant: 'standard' }}
 					/>
 					<Autocomplete
-						options={specialties}
+						options={specialties ?? []}
 						name="especialidad"
 						getOptionLabel={(option) => option.nombre}
 						isOptionEqualToValue={(option, value) => option.nombre === value.nombre}
@@ -128,7 +128,7 @@ export const NewSchedule = ({ open, onClose }) => {
 				</Stack>
 			</Form>
 			{/* @ts-ignore*/}
-			<RequestStatusMessage status={status} errorMessage={error?.response.data.message} />
+			<RequestStatusMessage status={status} errorMessage={error?.response?.data?.message} />
 		</RightDrawer>
 	);
 };

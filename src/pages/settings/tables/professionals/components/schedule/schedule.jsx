@@ -57,7 +57,7 @@ export const ProfessionalsSchedule = () => {
 			</Button>
 			<Grid container spacing={2}>
 				{listToRender.map((professional) => (
-					<Grid key={professional.perfil.celular} xs={12}>
+					<Grid key={professional.perfil.id} xs={12}>
 						<Paper variant="outlined" sx={{ p: 2 }}>
 							<Typography fontWeight="bold" variant="h6" component="p">
 								{professional.perfil.nombre} {professional.perfil.apellido}
@@ -65,7 +65,7 @@ export const ProfessionalsSchedule = () => {
 							{professional.horarios.length > 0 ? (
 								<Grid container spacing={4}>
 									{professional.horarios.map((dia) => (
-										<Grid key={dia.nroDia} xs={6} sm={'auto'}>
+										<Grid key={dia.id} xs={6} sm={'auto'}>
 											<Paper variant="outlined" sx={{ p: 1 }}>
 												<Typography>{dayList[dia.nroDia]}</Typography>
 												<Typography color="#666">

@@ -9,7 +9,7 @@ import TableCell from '@mui/material/TableCell';
  */
 export function OptionsCell({ onClick, disabled }) {
 	return (
-		<TableCell sx={{ position: 'relative' }} align="center">
+		<TableCell sx={{ position: 'relative' }} align="right">
 			<IconButton onClick={onClick} disabled={disabled}>
 				<MoreVertIcon />
 			</IconButton>

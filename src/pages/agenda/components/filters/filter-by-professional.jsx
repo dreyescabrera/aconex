@@ -46,7 +46,7 @@ export const FilterByProfessional = () => {
 			<p>Selecciona el profesional y la especialidad que quieres ver</p>
 
 			<Grid container spacing={2}>
-				<Grid xs>
+				<Grid xs={6}>
 					<Autocomplete
 						defaultValue={initialProfessional}
 						clearOnBlur={false}
@@ -59,7 +59,7 @@ export const FilterByProfessional = () => {
 						renderInput={(params) => <TextField {...params} label="Profesional" size="small" />}
 					/>
 				</Grid>
-				<Grid xs={5}>
+				<Grid xs={6}>
 					<Autocomplete
 						onChange={handleChangeSpecialty}
 						defaultValue={initialSpecialty}

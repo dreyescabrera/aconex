@@ -7,6 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { Link } from 'react-router-dom';
 import { navLinks } from '../constants/nav-links';
 import { DrawerHeader } from './drawer-header';
 
@@ -30,7 +31,13 @@ export const MobileBar = ({ onClose, open }) => {
 						<ListItem disablePadding key={link.id} sx={{ display: 'block' }}>
 							<ListItemButton sx={{ py: 2 }}>
 								<ListItemIcon sx={{ minWidth: 0, mr: 1 }}>{link.icon}</ListItemIcon>
-								<ListItemText primary={link.text} />
+								<ListItemText
+									primary={
+										<Link to={link.href} style={{ textDecoration: 'none', color: 'inherit' }}>
+											{link.text}
+										</Link>
+									}
+								/>
 							</ListItemButton>
 						</ListItem>
 					))}

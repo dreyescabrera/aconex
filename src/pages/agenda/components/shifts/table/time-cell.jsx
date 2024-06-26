@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
  */
 export function TimeCell({ date }) {
 	return (
-		<TableCell sx={{ position: 'relative' }} align="center">
+		<TableCell sx={{ position: 'relative' }} align="left">
 			<span>{dayjs.tz(date, 'America/Argentina/Buenos_Aires').format('HH:mm')}</span>
 			<Divider orientation="vertical" absolute sx={{ height: '50%', top: '25%' }} />
 		</TableCell>

@@ -1,3 +1,4 @@
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
@@ -12,6 +13,14 @@ import { Autocomplete, Form, TextInput } from '@/components/form';
 import { usePatients } from '@/hooks/use-patients';
 import { useEditShifts } from '../hooks/use-edit-shifts';
 
+const opcionesPresentismo = [
+	{ estado: 'Presente', color: '#63db8b' },
+	{ estado: 'Atendido', color: '#6ad3ee' },
+	{ estado: 'Ausente con aviso', color: '#d9e25d' },
+	{ estado: 'Ausente sin aviso', color: '#ee1919' },
+	{ estado: 'Confirmado', color: '#0f8519' },
+	{ estado: 'Cancelado', color: '#000000' },
+];
 export const Component = () => {
 	const { data: patients } = usePatients();
 	const { mutate, isSuccess, error } = useEditShifts();
@@ -21,11 +30,14 @@ export const Component = () => {
 	const navigate = useNavigate();
 	const [cellphone, setCellphone] = useState(0);
 	let flagobject = useRef(null); //flagobject
+	let selectedoptions = useRef(opcionesPresentismo[1]);
 
 	const handleCellphonechange = (data) => {
 		setCellphone(data.target.value);
 	};
-
+	const handleOnChange = (selected) => {
+		selectedoptions.current = selected;
+	};
 	const Isthesameobject = (data) => {
 		//due to an autocomplete malfunction where the input overwrites
 		// default data on every Render on the input hook
@@ -84,14 +96,20 @@ export const Component = () => {
 				}
 			}
 		}
-
-		if (cellphone != null) {
+		if (typeof data.presentismo === 'object') {
+			data.presentismo = data.presentismo.estado;
+		}
+		if (cellphone == undefined || cellphone == null || cellphone < 0) {
+			data.celular = null;
+		} else {
 			if (cellphone.toString() != '' && cellphone != 0) {
 				let cell = cellphone;
 				if (typeof cellphone === 'string') {
 					cell = Number(cellphone);
 				}
 				data = { celular: cell, ...data };
+			} else {
+				data.celular = null;
 			}
 		}
 
@@ -175,11 +193,24 @@ export const Component = () => {
 							label="Observación"
 							rules={{ required: false }}
 						/>
-						<TextInput
+						<Autocomplete
 							name="presentismo"
-							variant="standard"
-							label="Presentismo"
-							rules={{ required: false }}
+							onChange={handleOnChange}
+							options={opcionesPresentismo}
+							getOptionLabel={(opt) =>
+								opt.estado === undefined ? shift.presentismo : `${opt.estado}`
+							}
+							isOptionEqualToValue={(option, value) => option.estado === value.estado}
+							renderOption={(props, option) => (
+								<li {...props}>
+									{<FiberManualRecordIcon sx={{ color: option.color }} />}
+									{option.estado}
+								</li>
+							)}
+							inputProps={{
+								variant: 'standard',
+								label: 'Presentismo',
+							}}
 						/>
 						<TextInput
 							name="celular"

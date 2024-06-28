@@ -33,7 +33,7 @@ const opciones = (opt) => {
 		return opt.inputValue;
 	}
 	if (opt.perfil?.nombre != undefined) {
-		return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
+		return `${opt.perfil.nombre} ${opt.perfil.apellido}`;
 	}
 };
 
@@ -107,7 +107,11 @@ export const Component = () => {
 				datos = { [key]: formdata[key], ...datos };
 			}
 		}
-		datos.presentismo = datos.presentismo.estado;
+		if (datos.presentismo) {
+			datos.presentismo = datos.presentismo.estado;
+		} else {
+			datos.presentismo = ' ';
+		}
 		if (cellphone == undefined || cellphone == null || cellphone < 0) {
 			datos.celular = null;
 		} else {
@@ -224,7 +228,7 @@ export const Component = () => {
 											setCellphone(0);
 										}
 									}
-									return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
+									return `${opt.perfil.nombre} ${opt.perfil.apellido}`;
 								}
 								if (!boolflag) {
 									flagobject.current = opt;
@@ -270,6 +274,7 @@ export const Component = () => {
 								variant: 'standard',
 								label: 'Presentismo',
 							}}
+							rules={{ required: false }}
 						/>
 						<TextInput
 							name="celular"

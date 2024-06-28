@@ -71,7 +71,7 @@ export const ProfessionalsData = () => {
 			</Button>
 			<Grid container spacing={2}>
 				{listToRender?.map((professional) => (
-					<Grid key={professional.perfil.celular} xs={12} md={6} lg={4}>
+					<Grid key={professional.perfil.id} xs={12} md={6} lg={4}>
 						<Paper variant="outlined" sx={{ p: 2 }}>
 							<Typography fontWeight="bold" variant="h6" component="p">
 								{professional.perfil.nombre} {professional.perfil.apellido}

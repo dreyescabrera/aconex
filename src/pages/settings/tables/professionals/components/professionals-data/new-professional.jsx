@@ -15,6 +15,7 @@ import { useCreateProfessional } from '../../hooks/use-create-professional';
  */
 export const NewProfessionalData = ({ open, onClose }) => {
 	const [currentStatus, setCurrentStatus] = useState('idle');
+	const [messageError, setMessageError] = useState('');
 	const { mutate, status } = useCreateProfessional(setCurrentStatus);
 
 	const handleSubmit = (formData) => {
@@ -23,6 +24,12 @@ export const NewProfessionalData = ({ open, onClose }) => {
 			if (formData[key] != null && formData[key] != '') {
 				datos = { [key]: formData[key], ...datos };
 			}
+		}
+
+		if (!datos.apellido || datos.apellido.trim() === '') {
+			setCurrentStatus('error');
+			setMessageError('El campo apellido debe ser obligatorio');
+			return; //el back no tiene restriccion de apellido
 		}
 
 		if (datos.celular) {
@@ -70,7 +77,7 @@ export const NewProfessionalData = ({ open, onClose }) => {
 			>
 				<Stack spacing={3} sx={{ mb: 2 }}>
 					<TextInput name="nombre" label="Nombre" />
-					<TextInput name="apellido" label="Apellido" rules={{ required: false }} />
+					<TextInput name="apellido" label="Apellido" />
 					<TextInput name="cedula" label="Número de DNI o Pasaporte" rules={{ required: false }} />
 					<TextInput name="celular" label="Celular" rules={{ required: false }} />
 					<TextInput name="direccion" label="Dirección" rules={{ required: false }} />
@@ -98,7 +105,9 @@ export const NewProfessionalData = ({ open, onClose }) => {
 
 			{currentStatus === 'error' && (
 				<Alert severity="error">
-					Hubo un problema creando el profesional. Por favor, intente de nuevo.
+					{messageError
+						? messageError
+						: 'Hubo un problema creando el profesional. Por favor, intente de nuevo.'}
 				</Alert>
 			)}
 

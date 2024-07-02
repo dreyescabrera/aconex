@@ -4,6 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 import { RightDrawer } from '@/components/drawers';
 import { Autocomplete, DatePicker, Form, TimePicker } from '@/components/form';
 import { useProfessionals } from '@/hooks/use-professionals';
@@ -19,7 +20,8 @@ import { useCreateSchedule } from '../../hooks/use-create-schedule';
 export const NewSchedule = ({ open, onClose }) => {
 	const { data: professionals } = useProfessionals();
 	const { data: specialties } = useSpecialties();
-	const { mutate, status, error } = useCreateSchedule();
+	const { mutate, status, error, isError, isLoading } = useCreateSchedule();
+	const [mensajeError, setMensajeError] = useState(null);
 
 	const handleSubmit = (formData) => {
 		const dateFrom = formData.fechaDesde.format('MM/DD/YYYY');
@@ -40,6 +42,22 @@ export const NewSchedule = ({ open, onClose }) => {
 		});
 	};
 
+	const handleError = (data) => {
+		if (data?.response) {
+			setMensajeError(data?.response?.data?.message);
+		} else {
+			setMensajeError(data?.message);
+		}
+	};
+
+	useEffect(() => {
+		if (isError) {
+			handleError(error);
+		} else {
+			setMensajeError('');
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isError]);
 	return (
 		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2" sx={{ mb: 3 }}>
@@ -127,8 +145,15 @@ export const NewSchedule = ({ open, onClose }) => {
 					</Button>
 				</Stack>
 			</Form>
+			{isLoading ? (
+				<div>
+					<Alert severity="info">Cargando...</Alert>
+				</div>
+			) : (
+				<div></div>
+			)}
 			{/* @ts-ignore*/}
-			<RequestStatusMessage status={status} errorMessage={error?.response?.data?.message} />
+			<RequestStatusMessage status={status} errorMessage={mensajeError} />
 		</RightDrawer>
 	);
 };

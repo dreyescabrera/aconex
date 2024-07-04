@@ -19,7 +19,7 @@ import { api } from '@/services/api';
  * @param {Schedule} schedule
  */
 async function postSchedule(schedule) {
-	const res = await api.post('/horarios', schedule);
+	const res = await api.post('/horarios', schedule, { timeout: 30000 });
 	return res.data;
 }
 

@@ -180,7 +180,7 @@ export const Component = () => {
 					Datos requeridos
 				</Typography>
 				<Form
-					defaultValues={{ observacion: '', presentismo: opcionesPresentismo[0], patient: null }}
+					defaultValues={{ observacion: '', presentismo: null, patient: null }}
 					onSubmit={assignPatientToShift}
 				>
 					<Stack spacing={4}>

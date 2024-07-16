@@ -1,4 +1,5 @@
 import { useCreatePatient } from '@/pages/patients/hooks/use-create-patient';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import Alert from '@mui/material/Alert';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -16,6 +17,23 @@ import { useProfessionals } from '@/hooks/use-professionals';
 import { useNewShift } from '../hooks/use-new-shift';
 import { useShifts } from '../hooks/use-shifts';
 
+const opcionesPresentismo = [
+	{ estado: 'Presente', color: '#63db8b' },
+	{ estado: 'Atendido', color: '#6ad3ee' },
+	{ estado: 'Ausente con aviso', color: '#d9e25d' },
+	{ estado: 'Ausente sin aviso', color: '#ee1919' },
+	{ estado: 'Confirmado', color: '#0f8519' },
+	{ estado: 'Cancelado', color: '#000000' },
+];
+
+const handlePatientnullabledata = (nullabledata) => {
+	if (nullabledata) {
+		return `— ${nullabledata}`;
+	} else {
+		return ' ';
+	}
+};
+
 const filter = createFilterOptions();
 const opciones = (opt) => {
 	if (typeof opt === 'string') {
@@ -25,7 +43,9 @@ const opciones = (opt) => {
 		return opt.inputValue;
 	}
 	if (opt.perfil?.nombre != undefined) {
-		return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
+		return `${opt.perfil.nombre} ${opt.perfil.apellido} ${handlePatientnullabledata(
+			opt.perfil.email
+		)}`;
 	}
 };
 
@@ -44,6 +64,7 @@ export const Component = () => {
 	const { mutate, isSuccess, error } = useNewShift();
 	const navigate = useNavigate();
 	const [cellphone, setCellphone] = useState(0);
+	let selectedoptions = useRef(opcionesPresentismo[1]);
 	let flagobject = useRef(null); //flagobject
 
 	const unavailableMinutes = allDayShifts?.reduce((array, currentShift) => {
@@ -53,6 +74,10 @@ export const Component = () => {
 		}
 		return array;
 	}, []);
+
+	const handleOnChangepresentismo = (selected) => {
+		selectedoptions.current = selected;
+	};
 
 	const handleCellphonechange = (data) => {
 		setCellphone(data.target.value);
@@ -115,13 +140,17 @@ export const Component = () => {
 
 		let datos = {};
 		for (var key in formdata) {
-			if (
-				formdata[key] != '' &&
-				(key === 'observacion' || key === 'presentismo' || key === 'obraSocial')
-			) {
+			if (formdata[key] != '' && (key === 'observacion' || key === 'obraSocial')) {
 				datos = { [key]: formdata[key], ...datos };
 			}
 		}
+
+		if (datos.presentismo) {
+			datos.presentismo = datos.presentismo.estado;
+		} else {
+			datos.presentismo = ' ';
+		}
+
 		if (cellphone != null) {
 			if (cellphone.toString() != '' && cellphone != 0) {
 				let cell = cellphone;
@@ -176,7 +205,7 @@ export const Component = () => {
 				<Form
 					defaultValues={{
 						observacion: '',
-						presentismo: '',
+						presentismo: null,
 						patient: null,
 						date: dayjs.utc(shift.date),
 						hour: dayjs.utc(shift.date),
@@ -260,7 +289,9 @@ export const Component = () => {
 											setCellphone(0);
 										}
 									}
-									return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
+									return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${handlePatientnullabledata(
+										opt.perfil.email
+									)}`;
 								}
 								if (!boolflag) {
 									flagobject.current = opt;
@@ -312,10 +343,22 @@ export const Component = () => {
 							label="telefono/celular"
 							rules={{ required: false }}
 						/>
-						<TextInput
+						<Autocomplete
 							name="presentismo"
-							variant="standard"
-							label="Presentismo"
+							onChange={handleOnChangepresentismo}
+							options={opcionesPresentismo}
+							getOptionLabel={(opt) => `${opt.estado}`}
+							isOptionEqualToValue={(option, value) => option.estado === value.estado}
+							renderOption={(props, option) => (
+								<li {...props}>
+									{<FiberManualRecordIcon sx={{ color: option.color }} />}
+									{option.estado}
+								</li>
+							)}
+							inputProps={{
+								variant: 'standard',
+								label: 'Presentismo',
+							}}
 							rules={{ required: false }}
 						/>
 						<TextInput

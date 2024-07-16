@@ -67,6 +67,7 @@ export const EditPatientData = ({ open, onClose }) => {
 						label="Fecha de nacimiento"
 						slotProps={{ textField: { variant: 'standard' } }}
 						disableFuture
+						format="DD/MM/YYYY"
 						rules={{ required: false }}
 					/>
 					<Button type="submit" variant="contained">

@@ -26,6 +26,14 @@ const opcionesPresentismo = [
 	{ estado: 'Cancelado', color: '#000000' },
 ];
 
+const handlePatientnullabledata = (nullabledata) => {
+	if (nullabledata) {
+		return `— ${nullabledata}`;
+	} else {
+		return ' ';
+	}
+};
+
 const filter = createFilterOptions();
 const opciones = (opt) => {
 	if (typeof opt === 'string') {
@@ -35,7 +43,9 @@ const opciones = (opt) => {
 		return opt.inputValue;
 	}
 	if (opt.perfil?.nombre != undefined) {
-		return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
+		return `${opt.perfil.nombre} ${opt.perfil.apellido} ${handlePatientnullabledata(
+			opt.perfil.email
+		)}`;
 	}
 };
 
@@ -279,7 +289,9 @@ export const Component = () => {
 											setCellphone(0);
 										}
 									}
-									return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${opt.perfil.email}`;
+									return `${opt.perfil.nombre} ${opt.perfil.apellido} — ${handlePatientnullabledata(
+										opt.perfil.email
+									)}`;
 								}
 								if (!boolflag) {
 									flagobject.current = opt;

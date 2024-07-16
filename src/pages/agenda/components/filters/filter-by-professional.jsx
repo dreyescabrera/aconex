@@ -7,6 +7,14 @@ import { useProfessionals } from '@/hooks/use-professionals';
 import { useSpecialties } from '@/hooks/use-specialties';
 import { useAgendaContext } from '../../context/agenda.context';
 
+const handleCedula = (cedula) => {
+	if (!cedula) {
+		return ' ';
+	} else {
+		return cedula;
+	}
+};
+
 export const FilterByProfessional = () => {
 	const { updateFilters, filters } = useAgendaContext();
 	const { data: professionals } = useProfessionals();
@@ -53,7 +61,7 @@ export const FilterByProfessional = () => {
 						onChange={handleChangeProfessional}
 						options={professionals ?? []}
 						getOptionLabel={(opt) =>
-							`${opt.perfil.nombre} ${opt.perfil.apellido} ${opt.perfil.cedula}`
+							`${opt.perfil.nombre} ${opt.perfil.apellido} ${handleCedula(opt.perfil.cedula)}`
 						}
 						isOptionEqualToValue={(option, value) => option.id === value.id}
 						renderInput={(params) => <TextField {...params} label="Profesional" size="small" />}

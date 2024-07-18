@@ -20,8 +20,8 @@ import { useShifts } from '../hooks/use-shifts';
 const opcionesPresentismo = [
 	{ estado: 'Presente', color: '#63db8b' },
 	{ estado: 'Atendido', color: '#6ad3ee' },
-	{ estado: 'Ausente con aviso', color: '#d9e25d' },
-	{ estado: 'Ausente sin aviso', color: '#ee1919' },
+	{ estado: 'Ausento con aviso', color: '#d9e25d' },
+	{ estado: 'Ausento sin aviso', color: '#ee1919' },
 	{ estado: 'Confirmado', color: '#0f8519' },
 	{ estado: 'Cancelado', color: '#000000' },
 ];

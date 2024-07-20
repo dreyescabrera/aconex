@@ -6,9 +6,10 @@ import { api } from '@/services/api';
  * @param {number} clinicaId
  * @param {number} userId
  * @param {{username: string, password: string}} modifications
+ * @param {object} additionalHeaders
  */
-const editUser = async (clinicaId, userId, modifications) => {
-	const res = await api.patch(`/usuarios/${clinicaId}/${userId}`, modifications);
+const editUser = async (clinicaId, userId, modifications, additionalHeaders) => {
+	const res = await api.patch(`/usuarios/${clinicaId}/${userId}`, modifications, additionalHeaders);
 	return res.data;
 };
 
@@ -18,7 +19,10 @@ export const useEditUser = () => {
 		clinic: { id },
 		setUser,
 	} = useStore();
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	/**
 	 * @param {object} data
 	 * @param {number} data.userId
@@ -27,7 +31,7 @@ export const useEditUser = () => {
 	 */
 	const mutationFn = (data) => {
 		const { userId, ...modifications } = data;
-		return editUser(id, userId, modifications);
+		return editUser(id, userId, modifications, { headers: { ...additionalHeaders } });
 	};
 
 	return useMutation({

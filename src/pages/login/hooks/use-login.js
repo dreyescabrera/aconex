@@ -14,7 +14,7 @@ import { api } from '@/services/api';
  * @param {Credentials} credentials
  */
 const postLogin = async (credentials) => {
-	const res = await api.post('/usuarios/login', credentials);
+	const res = await api.post('/auth/login', credentials);
 	return res.data;
 };
 
@@ -31,14 +31,15 @@ export const useLogin = () => {
 
 	const mutation = useMutation({
 		mutationFn,
-		onSuccess: ({ data }) => {
-			setClinic({ ...data.clinica });
+		onSuccess: (data) => {
+			setClinic({ ...data.user.clinica });
 			setUser({
-				id: data.id,
-				username: data.username,
-				createdAt: data.createdAt,
-				perfilId: data.perfilId,
-				perfil: data.perfil,
+				id: data.user.id,
+				username: data.user.username,
+				createdAt: data.user.createdAt,
+				//perfilId: data.perfilId,
+				token: data.token,
+				perfil: data.user.perfil,
 			});
 			setIsLoggedIn(true);
 

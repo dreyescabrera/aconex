@@ -18,27 +18,30 @@ import { api } from '@/services/api';
  * @param {number} clinicaId
  * @param {Patient} patient
  */
-const createPatient = async (clinicaId, patient) => {
+const createPatient = async (clinicaId, patient, additionalHeaders) => {
 	const { CondIVA, ...profile } = patient;
-	const profileResponse = await api.post('/perfiles', profile);
+	const profileResponse = await api.post('/perfiles', profile, additionalHeaders);
 
 	let paciente = { clinicaId, perfilId: profileResponse.data.data.id };
 	if (CondIVA) {
 		paciente = { CondIVA, ...paciente };
 	}
-	const res = await api.post('/pacientes', paciente);
+	const res = await api.post('/pacientes', paciente, additionalHeaders);
 	return res.data;
 };
 
 export const useCreatePatient = () => {
 	const queryClient = useQueryClient();
 	const { id } = useStore((state) => state.clinic);
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	/*
 	 * @param {Patient} patient
 	 */
 	const mutationFn = (patient) => {
-		return createPatient(id, patient);
+		return createPatient(id, patient, { headers: { ...additionalHeaders } });
 	};
 
 	return useMutation({

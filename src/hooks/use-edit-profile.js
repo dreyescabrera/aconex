@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
@@ -17,9 +18,9 @@ import { api } from '@/services/api';
  * @param {Partial<Perfil>} modifications
  */
 
-const editProfile = async (perfilId, modifications) => {
+const editProfile = async (perfilId, modifications, additionalHeaders) => {
 	const endpoint = `/perfiles/${perfilId}`;
-	const response = await api.patch(endpoint, modifications);
+	const response = await api.patch(endpoint, modifications, additionalHeaders);
 	return response.data;
 };
 
@@ -29,13 +30,16 @@ const editProfile = async (perfilId, modifications) => {
  */
 export const useEditProfile = ({ queryKeyToInvalidate }) => {
 	const queryClient = useQueryClient();
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		headers: { Authorization: `Bearer ${user.token}` },
+	};
 	/**
 	 * @param {Partial<Perfil> & {perfilId: number}} data
 	 */
 	const mutationFn = (data) => {
 		const { perfilId, ...modifications } = data;
-		return editProfile(perfilId, modifications);
+		return editProfile(perfilId, modifications, additionalHeaders);
 	};
 
 	return useMutation({

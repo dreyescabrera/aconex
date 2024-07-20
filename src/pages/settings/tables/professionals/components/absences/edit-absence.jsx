@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -35,7 +36,7 @@ export const EditAbsence = ({ open, onClose }) => {
 	const { professionalInView, absenceInView } = useProfessionalsContext();
 
 	async function updateabsence(listdata) {
-		const res = await api.patch(listdata[0], listdata[1]);
+		const res = await api.patch(listdata[0], listdata[1], listdata[2]);
 		return res;
 	}
 	const queryClient = useQueryClient();
@@ -43,7 +44,10 @@ export const EditAbsence = ({ open, onClose }) => {
 		mutationFn: updateabsence,
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['professionals'] }),
 	});
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	const handleEdit = (ev) => {
 		const idstring = absenceInView.id.toString();
 		const profid = absenceInView.profesionalId.toString();
@@ -52,7 +56,7 @@ export const EditAbsence = ({ open, onClose }) => {
 			vigenciaDesde: ev.fechaDesde.format('MM/DD/YYYY'),
 			vigenciaHasta: ev.fechaHasta.format('MM/DD/YYYY'),
 		};
-		const datos = [urldata, objdata];
+		const datos = [urldata, objdata, { headers: { ...additionalHeaders } }];
 		mutation.mutate(datos);
 	};
 

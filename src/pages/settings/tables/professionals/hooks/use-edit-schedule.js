@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
@@ -20,22 +21,30 @@ import { api } from '@/services/api';
 
 /**
  * @param {ScheduleEditRequiredParams & Partial<Schedule>} data
+ * @param {object} additionalHeaders
  */
-const editSchedule = async (data) => {
+const editSchedule = async (data, additionalHeaders) => {
 	const { profesionalId, horarioId, ...modifications } = data;
 
-	const response = await api.patch(`/horarios/${profesionalId}/${horarioId}`, modifications);
+	const response = await api.patch(
+		`/horarios/${profesionalId}/${horarioId}`,
+		modifications,
+		additionalHeaders
+	);
 	return response.data;
 };
 
 export const useEditSchedule = () => {
 	const queryClient = useQueryClient();
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	/**
 	 * @param {ScheduleEditRequiredParams & Partial<Schedule>} data
 	 */
 	const mutationFn = (data) => {
-		return editSchedule(data);
+		return editSchedule(data, { headers: { ...additionalHeaders } });
 	};
 
 	return useMutation({

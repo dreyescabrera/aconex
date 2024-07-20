@@ -18,16 +18,20 @@ import { api } from '@/services/api';
  * @param {number} clinicaId
  * @param {Professional} professional
  */
-async function createProfessional(clinicaId, professional) {
+async function createProfessional(clinicaId, professional, additionalHeaders) {
 	const { matricula, ...profile } = professional;
 
-	const { data: profileResponse } = await api.post('/perfiles', profile);
+	const { data: profileResponse } = await api.post('/perfiles', profile, additionalHeaders);
 
-	const res = await api.post('/profesionales', {
-		clinicaId,
-		perfilId: profileResponse.data.id,
-		matricula,
-	});
+	const res = await api.post(
+		'/profesionales',
+		{
+			clinicaId,
+			perfilId: profileResponse.data.id,
+			matricula,
+		},
+		additionalHeaders
+	);
 
 	return res;
 }
@@ -35,12 +39,15 @@ async function createProfessional(clinicaId, professional) {
 export const useCreateProfessional = (setCurrentStatus) => {
 	const queryClient = useQueryClient();
 	const { id } = useStore((state) => state.clinic);
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	/*
 	 * @param {Professional} profile
 	 */
 	const mutationFn = (profile) => {
-		return createProfessional(id, profile);
+		return createProfessional(id, profile, { headers: { ...additionalHeaders } });
 	};
 
 	return useMutation({

@@ -81,71 +81,81 @@ export const Component = () => {
 								<Grid item xs={12} sm={6}>
 									<TextInput
 										name="clinica"
-										variant="standard"
+										variant="outlined"
 										label="Nombre de la clínica"
 										placeholder="Nombre de la clínica"
+										sx={{ margin: '3px 0' }}
 									/>
 									<TextInput
 										name="username"
-										variant="standard"
+										variant="outlined"
 										label="Nombre de usuario"
 										placeholder="Nombre de usuario"
+										sx={{ margin: '3px 0' }}
 									/>
 									<TextInput
 										name="password"
 										type="password"
-										variant="standard"
+										variant="outlined"
 										label="Contraseña del usuario"
 										placeholder="Tu contraseña de usuario"
+										sx={{ margin: '3px 0' }}
 									/>
 								</Grid>
 								<Grid item xs={12} sm={6}>
 									<TextInput
 										name="nombre"
-										variant="standard"
+										variant="outlined"
 										label="Nombre"
 										placeholder="Nombre del usuario"
+										sx={{ margin: '3px 0' }}
 									/>
 									<TextInput
 										name="apellido"
-										variant="standard"
+										variant="outlined"
 										label="Apellido"
 										placeholder="Apellido del usuario"
+										sx={{ margin: '3px 0' }}
 									/>
 									<TextInput
 										name="email"
-										variant="standard"
+										variant="outlined"
 										label="Email"
 										placeholder="Email del usuario"
+										sx={{ margin: '3px 0' }}
 									/>
 									<TextInput
 										name="cedula"
 										type="number"
-										variant="standard"
+										variant="outlined"
 										label="Cedula"
 										rules={{ required: false }}
+										sx={{ margin: '3px 0' }}
 									/>
 									<TextInput
 										name="celular"
 										type="number"
-										variant="standard"
+										variant="outlined"
 										label="Telefono/Celular"
 										rules={{ required: false }}
+										sx={{ margin: '3px 0' }}
 									/>
 									<TextInput
 										name="direccion"
-										variant="standard"
+										variant="outlined"
 										label="Direccion"
 										placeholder="Direccion del usuario"
 										rules={{ required: false }}
+										sx={{ margin: '3px 0' }}
 									/>
 									<DatePicker
 										name="nacimiento"
 										label="Fecha de nacimiento"
-										slotProps={{ textField: { variant: 'standard' } }}
+										slotProps={{ textField: { variant: 'outlined' } }}
 										disableFuture
 										format="DD/MM/YYYY"
 										rules={{ required: false }}
+										sx={{ margin: '3px 0' }}
 									/>
 								</Grid>
 								<Collapse in={isError}>

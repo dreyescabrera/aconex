@@ -36,7 +36,7 @@ async function createProfessional(clinicaId, professional, additionalHeaders) {
 	return res;
 }
 
-export const useCreateProfessional = (setCurrentStatus) => {
+export const useCreateProfessional = (setCurrentStatus, setMessageError) => {
 	const queryClient = useQueryClient();
 	const { id } = useStore((state) => state.clinic);
 	const user = useStore((state) => state.user);
@@ -55,6 +55,15 @@ export const useCreateProfessional = (setCurrentStatus) => {
 		onSuccess: () => {
 			setCurrentStatus('success');
 			queryClient.invalidateQueries({ queryKey: ['professionals'] });
+		},
+		/**
+		 * @param {object} error
+		 */
+		onError: (error) => {
+			setCurrentStatus('error');
+			if (error.response.status === 409) {
+				setMessageError('Este correo ya esta registrado');
+			}
 		},
 	});
 };

@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { agendaRouter } from './agenda';
 import { patientsRouter } from './patients';
+import { registerRoutes } from './register';
 import { settingsRouter } from './settings';
 import { userRouter } from './user';
 
@@ -9,7 +10,6 @@ const Login = () => import('@/pages/login');
 const NotFound = () => import('@/pages/not-found');
 const AppLayout = () => import('@/layouts/app-layout');
 const BasicLayout = () => import('@/layouts/basic-layout');
-const Register = () => import('@/pages/register');
 
 export const router = createBrowserRouter([
 	{
@@ -40,10 +40,7 @@ export const router = createBrowserRouter([
 				path: '/login',
 				lazy: Login,
 			},
-			{
-				path: '/register',
-				lazy: Register,
-			},
+			...registerRoutes,
 		],
 	},
 ]);

@@ -5,7 +5,7 @@ import { api } from '@/services/api';
 /**
  * @typedef NewUsuario
  * @property {object} [usuario]
- * @property {number} [usuario.clinicaId]
+ * @property {string} [usuario.clinicaNombre]
  * @property {string} [usuario.username]
  * @property {string} [usuario.password]
  * @property {object} [perfil]
@@ -23,10 +23,10 @@ import { api } from '@/services/api';
  */
 const postRegister = async (newUsuario) => {
 	const res = await api.post('/auth/register', newUsuario);
-	return res.data;
+	return res;
 };
 
-export const useRegister = () => {
+export const useRegister = (setMessageError) => {
 	const navigate = useNavigate();
 	/**
 	 * @param {NewUsuario} newUsuario
@@ -39,6 +39,12 @@ export const useRegister = () => {
 		mutationFn,
 		onSuccess: () => {
 			navigate('/login');
+		},
+		/**
+		 * @param {object} error
+		 */
+		onError: (error) => {
+			setMessageError(error.response.data.message);
 		},
 	});
 

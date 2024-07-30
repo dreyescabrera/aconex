@@ -37,7 +37,7 @@ export const Component = () => {
 							color="inherit"
 							sx={{ display: 'flex', alignItems: 'center', gap: '2px' }}
 						>
-							Busco servicio
+							Registrar clínica
 							<BusinessCenterIcon fontSize="large" />
 						</Link>
 					</Button>
@@ -48,7 +48,7 @@ export const Component = () => {
 							color="inherit"
 							sx={{ display: 'flex', alignItems: 'center', gap: '2px' }}
 						>
-							Ofrezco servicio/creación de usuarios
+							Registrar usuario de clínica
 							<ManageSearchIcon fontSize="large" />
 						</Link>
 					</Button>

@@ -1,5 +1,6 @@
 import Alert from '@mui/material/Alert';
 import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Collapse from '@mui/material/Collapse';
@@ -48,7 +49,7 @@ export const Component = () => {
 				maxWidth="xl"
 				sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
 			>
-				<Typography variant="h3" component="h1" align="center" my={6}>
+				<Typography variant="h3" component="h1" align="center" my={1}>
 					Registrar Clínica
 				</Typography>
 				<Form
@@ -66,54 +67,121 @@ export const Component = () => {
 					}}
 					onSubmit={handleRegister}
 				>
-					<Stack spacing={4} sx={{ fontSize: 16, maxWidth: '600px' }}>
-						<Grid container spacing={2} sx={{ padding: '16px 8px 0 8px' }}>
-							<Grid item xs={12} sm={6} sx={{ padding: '16px 8px 0 8px' }}>
+					<Stack spacing={1} sx={{ fontSize: 16 }}>
+						<Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+							<Box component="label" sx={{ flex: '1 1 20%' }}>
+								Datos de la clínica:
+							</Box>
+							<Box sx={{ flex: '1 1 80%', display: 'flex', flexDirection: 'column', gap: 1 }}>
+								<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+									<TextInput
+										name="username"
+										variant="outlined"
+										label="Nombre de la clínica"
+										placeholder="Nombre de la clínica"
+									/>
+								</Box>
+								<Box sx={{ display: 'flex', gap: 1 }}>
+									<TextInput
+										name="condicionFiscal"
+										variant="outlined"
+										label="Condición fiscal"
+										placeholder="Especifique la condición fiscal"
+										sx={{ width: '50%' }}
+									/>
+									<TextInput
+										name="region"
+										variant="outlined"
+										label="Región"
+										placeholder="Región donde está la clínica"
+										sx={{ width: '50%' }}
+									/>
+								</Box>
+							</Box>
+						</Grid>
+						<Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', margin: 0 }}>
+							<Box component="label" sx={{ flex: '1 1 20%' }}>
+								Nombre del perfil:
+							</Box>
+							<Box
+								sx={{ flex: '1 1 80%', display: 'flex', flexDirection: 'row', gap: 1, margin: 0 }}
+							>
 								<TextInput
 									name="nombre"
 									variant="outlined"
 									label="Nombre"
 									placeholder="Nombre del usuario"
-									sx={{ margin: '3px 0' }}
+									sx={{ width: '50%' }}
 								/>
 								<TextInput
 									name="apellido"
 									variant="outlined"
 									label="Apellido"
 									placeholder="Apellido del usuario"
-									sx={{ margin: '3px 0' }}
+									sx={{ width: '50%' }}
 								/>
+							</Box>
+						</Grid>
+						<Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center' }}>
+							<Box component="label" sx={{ flex: '1 1 20%' }}>
+								Email del perfil:
+							</Box>
+							<Box sx={{ flex: '1 1 80%', display: 'flex', flexDirection: 'column', gap: 1 }}>
 								<TextInput
 									name="email"
 									variant="outlined"
 									label="Email"
 									placeholder="Email del usuario"
-									sx={{ margin: '3px 0' }}
 								/>
+							</Box>
+						</Grid>
+						<Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center' }}>
+							<Box component="label" sx={{ flex: '1 1 20%' }}>
+								Cédula del perfil:
+							</Box>
+							<Box sx={{ flex: '1 1 80%', display: 'flex', flexDirection: 'column', gap: 1 }}>
 								<TextInput
 									name="cedula"
 									type="number"
 									variant="outlined"
 									label="Cedula"
 									rules={{ required: false }}
-									sx={{ margin: '3px 0' }}
 								/>
+							</Box>
+						</Grid>
+						<Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center' }}>
+							<Box component="label" sx={{ flex: '1 1 20%' }}>
+								Celular del perfil:
+							</Box>
+							<Box sx={{ flex: '1 1 80%', display: 'flex', flexDirection: 'column', gap: 1 }}>
 								<TextInput
 									name="celular"
 									type="number"
 									variant="outlined"
 									label="Telefono/Celular"
 									rules={{ required: false }}
-									sx={{ margin: '3px 0' }}
 								/>
+							</Box>
+						</Grid>
+						<Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center' }}>
+							<Box component="label" sx={{ flex: '1 1 20%' }}>
+								Dirección del perfil:
+							</Box>
+							<Box sx={{ flex: '1 1 80%', display: 'flex', flexDirection: 'column', gap: 1 }}>
 								<TextInput
 									name="direccion"
 									variant="outlined"
-									label="Direccion"
+									label="Dirección"
 									placeholder="Direccion del usuario"
 									rules={{ required: false }}
-									sx={{ margin: '3px 0' }}
 								/>
+							</Box>
+						</Grid>
+						<Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center' }}>
+							<Box component="label" sx={{ flex: '1 1 20%' }}>
+								Fecha de nacimiento:
+							</Box>
+							<Box sx={{ flex: '1 1 80%', display: 'flex', flexDirection: 'column', gap: 1 }}>
 								<DatePicker
 									name="nacimiento"
 									label="Fecha de nacimiento"
@@ -121,32 +189,8 @@ export const Component = () => {
 									disableFuture
 									format="DD/MM/YYYY"
 									rules={{ required: false }}
-									sx={{ margin: '3px 0' }}
 								/>
-							</Grid>
-							<Grid item xs={12} sm={6} gap={12} sx={{ width: '40%' }}>
-								<TextInput
-									name="username"
-									variant="outlined"
-									label="Nombre de la clínica"
-									placeholder="Nombre de la clínica"
-									sx={{ margin: '3px 0' }}
-								/>
-								<TextInput
-									name="condicionFiscal"
-									variant="outlined"
-									label="Condición fiscal"
-									placeholder="Especifique la condición fiscal"
-									sx={{ margin: '3px 0' }}
-								/>
-								<TextInput
-									name="region"
-									variant="outlined"
-									label="Región"
-									placeholder="Región donde está la clínica"
-									sx={{ margin: '3px 0' }}
-								/>
-							</Grid>
+							</Box>
 						</Grid>
 						<Collapse in={isError}>
 							<Alert severity="error">{messageError}</Alert>
@@ -154,13 +198,15 @@ export const Component = () => {
 						<Backdrop open={isLoading} sx={{ color: '#fff' }}>
 							<CircularProgress color="inherit" />
 						</Backdrop>
-						<Button
-							type="submit"
-							variant="contained"
-							sx={{ textTransform: 'capitalize', fontSize: 16 }}
-						>
-							Registrar Clínica
-						</Button>
+						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+							<Button
+								type="submit"
+								variant="contained"
+								sx={{ textTransform: 'capitalize', fontSize: 16, width: '50%' }}
+							>
+								Registrar Clínica
+							</Button>
+						</Box>
 					</Stack>
 				</Form>
 			</Container>

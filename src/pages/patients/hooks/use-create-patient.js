@@ -20,14 +20,24 @@ import { api } from '@/services/api';
  */
 const createPatient = async (clinicaId, patient, additionalHeaders) => {
 	const { CondIVA, ...profile } = patient;
-	const profileResponse = await api.post('/perfiles', profile, additionalHeaders);
-
-	let paciente = { clinicaId, perfilId: profileResponse.data.data.id };
-	if (CondIVA) {
-		paciente = { CondIVA, ...paciente };
+	let res = null;
+	try {
+		const profileResponse = await api.post('/perfiles', profile, additionalHeaders);
+		let paciente = { clinicaId, perfilId: profileResponse.data.data.id };
+		if (CondIVA) {
+			paciente = { CondIVA, ...paciente };
+		}
+		res = await api.post('/pacientes', paciente, additionalHeaders);
+	} catch (error) {
+		if (error.response.status === 409) {
+			let paciente = { clinicaId, perfilId: error.response.data.data.id };
+			if (CondIVA) {
+				paciente = { CondIVA, ...paciente };
+			}
+			res = await api.post('/pacientes', paciente, additionalHeaders);
+		}
 	}
-	const res = await api.post('/pacientes', paciente, additionalHeaders);
-	return res.data;
+	return res;
 };
 
 export const useCreatePatient = () => {

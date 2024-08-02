@@ -20,19 +20,31 @@ import { api } from '@/services/api';
  */
 async function createProfessional(clinicaId, professional, additionalHeaders) {
 	const { matricula, ...profile } = professional;
-
-	const { data: profileResponse } = await api.post('/perfiles', profile, additionalHeaders);
-
-	const res = await api.post(
-		'/profesionales',
-		{
-			clinicaId,
-			perfilId: profileResponse.data.id,
-			matricula,
-		},
-		additionalHeaders
-	);
-
+	let res = null;
+	try {
+		const { data: profileResponse } = await api.post('/perfiles', profile, additionalHeaders);
+		res = await api.post(
+			'/profesionales',
+			{
+				clinicaId,
+				perfilId: profileResponse.data.id,
+				matricula,
+			},
+			additionalHeaders
+		);
+	} catch (error) {
+		if (error.response.status === 409) {
+			res = await api.post(
+				'/profesionales',
+				{
+					clinicaId,
+					perfilId: error.response.data.data.id,
+					matricula,
+				},
+				additionalHeaders
+			);
+		}
+	}
 	return res;
 }
 
@@ -62,7 +74,7 @@ export const useCreateProfessional = (setCurrentStatus, setMessageError) => {
 		onError: (error) => {
 			setCurrentStatus('error');
 			if (error.response.status === 409) {
-				setMessageError('Este correo ya esta registrado');
+				setMessageError(error.response.data.message);
 			}
 		},
 	});

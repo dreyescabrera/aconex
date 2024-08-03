@@ -16,7 +16,7 @@ import { useCreateProfessional } from '../../hooks/use-create-professional';
 export const NewProfessionalData = ({ open, onClose }) => {
 	const [currentStatus, setCurrentStatus] = useState('idle');
 	const [messageError, setMessageError] = useState('');
-	const { mutate, status } = useCreateProfessional(setCurrentStatus);
+	const { mutate, status } = useCreateProfessional(setCurrentStatus, setMessageError);
 
 	const handleSubmit = (formData) => {
 		let datos = {};

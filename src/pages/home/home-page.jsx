@@ -40,10 +40,10 @@ export const Component = () => {
 			</Helmet>
 			<Container>
 				<Typography variant="h3" component="h1">
-					{clinic.username}
+					{clinic.username ?? ''}
 				</Typography>
 				<Typography variant="subtitle1">
-					Hola, {user.perfil.nombre} {user.perfil.apellido}
+					Hola, {user.perfil?.nombre} {user.perfil?.apellido}
 				</Typography>
 				<Stack spacing={3} sx={{ mt: 4 }}>
 					{navLinks.map((link) => (

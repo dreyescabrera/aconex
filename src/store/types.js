@@ -30,6 +30,7 @@ import { UserData } from '../pages/settings/system/users/new-user/components/use
  * @property {number} perfilId - The profile ID associated with the user data.
  * @property {string} createdAt - The creation timestamp.
  * @property {Profile} perfil - The profile details associated with the clinic.
+ * @property {string} token - The profile details associated with the clinic.
  */
 
 export {};

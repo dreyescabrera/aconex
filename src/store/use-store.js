@@ -6,7 +6,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
  * @property {boolean} isLoggedIn
  * @property {import('./types').ClinicaData | null} clinic
  * @property {import('./types').UserData | null} user
- * @property {(clinicData: import('./types').ClinicaData) => void} setClinic
+ * @property {(clinicData: Partial<import('./types').ClinicaData>) => void} setClinic
  * @property {(userData: Partial<import('./types').UserData>) => void} setUser
  * @property {(status: boolean) => void} setIsLoggedIn
  * @property {() => void} doLogout
@@ -21,7 +21,7 @@ export const useStore = create(
 			isLoggedIn: false,
 			clinic: null,
 			user: null,
-			setClinic: (clinicData) => set(() => ({ clinic: clinicData })),
+			setClinic: (clinicData) => set((state) => ({ clinic: { ...state.clinic, ...clinicData } })),
 			setUser: (userData) => set((state) => ({ user: { ...state.user, ...userData } })),
 			setIsLoggedIn: (status) => set(() => ({ isLoggedIn: status })),
 			doLogout: () => set(() => ({ clinic: null, isLoggedIn: false, user: null })),

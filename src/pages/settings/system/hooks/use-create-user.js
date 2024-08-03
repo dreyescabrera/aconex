@@ -16,29 +16,37 @@ import { api } from '@/services/api';
 /**
  * @param {number} clinicaId
  * @param {Perfil & {username: string, password: string}} user
+ * @param {object} additionalHeaders
  */
-async function createUser(clinicaId, user) {
+async function createUser(clinicaId, user, additionalHeaders) {
 	const { username, password, ...profile } = user;
 
-	const profileResponse = await api.post('/perfiles/', profile);
-	const res = await api.post('/usuarios', {
-		clinicaId,
-		perfilId: profileResponse.data.data.id,
-		username,
-		password,
-	});
+	const profileResponse = await api.post('/perfiles/', profile, additionalHeaders);
+	const res = await api.post(
+		'/usuarios',
+		{
+			clinicaId,
+			perfilId: profileResponse.data.data.id,
+			username,
+			password,
+		},
+		additionalHeaders
+	);
 	return res;
 }
 
 export const useCreateUser = () => {
 	const queryClient = useQueryClient();
 	const { id } = useStore((state) => state.clinic);
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	/**
 	 * @param {Perfil & {username: string, password: string}} profile
 	 */
 	const mutationFn = (profile) => {
-		return createUser(id, profile);
+		return createUser(id, profile, { headers: { ...additionalHeaders } });
 	};
 
 	return useMutation({

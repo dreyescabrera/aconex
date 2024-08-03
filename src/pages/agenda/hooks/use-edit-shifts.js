@@ -1,14 +1,21 @@
+import { useStore } from '@/store/use-store';
 import { useMutation } from '@tanstack/react-query';
 import { useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
-const patchShifts = async (professionalId, shiftId, modifications) => {
-	const res = await api.patch(`/turnos/${professionalId}/${shiftId}`, modifications);
+const patchShifts = async (professionalId, shiftId, modifications, additionalHeaders) => {
+	const res = await api.patch(`/turnos/${professionalId}/${shiftId}`, modifications, {
+		headers: { ...additionalHeaders },
+	});
 	return res.data;
 };
 
 export const useEditShifts = () => {
 	const queryClient = useQueryClient();
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 
 	/*
 	 * @param {object} data
@@ -23,7 +30,7 @@ export const useEditShifts = () => {
 	const mutationFn = (data) => {
 		const { shiftId, profesionalId, ...modifications } = data;
 
-		return patchShifts(profesionalId, shiftId, modifications);
+		return patchShifts(profesionalId, shiftId, modifications, additionalHeaders);
 	};
 
 	return useMutation({

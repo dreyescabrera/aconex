@@ -74,7 +74,7 @@ export const Component = () => {
 				</Form>
 				<Typography variant="body1" mt={3} align="center">
 					Todavía no tienes una cuenta?{' '}
-					<Link href="https://forms.gle/2UCdXSfQFxhA2iPu7" underline="hover" color="#5d8bff">
+					<Link href="/register" underline="hover" color="#5d8bff">
 						Regístrate
 					</Link>
 				</Typography>

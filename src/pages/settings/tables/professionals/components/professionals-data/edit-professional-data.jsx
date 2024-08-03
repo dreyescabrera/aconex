@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -32,7 +33,7 @@ const Mnjeditprof = ({ status, currentStatus }) => {
 async function editprofiledata(data) {
 	const idstring = data[0].toString();
 	const urldata = '/perfiles/' + idstring;
-	const response = await api.patch(urldata, data[1]);
+	const response = await api.patch(urldata, data[1], data[2]);
 	return response;
 }
 
@@ -76,7 +77,10 @@ export const EditProfessionalData = ({ open, onClose }) => {
 			queryClient.invalidateQueries({ queryKey: ['professionals'] });
 		},
 	});
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	const handleSubmit = (ev) => {
 		let datos = {};
 		for (var key in ev) {
@@ -92,7 +96,7 @@ export const EditProfessionalData = ({ open, onClose }) => {
 			}
 		}
 
-		const dataperfil = [professionalInView.perfil.id, datos];
+		const dataperfil = [professionalInView.perfil.id, datos, { headers: { ...additionalHeaders } }];
 		mutation.mutate(dataperfil);
 	};
 

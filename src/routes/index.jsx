@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { agendaRouter } from './agenda';
 import { patientsRouter } from './patients';
+import { registerRoutes } from './register';
 import { settingsRouter } from './settings';
 import { userRouter } from './user';
 
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
 				path: '/login',
 				lazy: Login,
 			},
+			...registerRoutes,
 		],
 	},
 ]);

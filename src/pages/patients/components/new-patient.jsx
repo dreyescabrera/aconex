@@ -25,7 +25,13 @@ export const NewPatient = ({ open, onClose }) => {
 
 		mutate(datos);
 	};
-
+	const handleError = (err) => {
+		let messageError = err;
+		if (err === 'Conflict') {
+			messageError = 'Este correo ya esta registrado';
+		}
+		return messageError;
+	};
 	return (
 		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
@@ -70,7 +76,13 @@ export const NewPatient = ({ open, onClose }) => {
 
 			{status === 'error' && (
 				// @ts-ignore
-				<Alert severity="error">Error al crear el paciente: {error.response.data.message}</Alert>
+				<Alert severity="error">
+					Error al crear el paciente:{' '}
+					{handleError(
+						// @ts-ignore
+						error.response.data.message
+					)}
+				</Alert>
 			)}
 
 			{status === 'success' && <Alert severity="success">Paciente creado con éxito.</Alert>}

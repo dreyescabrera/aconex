@@ -17,21 +17,28 @@ import { api } from '@/services/api';
 
 /**
  * @param {Schedule} schedule
+ * @param {object} additionalHeaders
  */
-async function postSchedule(schedule) {
-	const res = await api.post('/horarios', schedule, { timeout: 30000 });
+async function postSchedule(schedule, additionalHeaders) {
+	const res = await api.post('/horarios', schedule, additionalHeaders);
 	return res.data;
 }
 
 export const useCreateSchedule = () => {
 	const { id } = useStore((state) => state.clinic);
 	const queryClient = useQueryClient();
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	/**
 	 * @param {Omit<Schedule, 'clinicaId'>} schedule
 	 */
 	const mutationFn = (schedule) => {
-		return postSchedule({ ...schedule, clinicaId: id });
+		return postSchedule(
+			{ ...schedule, clinicaId: id },
+			{ timeout: 30000, headers: { ...additionalHeaders } }
+		);
 	};
 
 	return useMutation({

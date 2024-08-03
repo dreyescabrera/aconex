@@ -18,20 +18,23 @@ import { api } from '@/services/api';
 /*
  * @param {ShiftOptions} shiftInfo
  */
-const createShift = async (shiftInfo) => {
-	const res = await api.post('/turnos', shiftInfo);
+const createShift = async (shiftInfo, additionalHeaders) => {
+	const res = await api.post('/turnos', shiftInfo, additionalHeaders);
 	return res.data;
 };
 
 export const useNewShift = () => {
 	const { id } = useStore((state) => state.clinic);
 	const queryClient = useQueryClient();
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	/*
 	 * @param {Omit<ShiftOptions, 'clinicaId'>} data
 	 */
 	const mutationFn = (data) => {
-		return createShift({ clinicaId: id, ...data });
+		return createShift({ clinicaId: id, ...data }, { headers: { ...additionalHeaders } });
 	};
 
 	return useMutation({

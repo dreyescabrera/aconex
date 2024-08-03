@@ -1,14 +1,18 @@
+import { useStore } from '@/store/use-store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
-async function createAbsence(absence) {
-	const response = await api.post('/ausencias', absence);
+async function createAbsence(absence, additionalHeaders) {
+	const response = await api.post('/ausencias', absence, additionalHeaders);
 	return response.data;
 }
 
 export const useCreateAbsence = () => {
 	const queryClient = useQueryClient();
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	/**
 	 * @param {object} data
 	 * @param {number} data.profesionalId
@@ -16,7 +20,7 @@ export const useCreateAbsence = () => {
 	 * @param {import('dayjs').Dayjs} data.vigenciaHasta
 	 */
 	const mutationFn = (data) => {
-		return createAbsence(data);
+		return createAbsence(data, { headers: { ...additionalHeaders } });
 	};
 
 	return useMutation({

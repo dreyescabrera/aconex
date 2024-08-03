@@ -54,13 +54,13 @@ export const Component = () => {
 				<Form
 					onSubmit={handleSubmit}
 					defaultValues={{
-						nombre: clinic.perfil.nombre,
-						direccion: clinic.perfil.direccion,
-						celular: clinic.perfil.celular,
-						email: clinic.perfil.email,
-						condicionFiscal: clinic.condicionFiscal,
-						region: clinic.region,
-						username: clinic.username,
+						nombre: clinic.perfil?.nombre,
+						direccion: clinic.perfil?.direccion,
+						celular: clinic.perfil?.celular,
+						email: clinic.perfil?.email,
+						condicionFiscal: clinic.condicionFiscal ?? '',
+						region: clinic.region ?? '',
+						username: clinic.username ?? '',
 					}}
 				>
 					<Stack gap={4}>

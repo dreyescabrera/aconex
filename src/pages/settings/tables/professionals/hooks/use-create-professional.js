@@ -18,29 +18,48 @@ import { api } from '@/services/api';
  * @param {number} clinicaId
  * @param {Professional} professional
  */
-async function createProfessional(clinicaId, professional) {
+async function createProfessional(clinicaId, professional, additionalHeaders) {
 	const { matricula, ...profile } = professional;
-
-	const { data: profileResponse } = await api.post('/perfiles', profile);
-
-	const res = await api.post('/profesionales', {
-		clinicaId,
-		perfilId: profileResponse.data.id,
-		matricula,
-	});
-
+	let res = null;
+	try {
+		const { data: profileResponse } = await api.post('/perfiles', profile, additionalHeaders);
+		res = await api.post(
+			'/profesionales',
+			{
+				clinicaId,
+				perfilId: profileResponse.data.id,
+				matricula,
+			},
+			additionalHeaders
+		);
+	} catch (error) {
+		if (error.response.status === 409) {
+			res = await api.post(
+				'/profesionales',
+				{
+					clinicaId,
+					perfilId: error.response.data.data.id,
+					matricula,
+				},
+				additionalHeaders
+			);
+		}
+	}
 	return res;
 }
 
-export const useCreateProfessional = (setCurrentStatus) => {
+export const useCreateProfessional = (setCurrentStatus, setMessageError) => {
 	const queryClient = useQueryClient();
 	const { id } = useStore((state) => state.clinic);
-
+	const user = useStore((state) => state.user);
+	const additionalHeaders = {
+		Authorization: `Bearer ${user.token}`,
+	};
 	/*
 	 * @param {Professional} profile
 	 */
 	const mutationFn = (profile) => {
-		return createProfessional(id, profile);
+		return createProfessional(id, profile, { headers: { ...additionalHeaders } });
 	};
 
 	return useMutation({
@@ -48,6 +67,15 @@ export const useCreateProfessional = (setCurrentStatus) => {
 		onSuccess: () => {
 			setCurrentStatus('success');
 			queryClient.invalidateQueries({ queryKey: ['professionals'] });
+		},
+		/**
+		 * @param {object} error
+		 */
+		onError: (error) => {
+			setCurrentStatus('error');
+			if (error.response.status === 409) {
+				setMessageError(error.response.data.message);
+			}
 		},
 	});
 };

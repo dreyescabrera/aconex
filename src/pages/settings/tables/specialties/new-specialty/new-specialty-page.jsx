@@ -9,7 +9,7 @@ import { Form, TextInput } from '@/components/form';
 import { api } from '@/services/api';
 
 async function addspecialty(specialty) {
-	const res = await api.post('/especialidades', specialty);
+	const res = await api.post('/especialidades', specialty.data, specialty.addHeader);
 	return res;
 }
 
@@ -35,10 +35,17 @@ const Message = ({ status }) => {
 export const Component = () => {
 	const mutation = useMutation(addspecialty);
 	const { id } = useStore((state) => state.clinic);
+	const user = useStore((state) => state.user);
 
 	const handleSubmit = (event) => {
+		const additionalHeaders = {
+			Authorization: `Bearer ${user.token}`,
+		};
 		//let specialty = { clinicaId: 1, nombre: event.descripcion }; //el Codigo de la clinica debe obtenerse desde los datos del usuario a traves del backend Arreglar esto
-		let specialty = { clinicaId: id, nombre: event.descripcion };
+		let specialty = {
+			data: { clinicaId: id, nombre: event.descripcion },
+			addHeader: { headers: { ...additionalHeaders } },
+		};
 		mutation.mutate(specialty);
 	};
 

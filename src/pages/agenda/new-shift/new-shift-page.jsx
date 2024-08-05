@@ -149,14 +149,16 @@ export const Component = () => {
 
 			createpatient(pacienteobj, {
 				onSuccess: (patientdata) => {
+					console.log("Bug Editar Turno")
+					console.log("patientdata: "+JSON.stringify(patientdata));
 					datos = {
 						shiftId: shift.id,
 						profesionalId: shift.profesionalId,
 						pacienteId: patientdata.data.id,
 						...datos,
 					};
-					console.log("Bug Editar Turno")
-					console.log(JSON.stringify(datos));
+					console.log("datos: "+JSON.stringify(datos));
+
 
 					editshiftmutation.mutate(datos, {
 						onSuccess: () => setTimeout(() => navigate(-1), 1_000),

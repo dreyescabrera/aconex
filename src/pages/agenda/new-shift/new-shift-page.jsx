@@ -150,11 +150,11 @@ export const Component = () => {
 			createpatient(pacienteobj, {
 				onSuccess: (patientdata) => {
 					console.log("Bug Editar Turno")
-					console.log("patientdata: "+JSON.stringify(patientdata));
+					console.log("patientdata: "+JSON.stringify(patientdata.data.data));
 					datos = {
 						shiftId: shift.id,
 						profesionalId: shift.profesionalId,
-						pacienteId: patientdata.data.id,
+						pacienteId: patientdata.data.data.id,
 						...datos,
 					};
 					console.log("datos: "+JSON.stringify(datos));

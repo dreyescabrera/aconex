@@ -140,6 +140,7 @@ export const Component = () => {
 		}
 
 		if (formdata.patient.inputValue) {
+
 			let pacienteobj = { nombre: formdata.patient.inputValue, apellido: ' ' };
 
 			if (datos?.celular) {
@@ -154,11 +155,16 @@ export const Component = () => {
 						pacienteId: patientdata.data.id,
 						...datos,
 					};
+					console.log("Bug Editar Turno")
+					console.log(JSON.stringify(datos));
+
 					editshiftmutation.mutate(datos, {
 						onSuccess: () => setTimeout(() => navigate(-1), 1_000),
 					});
 				},
 			});
+
+
 		} else {
 			datos = {
 				shiftId: shift.id,

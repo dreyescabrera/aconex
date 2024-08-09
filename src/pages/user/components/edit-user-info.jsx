@@ -17,7 +17,14 @@ export const EditUserInfo = ({ open, onClose }) => {
 	const { mutate, status, error } = useEditUser();
 
 	const handleEdit = (formData) => {
-		mutate({ userId: user.id, username: formData.username, password: formData.password });
+		let data = { userId: user.id };
+		for (let key in formData) {
+			if (formData[key] != '' && formData[key] != undefined && formData[key] != null) {
+				data = { [key]: formData[key], ...data };
+			}
+		}
+		// @ts-ignore
+		mutate(data);
 	};
 
 	return (
@@ -37,12 +44,17 @@ export const EditUserInfo = ({ open, onClose }) => {
 				onSubmit={handleEdit}
 				defaultValues={{
 					username: user.username,
-					newPassword: '',
+					password: '',
 				}}
 			>
 				<Stack gap={4} sx={{ mb: 2 }}>
 					<TextInput name="username" label="Nombre de usuario" />
-					<TextInput name="newPassword" label="Nueva contraseña" type="password" />
+					<TextInput
+						name="password"
+						label="Nueva contraseña"
+						type="password"
+						rules={{ required: false }}
+					/>
 
 					<Button variant="contained" type="submit">
 						Editar

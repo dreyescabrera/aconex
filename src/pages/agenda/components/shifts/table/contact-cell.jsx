@@ -30,13 +30,15 @@ export function ContactCell({ phoneNumber, name, date }) {
 	if (phoneNumber === undefined || phoneNumber === null) {
 		return (
 			<TableCell sx={{ position: 'relative' }} align="center">
-				<PhoneDisabledIcon />
-				<Icon sx={{ height: '2vw', width: '2vw' }}>
+				<Icon sx={{ height: '1.4em', width: '1.4em' }}>
+					<PhoneDisabledIcon />
+				</Icon>
+				<Icon sx={{ height: '1.4em', width: '1.5em' }}>
 					<img
 						src="/no-logo-whatsapp.jpg"
 						style={{
-							height: '2vw',
-							width: '2vw',
+							height: '1em',
+							width: '1em',
 							borderRadius: '40px',
 						}}
 						alt="nonumber"

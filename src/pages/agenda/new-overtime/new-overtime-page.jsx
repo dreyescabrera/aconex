@@ -172,7 +172,7 @@ export const Component = () => {
 				onSuccess: async (patientdata) => {
 					datos = {
 						profesionalId: formdata.profesional.id,
-						pacienteId: patientdata.data.id,
+						pacienteId: patientdata.data.data.id,
 						date: date.toISOString(),
 						...datos,
 					};

@@ -140,7 +140,6 @@ export const Component = () => {
 		}
 
 		if (formdata.patient.inputValue) {
-
 			let pacienteobj = { nombre: formdata.patient.inputValue, apellido: ' ' };
 
 			if (datos?.celular) {
@@ -148,25 +147,18 @@ export const Component = () => {
 			}
 
 			createpatient(pacienteobj, {
-				onSuccess: (patientdata) => {
-					console.log("Bug Editar Turno")
-					console.log("patientdata: "+JSON.stringify(patientdata.data.data));
+				onSuccess: async (patientdata) => {
 					datos = {
 						shiftId: shift.id,
 						profesionalId: shift.profesionalId,
 						pacienteId: patientdata.data.data.id,
 						...datos,
 					};
-					console.log("datos: "+JSON.stringify(datos));
-
-
 					editshiftmutation.mutate(datos, {
 						onSuccess: () => setTimeout(() => navigate(-1), 1_000),
 					});
 				},
 			});
-
-
 		} else {
 			datos = {
 				shiftId: shift.id,

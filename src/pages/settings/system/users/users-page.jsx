@@ -17,8 +17,10 @@ import { UserDialog } from './components/user-dialog';
 export const Component = () => {
 	const { data: users, status } = useUsers();
 	const [open, setOpen] = useState(false);
+	const [userSelected, setUserSelected] = useState({});
 
-	const handleOpendialog = () => {
+	const handleOpendialog = (user) => {
+		setUserSelected(user);
 		setOpen(true);
 	};
 
@@ -46,13 +48,13 @@ export const Component = () => {
 
 					{status === 'success' && (
 						<List disablePadding>
-							{users.map((user, index) => (
-								<ListItem key={index} disablePadding>
-									<ListItemButton onClick={handleOpendialog}>
+							{users.map((user) => (
+								<ListItem key={user.id} disablePadding>
+									<ListItemButton onClick={() => handleOpendialog(user)}>
 										<ListItemText primary={user.perfil.nombre + ' ' + user.perfil.apellido} />
 										<KeyboardArrowRight />
 									</ListItemButton>
-									<UserDialog open={open} onClose={handleClosedialog} usuario={user} />
+									<UserDialog open={open} onClose={handleClosedialog} usuario={userSelected} />
 								</ListItem>
 							))}
 						</List>

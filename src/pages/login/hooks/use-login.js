@@ -37,7 +37,7 @@ export const useLogin = () => {
 				id: data.user.id,
 				username: data.user.username,
 				createdAt: data.user.createdAt,
-				//perfilId: data.perfilId,
+				roleId: data.user.roleId,
 				token: data.token,
 				perfil: data.user.perfil,
 			});

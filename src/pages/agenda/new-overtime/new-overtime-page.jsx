@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
+//import { useShifts } from '../hooks/use-shifts';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
@@ -15,7 +17,6 @@ import { Autocomplete, DatePicker, Form, TextInput, TimePicker } from '@/compone
 import { usePatients } from '@/hooks/use-patients';
 import { useProfessionals } from '@/hooks/use-professionals';
 import { useNewShift } from '../hooks/use-new-shift';
-import { useShifts } from '../hooks/use-shifts';
 
 const opcionesPresentismo = [
 	{ estado: 'Presente', color: '#63db8b' },
@@ -53,11 +54,11 @@ export const Component = () => {
 	const {
 		state: { shift },
 	} = useLocation();
-	const shiftDate = dayjs.utc(shift.date);
-	const { data: allDayShifts } = useShifts({
+	/* const shiftDate = dayjs.utc(shift.date); */
+	/* const { data: allDayShifts } = useShifts({
 		fechaDesde: shiftDate.format('MM/DD/YY'),
 		fechaHasta: shiftDate.format('MM/DD/YY'),
-	});
+	}); */
 	const { mutate: createpatient, status: patientstatus } = useCreatePatient();
 	const { data: patients } = usePatients();
 	const { data: professionals } = useProfessionals();
@@ -66,14 +67,21 @@ export const Component = () => {
 	const [cellphone, setCellphone] = useState(0);
 	let selectedoptions = useRef(opcionesPresentismo[1]);
 	let flagobject = useRef(null); //flagobject
+	const [minuteTimer, setMinuteTimer] = useState('');
 
-	const unavailableMinutes = allDayShifts?.reduce((array, currentShift) => {
+	const handleChange = (event) => {
+		const value = event.target.value;
+		if (/^\d*$/.test(value) && Number(value) >= 0 && Number(value) <= 59) {
+			setMinuteTimer(value);
+		}
+	};
+	/* const unavailableMinutes = allDayShifts?.reduce((array, currentShift) => {
 		const date = dayjs.utc(currentShift.date);
 		if (date.hour() === shiftDate.hour()) {
 			array.push(dayjs(currentShift.date).minute());
 		}
 		return array;
-	}, []);
+	}, []); */
 
 	const handleOnChangepresentismo = (selected) => {
 		selectedoptions.current = selected;
@@ -128,8 +136,12 @@ export const Component = () => {
 	};
 
 	const handleSubmit = (formdata) => {
+		let minuteAct = null;
+		if (minuteTimer) {
+			minuteAct = dayjs().minute(Number(minuteTimer));
+		}
 		const hour = dayjs(formdata.hour);
-		const minute = dayjs(formdata.minute);
+		const minute = dayjs(minuteAct);
 		const date = dayjs.utc(formdata.date).set('hour', hour.hour()).set('minute', minute.minute());
 
 		if (formdata.celular) {
@@ -209,7 +221,7 @@ export const Component = () => {
 						patient: null,
 						date: dayjs.utc(shift.date),
 						hour: dayjs.utc(shift.date),
-						minute: null,
+						minute: '',
 						profesional: null,
 						obraSocial: '',
 					}}
@@ -236,14 +248,26 @@ export const Component = () => {
 								views={['hours']}
 								view="hours"
 							/>
-							<TimePicker
+							{/* <TimePicker
 								name="minute"
-								slotProps={{ textField: { variant: 'standard', label: 'Minuto del turno' } }}
-								minutesStep={5}
+								slotProps={{ textField: { variant: 'standard', label: 'Minutos del turno' } }}
+								minutesStep={1}
 								views={['minutes']}
 								view="minutes"
 								shouldDisableTime={(value, view) => {
 									return view === 'minutes' && unavailableMinutes.includes(value.minute());
+								}}
+							/> */}
+							<TextField
+								name="minute"
+								label="Minutos del turno"
+								variant="standard"
+								value={minuteTimer}
+								onChange={handleChange}
+								inputProps={{
+									inputMode: 'numeric',
+									pattern: '[0-9]*',
+									maxLength: 2,
 								}}
 							/>
 						</Stack>

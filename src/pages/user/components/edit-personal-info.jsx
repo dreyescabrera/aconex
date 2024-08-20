@@ -8,6 +8,16 @@ import { RightDrawer } from '@/components/drawers';
 import { DatePicker, Form, TextInput } from '@/components/form';
 import { useEditProfile } from '@/hooks/use-edit-profile';
 
+const cuttimezone = (vigencia) => {
+	//Recorta la zona horaria de la fecha de forma tal que dayjs no la modifique
+	if (vigencia) {
+		const tam1 = vigencia.length - 2;
+		const fecha1 = vigencia.slice(0, tam1);
+
+		return fecha1;
+	}
+	return null;
+};
 /**
  * @param {object} props
  * @param {boolean} props.open
@@ -61,7 +71,7 @@ export const EditPersonalInfo = ({ open, onClose }) => {
 					celular: user.perfil.celular,
 					direccion: user.perfil.direccion,
 					email: user.perfil.email,
-					nacimiento: dayjs(user.perfil.nacimiento),
+					nacimiento: dayjs(cuttimezone(user.perfil.nacimiento)),
 				}}
 			>
 				<Stack gap={4} sx={{ mb: 2 }}>

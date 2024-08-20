@@ -45,7 +45,7 @@ const cuttimezone = (vigencia) => {
 
 		return fecha1;
 	}
-	return undefined;
+	return null;
 };
 
 /**
@@ -83,12 +83,12 @@ export const EditProfessionalData = ({ open, onClose }) => {
 	};
 	const handleSubmit = (ev) => {
 		let datos = {};
-		for (var key in ev) {
+		for (let key in ev) {
 			if (ev[key] && ev[key] != null && ev[key] != '') {
 				if (key != 'nacimiento') {
 					datos = { [key]: ev[key], ...datos };
 				} else {
-					if (ev[key].isvalid) {
+					if (dayjs(ev[key]).isValid()) {
 						const birthday = ev.nacimiento.format('MM/DD/YYYY');
 						datos = { [key]: birthday, ...datos };
 					}
@@ -133,6 +133,7 @@ export const EditProfessionalData = ({ open, onClose }) => {
 						label="Fecha de nacimiento"
 						slotProps={{ textField: { variant: 'standard' } }}
 						disableFuture
+						format="DD/MM/YYYY"
 						rules={{ required: false }}
 					/>
 					<Button type="submit" variant="contained">

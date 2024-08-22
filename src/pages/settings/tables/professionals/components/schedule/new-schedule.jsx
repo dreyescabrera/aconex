@@ -71,7 +71,7 @@ export const NewSchedule = ({ open, onClose }) => {
 					especialidad: null,
 					horaDesde: null,
 					horaHasta: null,
-					intervalo: dayjs(new Date(0, 0, 0, 0, 30)),
+					intervalo: dayjs().minute(30),
 					fechaDesde: null,
 					fechaHasta: null,
 				}}

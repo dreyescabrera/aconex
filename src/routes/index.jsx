@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { agendaRouter } from './agenda';
 import { patientsRouter } from './patients';
 import { registerRoutes } from './register';
@@ -19,6 +19,10 @@ export const router = createBrowserRouter([
 			return appLayoutLoader();
 		},
 		children: [
+			{
+				path: '/',
+				element: <Navigate to="/home" replace />,
+			},
 			{
 				path: '/home',
 				lazy: Home,

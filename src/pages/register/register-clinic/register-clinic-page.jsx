@@ -79,6 +79,7 @@ export const Component = () => {
 										variant="outlined"
 										label="Nombre de la clínica"
 										placeholder="Nombre de la clínica"
+										helperText="El nombre de la clínica debe tener al menos 3 caracteres"
 									/>
 								</Box>
 								<Box sx={{ display: 'flex', gap: 1 }}>

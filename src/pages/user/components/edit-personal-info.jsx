@@ -8,6 +8,16 @@ import { RightDrawer } from '@/components/drawers';
 import { DatePicker, Form, TextInput } from '@/components/form';
 import { useEditProfile } from '@/hooks/use-edit-profile';
 
+const cuttimezone = (vigencia) => {
+	//Recorta la zona horaria de la fecha de forma tal que dayjs no la modifique
+	if (vigencia) {
+		const tam1 = vigencia.length - 2;
+		const fecha1 = vigencia.slice(0, tam1);
+
+		return fecha1;
+	}
+	return null;
+};
 /**
  * @param {object} props
  * @param {boolean} props.open
@@ -18,18 +28,26 @@ export const EditPersonalInfo = ({ open, onClose }) => {
 	const { mutate, status, error } = useEditProfile({ queryKeyToInvalidate: ['users'] });
 
 	const handleSubmit = (formData) => {
-		mutate(
-			{
-				perfilId: user.perfilId,
-				...formData,
-				nacimiento: formData.nacimiento.format('MM/DD/YY'),
-			},
-			{
-				onSuccess: ({ data }) => {
-					setUser({ perfil: data });
-				},
+		let datos = { perfilId: user.perfil.id };
+		for (let key in formData) {
+			if (formData[key] != '' && formData[key] != undefined && formData[key] != null) {
+				if (key === 'nacimiento') {
+					if (dayjs(formData['nacimiento']).isValid()) {
+						datos = { [key]: formData[key], ...datos };
+					}
+				} else {
+					datos = { [key]: formData[key], ...datos };
+				}
 			}
-		);
+		}
+		if (datos.nacimiento) {
+			datos.nacimiento = datos.nacimiento.format('MM/DD/YY');
+		}
+		mutate(datos, {
+			onSuccess: ({ data }) => {
+				setUser({ perfil: data });
+			},
+		});
 	};
 
 	return (
@@ -53,21 +71,22 @@ export const EditPersonalInfo = ({ open, onClose }) => {
 					celular: user.perfil.celular,
 					direccion: user.perfil.direccion,
 					email: user.perfil.email,
-					nacimiento: dayjs(user.perfil.nacimiento),
+					nacimiento: dayjs(cuttimezone(user.perfil.nacimiento)),
 				}}
 			>
 				<Stack gap={4} sx={{ mb: 2 }}>
 					<TextInput name="nombre" label="Nombre" />
 					<TextInput name="apellido" label="Apellido" />
-					<TextInput name="cedula" label="Número de DNI o Pasaporte" />
-					<TextInput name="celular" label="Celular" />
-					<TextInput name="direccion" label="Dirección" />
-					<TextInput name="email" label="Email" />
+					<TextInput name="cedula" label="Número de DNI o Pasaporte" rules={{ required: false }} />
+					<TextInput name="celular" label="Celular" rules={{ required: false }} />
+					<TextInput name="direccion" label="Dirección" rules={{ required: false }} />
+					<TextInput name="email" label="Email" rules={{ required: false }} />
 					<DatePicker
 						name="nacimiento"
 						label="Nacimiento"
 						disableFuture
 						slotProps={{ textField: { variant: 'standard' } }}
+						rules={{ required: false }}
 					/>
 					<Button variant="contained" type="submit">
 						Editar usuario

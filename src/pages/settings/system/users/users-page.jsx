@@ -1,3 +1,4 @@
+import { useStore } from '@/store/use-store';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
@@ -18,7 +19,7 @@ export const Component = () => {
 	const { data: users, status } = useUsers();
 	const [open, setOpen] = useState(false);
 	const [userSelected, setUserSelected] = useState({});
-
+	const { roleId } = useStore((state) => state.user);
 	const handleOpendialog = (user) => {
 		setUserSelected(user);
 		setOpen(true);
@@ -60,9 +61,13 @@ export const Component = () => {
 						</List>
 					)}
 				</Paper>
-				<Button fullWidth variant="contained" href="./nuevo" sx={{ mt: 'auto' }}>
-					Agregar nuevo
-				</Button>
+				{roleId === 1 ? (
+					<Button fullWidth variant="contained" href="./nuevo" sx={{ mt: 'auto' }}>
+						Agregar nuevo
+					</Button>
+				) : (
+					<></>
+				)}
 			</Container>
 		</>
 	);

@@ -20,7 +20,7 @@ import { DeleteUserDialog } from './delete-user-dialog';
  */
 export const UserDialog = ({ open, onClose, usuario }) => {
 	const [openDialogDeleteUser, setDialogDeleteUser] = useState(false);
-	const rol = useStore((state) => state.user);
+	const { roleId } = useStore((state) => state.user);
 	const openDeleteDialogUser = () => {
 		setDialogDeleteUser(true);
 	};
@@ -58,7 +58,7 @@ export const UserDialog = ({ open, onClose, usuario }) => {
 				</List>
 			</DialogContent>
 			<Box mt={0} sx={{ display: 'flex', justifyContent: 'center', gap: 3, mt: 2 }}>
-				{rol.roleId === 1 ? (
+				{roleId === 1 ? (
 					<DialogActions>
 						<Button onClick={openDeleteDialogUser} color="error">
 							Eliminar

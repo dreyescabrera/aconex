@@ -20,7 +20,7 @@ import { useCreateSchedule } from '../../hooks/use-create-schedule';
 export const NewSchedule = ({ open, onClose }) => {
 	const { data: professionals } = useProfessionals();
 	const { data: specialties } = useSpecialties();
-	const { mutate, status, error, isError, isLoading } = useCreateSchedule();
+	const { mutate, status, error, isError, isLoading, reset } = useCreateSchedule();
 	const [mensajeError, setMensajeError] = useState(null);
 
 	const handleSubmit = (formData) => {
@@ -30,16 +30,21 @@ export const NewSchedule = ({ open, onClose }) => {
 		const hourTo = formData.horaHasta.format('HH:mm');
 		const interval = formData.intervalo.format('mm');
 
-		mutate({
-			profesionalId: formData.profesional.id,
-			especialidadId: formData.especialidad.id,
-			nroDia: formData.dia,
-			vigenciaDesde: dateFrom,
-			vigenciaHasta: dateTo,
-			horaDesde: hourFrom,
-			horaHasta: hourTo,
-			intervalo: interval,
-		});
+		if (dateFrom <= dateTo) {
+			setMensajeError(null);
+			mutate({
+				profesionalId: formData.profesional.id,
+				especialidadId: formData.especialidad.id,
+				nroDia: formData.dia,
+				vigenciaDesde: dateFrom,
+				vigenciaHasta: dateTo,
+				horaDesde: hourFrom,
+				horaHasta: hourTo,
+				intervalo: interval,
+			});
+		} else {
+			setMensajeError('La fecha hasta no puede ser menor a fecha desde');
+		}
 	};
 
 	const handleError = (data) => {
@@ -49,7 +54,12 @@ export const NewSchedule = ({ open, onClose }) => {
 			setMensajeError(data?.message);
 		}
 	};
-
+	useEffect(() => {
+		if (!open) {
+			reset();
+			setMensajeError(null);
+		}
+	}, [open, reset]);
 	useEffect(() => {
 		if (isError) {
 			handleError(error);
@@ -71,7 +81,7 @@ export const NewSchedule = ({ open, onClose }) => {
 					especialidad: null,
 					horaDesde: null,
 					horaHasta: null,
-					intervalo: dayjs(new Date(0, 0, 0, 0, 30)),
+					intervalo: dayjs().minute(30),
 					fechaDesde: null,
 					fechaHasta: null,
 				}}
@@ -167,7 +177,7 @@ function RequestStatusMessage({ status, errorMessage }) {
 		);
 	}
 
-	if (status === 'error') {
+	if (status === 'error' || errorMessage) {
 		return <Alert severity="error">Error al agregar Horario: {errorMessage}</Alert>;
 	}
 

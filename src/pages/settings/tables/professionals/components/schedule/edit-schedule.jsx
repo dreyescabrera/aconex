@@ -49,15 +49,14 @@ const createIntervalString = (intervalNumber) => {
  * @param {() => void} props.onClose
  */
 export const EditSchedule = ({ open, onClose }) => {
-	const [currentStatus, setCurrentStatus] = useState('idle');
+	const [messageError, setMessageError] = useState(null);
 	const { scheduleInView, professionalInView } = useProfessionalsContext();
 	const { data: specialties } = useSpecialties();
-	const { mutate, status, error } = useEditSchedule();
+	const { mutate, status, error, reset } = useEditSchedule();
 
 	useEffect(() => {
 		if (status === 'success') {
 			let timer = setTimeout(() => {
-				setCurrentStatus('idle');
 				onClose();
 			}, 2000);
 			return () => clearInterval(timer);
@@ -74,24 +73,33 @@ export const EditSchedule = ({ open, onClose }) => {
 		const intervalo = formData.intervalo.format('mm');
 		const especialidadId = formData.especialidad.id;
 		const dayNumber = formData.dia;
-
-		mutate({
-			profesionalId: scheduleInView.profesionalId,
-			horarioId: scheduleInView.id,
-			horaDesde: hourFrom,
-			horaHasta: hourTo,
-			vigenciaDesde: dateFrom,
-			vigenciaHasta: dateTo,
-			especialidadId,
-			intervalo,
-			nroDia: dayNumber,
-		});
+		if (dateFrom <= dateTo) {
+			setMessageError(null);
+			mutate({
+				profesionalId: scheduleInView.profesionalId,
+				horarioId: scheduleInView.id,
+				horaDesde: hourFrom,
+				horaHasta: hourTo,
+				vigenciaDesde: dateFrom,
+				vigenciaHasta: dateTo,
+				especialidadId,
+				intervalo,
+				nroDia: dayNumber,
+			});
+		} else {
+			setMessageError('La fecha hasta no puede ser menor a fecha desde');
+		}
 	};
 
 	const initialSpecialty = specialties?.find(
 		(specialty) => specialty.id === scheduleInView?.especialidadId
 	);
-
+	useEffect(() => {
+		if (!open) {
+			reset();
+			setMessageError(null);
+		}
+	}, [open, reset]);
 	return (
 		<RightDrawer anchor="right" open={open} onClose={onClose} sx={{ zIndex: 1201 }}>
 			<Typography variant="h4" component="h2">
@@ -174,12 +182,14 @@ export const EditSchedule = ({ open, onClose }) => {
 				</Stack>
 			)}
 
-			{currentStatus === 'error' && (
+			{status === 'error' && (
 				// @ts-ignore
-				<Alert severity="success">Error al editar horario: {error.response.data.message}</Alert>
+				<Alert severity="error">Error al editar horario: {error.response.data.message}</Alert>
 			)}
 
-			{currentStatus === 'success' && <Alert severity="success">Horario editado con éxito!</Alert>}
+			{status === 'success' && <Alert severity="success">Horario editado con éxito!</Alert>}
+
+			{messageError && <Alert severity="error"> {messageError} </Alert>}
 		</RightDrawer>
 	);
 };

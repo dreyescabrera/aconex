@@ -27,6 +27,10 @@ export const settingsRouter = [
 	},
 	{
 		path: '/configuracion/usuarios/nuevo',
+		loader: async () => {
+			const { protectionAdminRoute } = await import('../protection/protection-admin');
+			return protectionAdminRoute();
+		},
 		lazy: NewUsersPage,
 	},
 	{

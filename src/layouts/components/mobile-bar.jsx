@@ -7,6 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { NavLink } from 'react-router-dom';
 import { navLinks } from '../constants/nav-links';
 import { DrawerHeader } from './drawer-header';
 
@@ -28,7 +29,7 @@ export const MobileBar = ({ onClose, open }) => {
 				<List>
 					{navLinks.map((link) => (
 						<ListItem disablePadding key={link.id} sx={{ display: 'block' }}>
-							<ListItemButton sx={{ py: 2 }}>
+							<ListItemButton sx={{ py: 2 }} component={NavLink} to={link.href}>
 								<ListItemIcon sx={{ minWidth: 0, mr: 1 }}>{link.icon}</ListItemIcon>
 								<ListItemText primary={link.text} />
 							</ListItemButton>

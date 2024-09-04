@@ -73,21 +73,23 @@ export const EditSchedule = ({ open, onClose }) => {
 		const intervalo = formData.intervalo.format('mm');
 		const especialidadId = formData.especialidad.id;
 		const dayNumber = formData.dia;
-		if (dateFrom <= dateTo) {
-			setMessageError(null);
-			mutate({
-				profesionalId: scheduleInView.profesionalId,
-				horarioId: scheduleInView.id,
-				horaDesde: hourFrom,
-				horaHasta: hourTo,
-				vigenciaDesde: dateFrom,
-				vigenciaHasta: dateTo,
-				especialidadId,
-				intervalo,
-				nroDia: dayNumber,
-			});
-		} else {
-			setMessageError('La fecha hasta no puede ser menor a fecha desde');
+		if (dateTo) {
+			if (dayjs(dateTo).isAfter(dateFrom) || dayjs(dateTo).isSame(dateFrom)) {
+				setMessageError(null);
+				mutate({
+					profesionalId: scheduleInView.profesionalId,
+					horarioId: scheduleInView.id,
+					horaDesde: hourFrom,
+					horaHasta: hourTo,
+					vigenciaDesde: dateFrom,
+					vigenciaHasta: dateTo,
+					especialidadId,
+					intervalo,
+					nroDia: dayNumber,
+				});
+			} else {
+				setMessageError('La fecha hasta no puede ser menor a fecha desde');
+			}
 		}
 	};
 

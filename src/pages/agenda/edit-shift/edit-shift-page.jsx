@@ -101,8 +101,8 @@ export const Component = () => {
 		} else if (!data.presentismo) {
 			data.presentismo = ' ';
 		}
-		if (cellphone == undefined || cellphone == null || cellphone < 0) {
-			data.celular = null;
+		if (cellphone == undefined || cellphone < 0 || String(cellphone) === '') {
+			delete data.celular;
 		} else {
 			if (cellphone.toString() != '' && cellphone != 0) {
 				let cell = cellphone;
@@ -111,7 +111,8 @@ export const Component = () => {
 				}
 				data = { celular: cell, ...data };
 			} else {
-				data.celular = null;
+				setCellphone(null);
+				data = { celular: Number(cellphone), ...data };
 			}
 		}
 

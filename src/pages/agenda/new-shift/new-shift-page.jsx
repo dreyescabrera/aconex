@@ -124,8 +124,8 @@ export const Component = () => {
 		} else {
 			datos.presentismo = ' ';
 		}
-		if (cellphone == undefined || cellphone == null || cellphone < 0) {
-			datos.celular = null;
+		if (cellphone == undefined || cellphone < 0 || String(cellphone) === '') {
+			delete datos.celular;
 		} else {
 			if (cellphone.toString() != '' && cellphone != 0) {
 				let cell = cellphone;
@@ -135,7 +135,7 @@ export const Component = () => {
 				datos = { celular: cell, ...datos };
 			} else {
 				setCellphone(null);
-				datos = { celular: cellphone, ...datos };
+				datos = { celular: Number(cellphone), ...datos };
 			}
 		}
 

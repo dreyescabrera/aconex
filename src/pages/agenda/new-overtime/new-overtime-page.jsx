@@ -7,13 +7,14 @@ import Collapse from '@mui/material/Collapse';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 //import { useShifts } from '../hooks/use-shifts';
-import TextField from '@mui/material/TextField';
+//import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Autocomplete, DatePicker, Form, TextInput, TimePicker } from '@/components/form';
+import { TextInputMinute } from '@/components/form/text-input-minute';
 import { usePatients } from '@/hooks/use-patients';
 import { useProfessionals } from '@/hooks/use-professionals';
 import { useNewShift } from '../hooks/use-new-shift';
@@ -67,14 +68,14 @@ export const Component = () => {
 	const [cellphone, setCellphone] = useState(0);
 	let selectedoptions = useRef(opcionesPresentismo[1]);
 	let flagobject = useRef(null); //flagobject
-	const [minuteTimer, setMinuteTimer] = useState('');
+	/* const [minuteTimer, setMinuteTimer] = useState('');
 
 	const handleChange = (event) => {
 		const value = event.target.value;
 		if (/^\d*$/.test(value) && Number(value) >= 0 && Number(value) <= 59) {
 			setMinuteTimer(value);
 		}
-	};
+	}; */
 	/* const unavailableMinutes = allDayShifts?.reduce((array, currentShift) => {
 		const date = dayjs.utc(currentShift.date);
 		if (date.hour() === shiftDate.hour()) {
@@ -137,8 +138,8 @@ export const Component = () => {
 
 	const handleSubmit = (formdata) => {
 		let minuteAct = null;
-		if (minuteTimer) {
-			minuteAct = dayjs().minute(Number(minuteTimer));
+		if (formdata.minute) {
+			minuteAct = dayjs().minute(Number(formdata.minute));
 		}
 		const hour = dayjs(formdata.hour);
 		const minute = dayjs(minuteAct);
@@ -258,7 +259,7 @@ export const Component = () => {
 									return view === 'minutes' && unavailableMinutes.includes(value.minute());
 								}}
 							/> */}
-							<TextField
+							{/* <TextField
 								name="minute"
 								label="Minutos del turno"
 								variant="standard"
@@ -269,7 +270,8 @@ export const Component = () => {
 									pattern: '[0-9]*',
 									maxLength: 2,
 								}}
-							/>
+							/> */}
+							<TextInputMinute name="minute" label="Minutos del turno" variant="standard" />
 						</Stack>
 						<Autocomplete
 							name="patient"

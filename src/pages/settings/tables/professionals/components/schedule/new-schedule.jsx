@@ -152,7 +152,7 @@ export const NewSchedule = ({ open, onClose }) => {
 							format="DD/MM/YYYY"
 						/>
 					</Stack>
-					<Button type="submit" variant="contained">
+					<Button type="submit" variant="contained" disabled={isLoading}>
 						Guardar
 					</Button>
 				</Stack>
